@@ -1,0 +1,46 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : May 22, 2024, 11:02:35 PM
+    Author     : USA
+*/
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f7f7f7;
+    border-radius: 10px;
+}
+
+.pagination a {
+    color: #337ab7;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    padding: 10px 15px;
+    border-radius: 10px;
+}
+
+.pagination a:hover {
+    color: #23527c;
+    background-color: #f2f2f2;
+}
+
+.pagination a.active {
+    color: #23527c;
+    font-weight: bold;
+    cursor: default;
+    background-color: #337ab7;
+    color: #fff;
+}
+
+.pagination a + a {
+    margin-left: 10px;
+}
+
+.pagination .disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
