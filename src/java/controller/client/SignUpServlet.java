@@ -24,6 +24,7 @@ import java.util.UUID;
 import javax.mail.MessagingException;
 import model.Account;
 import model.Address;
+import util.PasswordHasher;
 
 /**
  *
@@ -125,6 +126,7 @@ public class SignUpServlet extends HttpServlet {
             } else {
                 UUID uuid = UUID.randomUUID();
                 String token = uuid.toString();
+                String hashedPassword = PasswordHasher.hashPassword(password);
                 Account account = new Account(0, null, fullName, email, password, gender, address, birthDate, telephone, null, createDate, null, null, null, null, null, null, null, null);
                 int id = accountDAO.addAccount(account, token);
                 

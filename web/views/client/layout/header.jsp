@@ -207,7 +207,7 @@
                                 <input
                                     class="form-control search-input search form-control-sm"
                                     type="search"
-                                    placeholder="Search your book here (ISBN, Title)..."
+                                    placeholder="Search your shoes here..."
                                     name="key"
                                     aria-label="Search"
                                     />

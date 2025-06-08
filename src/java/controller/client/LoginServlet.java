@@ -17,6 +17,7 @@ import java.util.List;
 import model.Account;
 //import model.Book;
 import model.Role;
+import util.PasswordHasher;
 
 /**
  *
@@ -81,6 +82,7 @@ public class LoginServlet extends HttpServlet {
         
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String hashedPassword = PasswordHasher.hashPassword(password);
         
         boolean status = true;
         boolean isExisted = false;
