@@ -2,40 +2,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin.SliderFeatures;
+package controller.client;
 
-import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
-import constants.FileLocation;
-import dao.SliderDAO;
+import dao.AccountDAO;
+import email_config.EmailUtility;
+import jakarta.servlet.ServletContext;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Slider;
+import jakarta.servlet.http.HttpSession;
+import java.util.List;
+import javax.mail.MessagingException;
 import token.TokenGenerator;
 
 /**
  *
- * @author USA
+ * @author hoaht
  */
-@WebServlet(name = "EditSliderServlet", urlPatterns = {"/admin/sliders/edit"})
-@MultipartConfig(
-        location = FileLocation.SLIDE_IMAGE_LOCATION,
-        fileSizeThreshold = 1024 * 1024,
-        maxFileSize = 1024 * 1024 * 10,
-        maxRequestSize = 1024 * 1024 * 11
-)
-public class EditSliderServlet extends HttpServlet {
+@WebServlet(name = "ForgotPasswordServlet", urlPatterns = {"/forget-pass"})
+public class ForgotPasswordServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +43,10 @@ public class EditSliderServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditSliderServlet</title>");
+            out.println("<title>Servlet ForgotPasswordServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditSliderServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ForgotPasswordServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,16 +64,7 @@ public class EditSliderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("id");
-        SliderDAO sliderDao = new SliderDAO();
-        try {
-            int id = Integer.parseInt(id_raw);
-            Slider slider = sliderDao.getSlider(id);
-            request.setAttribute("slider", slider);
-            request.getRequestDispatcher("/views/admin/EditSlider.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        request.getRequestDispatcher("/views/client/ForgetPass.jsp").forward(request, response);
     }
 
     /**
@@ -95,32 +75,51 @@ public class EditSliderServlet extends HttpServlet {
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
+    private String host;
+    private String port;
+    private String user;
+    private String pass;
+
+    public void init() {
+        // reads SMTP server setting from web.xml file
+        ServletContext context = getServletContext();
+        host = context.getInitParameter("host");
+        port = context.getInitParameter("port");
+        user = context.getInitParameter("user");
+        pass = context.getInitParameter("pass");
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-            String startDate = request.getParameter("startDate");
-            String endDate = request.getParameter("endDate");
-            int id = Integer.parseInt(request.getParameter("id"));
-            String title = request.getParameter("title");
-            String linkUrl = request.getParameter("linkUrl");
+        String email = request.getParameter("email");
+        String token = TokenGenerator.generateToken();
 
-            String imageUrl_fileName = request.getParameter("old-imageUrl");
-            Part part = request.getPart("imageUrl");
-            if (part != null && part.getSize() > 0 && request.getParameter("notUpdateImageUrl") == null) {
-                String token = TokenGenerator.generateToken();
-                imageUrl_fileName = "img_" + token + ".jpg";
-                part.write(imageUrl_fileName);
+        AccountDAO accountDAO = new AccountDAO();
+
+        List<String> listAllEmail = accountDAO.listAllEmail();
+        boolean isHasEmail = false;
+        for (String rEmail : listAllEmail) {
+            if (email.equalsIgnoreCase(rEmail)) {
+                isHasEmail = true;
+                break;
             }
+        }
 
-            SliderDAO sliderDAO = new SliderDAO();
-            Slider slider = new Slider(id, title, imageUrl_fileName, linkUrl, true, null, null, sf.parse(startDate), sf.parse(endDate));
-            sliderDAO.updateSlider(slider);
-
-            response.sendRedirect(request.getContextPath() + "/admin/sliders");
-        } catch (ParseException ex) {
-            Logger.getLogger(EditSliderServlet.class.getName()).log(Level.SEVERE, null, ex);
+        if (isHasEmail) {
+            accountDAO.storeResetToken(email, token);
+            try {
+                EmailUtility.sendEmail(host, port, user, pass, email, "Reset password request", "http://localhost:8080/BookShopping/reset-pass?token=" + token);
+            } catch (MessagingException ex) {
+                ex.printStackTrace();
+            }
+            HttpSession session = request.getSession();
+            session.setAttribute("a_email", email);
+            request.setAttribute("success", true);
+            request.getRequestDispatcher("/views/client/ForgetPass.jsp").forward(request, response);
+        } else {
+            request.setAttribute("failed", true);
+            request.getRequestDispatcher("/views/client/ForgetPass.jsp").forward(request, response);
         }
     }
 

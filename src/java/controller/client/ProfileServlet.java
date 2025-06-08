@@ -2,11 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin.SliderFeatures;
+package controller.client;
 
-import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
 import constants.FileLocation;
-import dao.SliderDAO;
+import dao.AccountDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -15,27 +14,25 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import jakarta.servlet.http.Part;
-import java.io.File;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import model.Slider;
-import token.TokenGenerator;
+import java.util.Date;
+import model.Account;
 
 /**
  *
- * @author USA
+ * @author hoaht
  */
-@WebServlet(name = "EditSliderServlet", urlPatterns = {"/admin/sliders/edit"})
+@WebServlet(name = "ProfileServlet", urlPatterns = {"/profile"})
 @MultipartConfig(
-        location = FileLocation.SLIDE_IMAGE_LOCATION,
+        location = FileLocation.ACCOUNT_LOCATION,
         fileSizeThreshold = 1024 * 1024,
         maxFileSize = 1024 * 1024 * 10,
         maxRequestSize = 1024 * 1024 * 11
 )
-public class EditSliderServlet extends HttpServlet {
+public class ProfileServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +51,10 @@ public class EditSliderServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditSliderServlet</title>");
+            out.println("<title>Servlet ProfileServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditSliderServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet ProfileServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,15 +72,28 @@ public class EditSliderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("id");
-        SliderDAO sliderDao = new SliderDAO();
-        try {
-            int id = Integer.parseInt(id_raw);
-            Slider slider = sliderDao.getSlider(id);
-            request.setAttribute("slider", slider);
-            request.getRequestDispatcher("/views/admin/EditSlider.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        HttpSession session = request.getSession(false);
+//        OrderDAO orderDAO = new OrderDAO();
+
+        if (session != null && session.getAttribute("uName") != null) {
+            String uName = (String) session.getAttribute("uName");
+
+            AccountDAO accountDAO = new AccountDAO();
+            Account account = accountDAO.getAccountByEmail(uName);
+
+//            Map<Order, Float> orders_total = orderDAO.listAllOrderWithTotalPriceByAccount(account.getAcc_id());
+//            List<Map.Entry<Order, Float>> orders_sorted = orders_total.entrySet()
+//                    .stream()
+//                    .sorted(Map.Entry.comparingByValue())
+//                    .collect(Collectors.toList());
+//            request.setAttribute("orders_sorted", orders_sorted);
+            request.setAttribute("account", account);
+
+            System.out.println(account.toString());
+
+            request.getRequestDispatcher("/views/client/Profile.jsp").forward(request, response);
+        } else {
+            response.sendRedirect(request.getContextPath() + "/homepage");
         }
     }
 
@@ -100,27 +110,30 @@ public class EditSliderServlet extends HttpServlet {
             throws ServletException, IOException {
         try {
             SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-            String startDate = request.getParameter("startDate");
-            String endDate = request.getParameter("endDate");
-            int id = Integer.parseInt(request.getParameter("id"));
-            String title = request.getParameter("title");
-            String linkUrl = request.getParameter("linkUrl");
+            int acc_id_update = Integer.parseInt(request.getParameter("acc_id"));
+            String fullName = request.getParameter("fullName");
+            String gender = request.getParameter("gender");
+            
+            Part part = request.getPart("acc_img");
+            String acc_img_fileName = "img_" + acc_id_update + ".jpg";
+            part.write(acc_img_fileName);
 
-            String imageUrl_fileName = request.getParameter("old-imageUrl");
-            Part part = request.getPart("imageUrl");
-            if (part != null && part.getSize() > 0 && request.getParameter("notUpdateImageUrl") == null) {
-                String token = TokenGenerator.generateToken();
-                imageUrl_fileName = "img_" + token + ".jpg";
-                part.write(imageUrl_fileName);
+            Date birthDate = null;
+            if (request.getParameter("birthDate").length() != 0) {
+                birthDate = sf.parse(request.getParameter("birthDate"));
             }
+            String telephone = request.getParameter("telephone");
+            String address = request.getParameter("address");
+            HttpSession session = request.getSession();
+            Account a = new Account(0, acc_img_fileName, fullName, (String) session.getAttribute("uName"), null, gender, address, birthDate, telephone, null, null, null, null, null, null, null, null, null, null);
 
-            SliderDAO sliderDAO = new SliderDAO();
-            Slider slider = new Slider(id, title, imageUrl_fileName, linkUrl, true, null, null, sf.parse(startDate), sf.parse(endDate));
-            sliderDAO.updateSlider(slider);
+            AccountDAO accountDAO = new AccountDAO();
+            accountDAO.updateAccount(a, acc_id_update);
 
-            response.sendRedirect(request.getContextPath() + "/admin/sliders");
-        } catch (ParseException ex) {
-            Logger.getLogger(EditSliderServlet.class.getName()).log(Level.SEVERE, null, ex);
+            response.sendRedirect(request.getContextPath() + "/profile");
+        } catch (IOException | NumberFormatException | ParseException e) {
+            e.printStackTrace();
+            response.sendRedirect(request.getContextPath() + "/profile");
         }
     }
 

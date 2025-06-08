@@ -2,40 +2,27 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
  */
-package controller.admin.SliderFeatures;
+package controller.client;
 
-import com.oracle.wls.shaded.org.apache.bcel.generic.AALOAD;
-import constants.FileLocation;
+//import dao.BookDAO;
 import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.File;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.List;
+import model.Product;
 import model.Slider;
-import token.TokenGenerator;
 
 /**
  *
- * @author USA
+ * @author hoaht
  */
-@WebServlet(name = "EditSliderServlet", urlPatterns = {"/admin/sliders/edit"})
-@MultipartConfig(
-        location = FileLocation.SLIDE_IMAGE_LOCATION,
-        fileSizeThreshold = 1024 * 1024,
-        maxFileSize = 1024 * 1024 * 10,
-        maxRequestSize = 1024 * 1024 * 11
-)
-public class EditSliderServlet extends HttpServlet {
+@WebServlet(name = "HomepageServlet", urlPatterns = {"/homepage"})
+public class HomepageServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -54,10 +41,10 @@ public class EditSliderServlet extends HttpServlet {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
             out.println("<head>");
-            out.println("<title>Servlet EditSliderServlet</title>");
+            out.println("<title>Servlet HomepageServlet</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Servlet EditSliderServlet at " + request.getContextPath() + "</h1>");
+            out.println("<h1>Servlet HomepageServlet at " + request.getContextPath() + "</h1>");
             out.println("</body>");
             out.println("</html>");
         }
@@ -75,16 +62,21 @@ public class EditSliderServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String id_raw = request.getParameter("id");
+        System.out.println("This is home page");
+//        BookDAO dao = new BookDAO();
         SliderDAO sliderDao = new SliderDAO();
-        try {
-            int id = Integer.parseInt(id_raw);
-            Slider slider = sliderDao.getSlider(id);
-            request.setAttribute("slider", slider);
-            request.getRequestDispatcher("/views/admin/EditSlider.jsp").forward(request, response);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+//        List<Book> listB = dao.listNewBooks();
+        List<Slider> sliders = sliderDao.getAllSliders();
+//        List<Book> listBS = dao.listBestSellers();
+//        List<Book> listFK = dao.listBookForKid();
+//        List<Book> gamesPuzzles_books = dao.listBookByCid(24);
+        
+//        request.setAttribute("listB", listB);
+//        request.setAttribute("listBS", listBS);
+        request.setAttribute("sliders", sliders);
+//        request.setAttribute("listFK", listFK);
+//        request.setAttribute("gamesPuzzles_books", gamesPuzzles_books);
+        request.getRequestDispatcher("/views/client/Homepage.jsp").forward(request, response);
     }
 
     /**
@@ -98,30 +90,7 @@ public class EditSliderServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-            String startDate = request.getParameter("startDate");
-            String endDate = request.getParameter("endDate");
-            int id = Integer.parseInt(request.getParameter("id"));
-            String title = request.getParameter("title");
-            String linkUrl = request.getParameter("linkUrl");
-
-            String imageUrl_fileName = request.getParameter("old-imageUrl");
-            Part part = request.getPart("imageUrl");
-            if (part != null && part.getSize() > 0 && request.getParameter("notUpdateImageUrl") == null) {
-                String token = TokenGenerator.generateToken();
-                imageUrl_fileName = "img_" + token + ".jpg";
-                part.write(imageUrl_fileName);
-            }
-
-            SliderDAO sliderDAO = new SliderDAO();
-            Slider slider = new Slider(id, title, imageUrl_fileName, linkUrl, true, null, null, sf.parse(startDate), sf.parse(endDate));
-            sliderDAO.updateSlider(slider);
-
-            response.sendRedirect(request.getContextPath() + "/admin/sliders");
-        } catch (ParseException ex) {
-            Logger.getLogger(EditSliderServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**
