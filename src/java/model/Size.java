@@ -5,8 +5,6 @@
 package model;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,25 +12,18 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
-
+ *
+ * @author admin
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Product {
-
+public class Size {
     private int id;
-    private String title;
-    private String image;
-    private String description;
+    private String value;
+    private boolean status;
     private Date createDate;
     private Date updateDate;
-    private boolean status;
-    private Publisher publisher;
-
-    private Set<Category> categories = new HashSet<>();
-    private Set<ProductVariant> productvariants = new HashSet<>();
-
 }

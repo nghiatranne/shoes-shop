@@ -14,25 +14,25 @@ import lombok.Setter;
 import lombok.ToString;
 
 /**
-
+ *
+ * @author admin
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Product {
-
+public class ProductVariant {
     private int id;
-    private String title;
-    private String image;
-    private String description;
+    private String name;
+    private double importPrice;
+    private double price;
+    private Product product;
+    private boolean status;
     private Date createDate;
     private Date updateDate;
-    private boolean status;
-    private Publisher publisher;
-
-    private Set<Category> categories = new HashSet<>();
-    private Set<ProductVariant> productvariants = new HashSet<>();
+    private String image;
+    
+    private Set<ProductVariantSize> productvariantsizes = new HashSet<>();
 
 }
