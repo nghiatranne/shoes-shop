@@ -94,7 +94,8 @@ public class LoginServlet extends HttpServlet {
         
         List<Account> accounts = accountDAO.listAllEmailPass();
         for (Account a : accounts) {
-            if (email.equals(a.getEmail()) && password.equals(a.getPassword())) {
+            if (email.equals(a.getEmail()) && hashedPassword.equals(a.getPassword())) {
+
                 isExisted = true;
                 status = a.getStatus();
                 for (Role role : a.getRoles()) {

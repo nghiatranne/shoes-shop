@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import util.PasswordHasher;
 
 /**
  *
@@ -111,7 +112,7 @@ public class ChangePassServlet extends HttpServlet {
         }
 
         // Update new password
-        boolean updated = a.updatePassword(email, newPassword);
+        boolean updated = a.updatePassword(email, PasswordHasher.hashPassword(newPassword));
         if (updated) {
             request.setAttribute("message", "Password changed successfully.");
             request.setAttribute("messageType", "success");

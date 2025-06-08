@@ -127,7 +127,7 @@ public class SignUpServlet extends HttpServlet {
                 UUID uuid = UUID.randomUUID();
                 String token = uuid.toString();
                 String hashedPassword = PasswordHasher.hashPassword(password);
-                Account account = new Account(0, null, fullName, email, password, gender, address, birthDate, telephone, null, createDate, null, null, null, null, null, null, null, null);
+                Account account = new Account(0, null, fullName, email, hashedPassword, gender, address, birthDate, telephone, null, createDate, null, null, null, null, null, null, null, null);
                 int id = accountDAO.addAccount(account, token);
                 
                 addressDAO.addNewAddress(id, new Address(0, fullName, address, telephone, null, true));
