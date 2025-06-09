@@ -5,6 +5,7 @@
 package controller.client;
 
 //import dao.BookDAO;
+import dao.ProductDAO;
 import dao.SliderDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -63,18 +64,17 @@ public class HomepageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("This is home page");
-//        BookDAO dao = new BookDAO();
+        ProductDAO dao = new ProductDAO();
         SliderDAO sliderDao = new SliderDAO();
-//        List<Book> listB = dao.listNewBooks();
+        List<Product> listB = dao.listNewProducts();
         List<Slider> sliders = sliderDao.getAllSliders();
-//        List<Book> listBS = dao.listBestSellers();
-//        List<Book> listFK = dao.listBookForKid();
-//        List<Book> gamesPuzzles_books = dao.listBookByCid(24);
+        List<Product> listBS = dao.listBestSellers();
+        List<Product> listRCM = dao.listRandomProducts();
         
-//        request.setAttribute("listB", listB);
-//        request.setAttribute("listBS", listBS);
+        request.setAttribute("listB", listB);
+        request.setAttribute("listBS", listBS);
         request.setAttribute("sliders", sliders);
-//        request.setAttribute("listFK", listFK);
+        request.setAttribute("listRCM", listRCM);
 //        request.setAttribute("gamesPuzzles_books", gamesPuzzles_books);
         request.getRequestDispatcher("/views/client/Homepage.jsp").forward(request, response);
     }
