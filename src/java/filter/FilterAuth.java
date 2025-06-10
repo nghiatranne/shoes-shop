@@ -143,7 +143,7 @@ public class FilterAuth implements Filter {
         boolean isHomePageRequest = url.equals(contextPath + "/homepage");
         boolean isBlogsListRequest = url.equals(contextPath + "/blog-list");
         boolean isBlogDetailsRequest = url.equals(contextPath + "/blog/post-details");
-        boolean isBooksRequest = url.contains(contextPath + "/books");
+        boolean isBooksRequest = url.contains(contextPath + "/products");
         boolean isOrderRequest = url.equals(contextPath + "/orders/order-detail");
         boolean isPaymentRequest = url.equals(contextPath + "/payment");
         boolean isChooseAddressRequest = url.equals(contextPath + "/choose-address");

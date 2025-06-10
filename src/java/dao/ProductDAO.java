@@ -171,24 +171,24 @@ public class ProductDAO extends DBContext{
     }
 
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM product WHERE id = ? AND status = 1";
+        String sql = "SELECT * FROM Product WHERE ID = ? AND Status = 1";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
             if (rs.next()) {
                 Product p = new Product();
-                p.setId(rs.getInt("id"));
-                p.setTitle(rs.getString("title"));
-                p.setImage(rs.getString("image"));
-                p.setDescription(rs.getString("description"));
-                p.setCreateDate(rs.getDate("create_date"));
-                p.setUpdateDate(rs.getDate("update_date"));
-                p.setStatus(rs.getBoolean("status"));
+                p.setId(rs.getInt("ID"));
+                p.setTitle(rs.getString("Title"));
+                p.setImage(rs.getString("Image"));
+                p.setDescription(rs.getString("Description"));
+                p.setCreateDate(rs.getDate("CreateDate"));
+                p.setUpdateDate(rs.getDate("UpdateDate"));
+                p.setStatus(rs.getBoolean("Status"));
                 
                 // Get publisher
                 PublisherDAO publisherDAO = new PublisherDAO();
-                Publisher publisher = publisherDAO.getPublisherById(rs.getInt("publisher_id"));
+                Publisher publisher = publisherDAO.getPublisherById(rs.getInt("PublisherID"));
                 p.setPublisher(publisher);
                 
                 // Get categories
@@ -207,6 +207,107 @@ public class ProductDAO extends DBContext{
             System.out.println(e);
         }
         return null;
+    }
+
+    public List<Product> listAllActiveProducts() {
+        PublisherDAO publisherDAO = new PublisherDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+        List<Product> products = new ArrayList<>();
+
+        String sql = "SELECT * FROM Product WHERE Status = 1";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description")); 
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<Product> searchProducts(String keyword) {
+        PublisherDAO publisherDAO = new PublisherDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+        List<Product> products = new ArrayList<>();
+
+        String sql = "SELECT * FROM Product WHERE Status = 1 AND (Title LIKE ? OR Description LIKE ?)";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, "%" + keyword + "%");
+            ps.setString(2, "%" + keyword + "%");
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description")); 
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
+
+    public List<Product> listProductsByCategory(int categoryId) {
+        PublisherDAO publisherDAO = new PublisherDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+        List<Product> products = new ArrayList<>();
+
+        String sql = "SELECT DISTINCT p.* FROM Product p " +
+                    "INNER JOIN ProductCategory pc ON p.ID = pc.ProductID " +
+                    "WHERE p.Status = 1 AND pc.CategoryID = ?";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, categoryId);
+            ResultSet rs = ps.executeQuery();
+
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description")); 
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
     }
 
 //
