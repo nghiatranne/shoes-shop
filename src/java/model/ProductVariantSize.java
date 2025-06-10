@@ -30,6 +30,4 @@ public class ProductVariantSize {
     private boolean status;
     private Date createDate;
     private Date updateDate;
-    
-    private Set<Size> sizes = new HashSet<>();
 }

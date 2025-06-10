@@ -192,7 +192,7 @@ public class PostDAO extends DBContext {
             ps.setInt(1, postId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                categorys.add(new Category(rs.getString(1), rs.getString(2), rs.getDate(3), rs.getDate(4), null, null));
+                categorys.add(new Category(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getDate(4), null, null));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -307,6 +307,33 @@ public class PostDAO extends DBContext {
         }
         return posts;
     }
+    public List<Post> listLatestUpdatedPosts(int limit){
+    List<Post> posts = new ArrayList<>();
+    String sql = "SELECT Top(?)* FROM Post ORDER BY CreateAt DESC";
+
+    try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        ps.setInt(1, limit);
+        try (ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Post post = new Post();
+                post.setId(rs.getInt("id"));
+                post.setTitle(rs.getString("Title"));
+                post.setThumbnail(rs.getString("Thumbnail"));
+                post.setContent(rs.getString("Content"));
+                post.setStatus(rs.getBoolean("Status"));
+                post.setCreateAt(rs.getDate("CreateAt"));
+                post.setUpdateAt(rs.getDate("UpdateAt"));
+                post.setAccount(new AccountDAO().getAccount(rs.getInt("AccountID")));
+                post.setCategories(getCategoryPost(rs.getInt("id")));
+                posts.add(post);
+            }
+        }
+    }catch (NumberFormatException | SQLException e) {
+            e.printStackTrace();
+        }
+
+    return posts;
+}
 
     public int getNumberOfPosts() throws SQLException {
         String sql = "SELECT COUNT(*) FROM Post";

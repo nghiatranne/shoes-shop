@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 import model.Category;
 import model.Product;
+import model.ProductVariant;
 import model.Publisher;
 
 /**
@@ -63,6 +64,7 @@ public class ProductDAO extends DBContext{
     public List<Product> listNewProducts() {
         PublisherDAO publisherDAO = new PublisherDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
 
         List<Product> products = new ArrayList<>();
         String sql = "SELECT * FROM Product ORDER BY CreateDate DESC";
@@ -83,7 +85,7 @@ public class ProductDAO extends DBContext{
 
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 // Nếu có DAO cho ProductVariant thì thêm ở đây:
-                // product.setProductvariants(productVariantDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
 
                 products.add(product);
             }
@@ -98,6 +100,7 @@ public class ProductDAO extends DBContext{
         PublisherDAO publisherDAO = new PublisherDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
 
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
         List<Product> products = new ArrayList<>();
         String sql = "SELECT p.*, SUM(od.Quantity) AS TotalSold "
                    + "FROM Product p "
@@ -124,7 +127,7 @@ public class ProductDAO extends DBContext{
                 product.setCategories(categoryDAO.listAll(product.getId()));
 
                 // Nếu cần, có thể load thêm productVariants ở đây
-
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
             }
 
@@ -138,6 +141,7 @@ public class ProductDAO extends DBContext{
         PublisherDAO publisherDAO = new PublisherDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         List<Product> products = new ArrayList<>();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
 
         String sql = "SELECT * FROM Product WHERE Status = 1 ORDER BY NEWID()";
 
@@ -156,7 +160,7 @@ public class ProductDAO extends DBContext{
                 product.setStatus(rs.getBoolean("Status"));
                 product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
-
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
             }
         } catch (SQLException e) {
@@ -164,6 +168,45 @@ public class ProductDAO extends DBContext{
         }
 
         return products;
+    }
+
+    public Product getProductById(int id) {
+        String sql = "SELECT * FROM product WHERE id = ? AND status = 1";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setTitle(rs.getString("title"));
+                p.setImage(rs.getString("image"));
+                p.setDescription(rs.getString("description"));
+                p.setCreateDate(rs.getDate("create_date"));
+                p.setUpdateDate(rs.getDate("update_date"));
+                p.setStatus(rs.getBoolean("status"));
+                
+                // Get publisher
+                PublisherDAO publisherDAO = new PublisherDAO();
+                Publisher publisher = publisherDAO.getPublisherById(rs.getInt("publisher_id"));
+                p.setPublisher(publisher);
+                
+                // Get categories
+                CategoryDAO categoryDAO = new CategoryDAO();
+                List<Category> categories = categoryDAO.getCategoriesByProductId(id);
+                p.setCategories(new HashSet<>(categories));
+                
+                // Get product variants
+                ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+                Set<ProductVariant> variants = productVariantDAO.getProductVariantsByProductId(id);
+                p.setProductvariants(variants);
+                
+                return p;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
     }
 
 //

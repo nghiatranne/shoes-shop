@@ -5,6 +5,7 @@
 package dao;
 
 import dal.DBContext;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -14,12 +15,79 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import model.Publisher;
+import model.Product;
 
 /**
  *
  * @author hoaht
  */
 public class PublisherDAO extends DBContext {
+
+    public Publisher getPublisherById(int id) {
+        String sql = "SELECT * FROM publisher WHERE id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Publisher p = new Publisher();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("name"));
+                return p;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    public List<Product> getProductsByPublisherId(int publisherId) {
+        List<Product> list = new ArrayList<>();
+        String sql = "SELECT * FROM product WHERE publisher_id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, publisherId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("id"));
+                p.setTitle(rs.getString("title"));
+                p.setImage(rs.getString("image"));
+                p.setDescription(rs.getString("description"));
+                p.setCreateDate(rs.getDate("create_date"));
+                p.setUpdateDate(rs.getDate("update_date"));
+                p.setStatus(rs.getBoolean("status"));
+                list.add(p);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public void addPublisher(Publisher publisher) {
+        String sql = "INSERT INTO publisher (name) VALUES (?)";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, publisher.getName());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
+    public void updatePublisher(Publisher publisher) {
+        String sql = "UPDATE publisher SET name = ? WHERE id = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setString(1, publisher.getName());
+            st.setInt(3, publisher.getId());
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
+    
 
     public List<Publisher> listAll() {
         List<Publisher> publishers = new ArrayList<>();

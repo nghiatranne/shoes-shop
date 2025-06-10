@@ -9,12 +9,13 @@
         <div class="row justify-content-between gy-4">
             <div class="col-12 col-lg-4">
                 <div class="d-flex align-items-center mb-3"><img src="<c:url
-                                                                     value="/resources/assets/img/logos/logo.png"
+                                                                     value="/resources/assets/img/logos/logo.jpg"
                                                                      />" alt="phoenix" width="27" />
-                    <p class="logo-text ms-2">Athena Bookstore</p>
+                    <p class="logo-text ms-2">Shoes Shop</p>
                 </div>
                 <p class="text-700 mb-1 fw-semi-bold lh-sm fs--1">
-                    Welcome to Athena bookstore, your ultimate destination for books of all genres. Whether you're looking for the latest bestsellers, timeless classics, or engaging children's books, we have something for everyone. Explore our extensive collection, enjoy exclusive discounts, and experience seamless shopping with us. Connect with us through our social media channels and stay updated on new arrivals and upcoming events. Need help? Our dedicated customer service team is here to assist you. Happy reading!
+                    
+Welcome to our Shoes shop, your ultimate destination for all things footwear! Step into our inviting space and discover a diverse collection of shoes designed to elevate your style and comfort. From the latest trends to timeless classics, we offer a wide range of options for every occasion and every member of the family. Our friendly team is here to help you find the perfect pair that feels as good as it looks. Come on in and let's find your next favorite shoes!
                 </p>
             </div>
             <div class="col-6 col-md-auto">

@@ -22,7 +22,7 @@ import lombok.ToString;
 @ToString
 public class Size {
     private int id;
-    private String value;
+    private int value;
     private boolean status;
     private Date createDate;
     private Date updateDate;
