@@ -81,7 +81,7 @@ uri="http://java.sun.com/jsp/jstl/fmt" %> <%--<%@ page import="model.Author"
 									data-bs-toggle="tooltip"
 									data-bs-placement="top"
 									title="View all"
-									href="books/new-book"
+									href="products/new-products"
 									type="button"
 								>
 									<span data-feather="arrow-right" class="fs--1 ms-1"></span>

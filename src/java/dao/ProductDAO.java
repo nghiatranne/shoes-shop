@@ -193,8 +193,8 @@ public class ProductDAO extends DBContext{
                 
                 // Get categories
                 CategoryDAO categoryDAO = new CategoryDAO();
-                List<Category> categories = categoryDAO.getCategoriesByProductId(id);
-                p.setCategories(new HashSet<>(categories));
+                Set<Category> categories = categoryDAO.listAll(id);
+                p.setCategories(categories);
                 
                 // Get product variants
                 ProductVariantDAO productVariantDAO = new ProductVariantDAO();
@@ -645,67 +645,53 @@ public class ProductDAO extends DBContext{
 //        return books;
 //    }
 //
-//    public List<Book> listBookRelated(int bookID) {
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        List<Book> books = new ArrayList<>();
-//
-//        String sql = "select * from Book where ID in ( "
-//                + "	select distinct b.ID from Book b left join BookCategory bc on b.ID = bc.BookID where bc.CategoryID in ( "
-//                + "		select c.ID from Category c left join BookCategory bc on c.ID = bc.CategoryID where bc.BookID = ? "
-//                + "	) and b.ID != ? "
-//                + ")";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, bookID);
-//            ps.setInt(2, bookID);
-//            ResultSet rs = ps.executeQuery();
-//
-//            Map<Integer, Book> bookMap = new HashMap<>();
-//
-//            while (rs.next()) {
-//                int bookId = rs.getInt("ID");
-//                Book book = bookMap.get(bookId);
-//                if (book == null) {
-//                    book = new Book();
-//                    book.setId(bookId);
-//                    book.setIsbn(rs.getString("ISBN"));
-//                    book.setTitle(rs.getString("Title"));
-//                    book.setImage(rs.getString("Image"));
-//                    book.setDesc(rs.getString("Desc"));
-//                    book.setDescDetail(rs.getString("DescDetail"));
-//                    book.setPublishDate(rs.getDate("PublishDate"));
-//                    book.setLanguage(rs.getString("Language"));
-//                    book.setPrice(rs.getFloat("Price"));
-//                    book.setPages(rs.getInt("Pages"));
-//                    book.setWidth(rs.getFloat("Width"));
-//                    book.setHeight(rs.getFloat("Height"));
-//                    book.setThickness(rs.getFloat("Thickness"));
-//                    book.setWeight(rs.getFloat("Weight"));
-//                    book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                    book.setCreateDate(rs.getDate("CreateDate"));
-//                    book.setUpdateDate(rs.getDate("UpdateDate"));
-//                    book.setStatus(rs.getInt("Status") == 1);
-//                    book.setAvailable(rs.getBoolean("Available"));
-//                    book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                    book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                    book.setCategories(categoryDAO.listAll(book.getId()));
-//
-//                    // Fetch authors for the current book using AuthorDAO
-//                    Set<Author> authors = authorDAO.listAll(book.getId());
-//                    book.setAuthors(authors);
-//
-//                    bookMap.put(bookId, book);
-//                    books.add(book);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
+    public List<Product> listBookRelated(int bookID) {
+        PublisherDAO publisherDAO = new PublisherDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+
+        List<Product> books = new ArrayList<>();
+
+        String sql = "select * from Product where ID in ( "
+                + "	select distinct b.ID from Product b left join ProductCategory bc on b.ID = bc.ProductID where bc.CategoryID in ( "
+                + "		select c.ID from Category c left join ProductCategory bc on c.ID = bc.CategoryID where bc.ProductID = ? "
+                + "	) and b.ID != ? "
+                + ")";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, bookID);
+            ps.setInt(2, bookID);
+            ResultSet rs = ps.executeQuery();
+
+            Map<Integer, Product> bookMap = new HashMap<>();
+
+            while (rs.next()) {
+                int bookId = rs.getInt("ID");
+                Product book = bookMap.get(bookId);
+                if (book == null) {
+                    Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description")); // hoặc "DescDetail" nếu bạn muốn
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                // Nếu có DAO cho ProductVariant thì thêm ở đây:
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+
+                    bookMap.put(bookId, book);
+                    books.add(book);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return books;
+    }
 //
 //    public Book getBookByIsbn(String isbn) {
 //        PublisherDAO publisherDAO = new PublisherDAO();

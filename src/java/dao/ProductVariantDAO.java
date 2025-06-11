@@ -63,9 +63,9 @@ public class ProductVariantDAO extends DBContext {
                 pv.setImage(rs.getString("Image"));
                 
                 // Get product
-                ProductDAO productDAO = new ProductDAO();
-                Product product = productDAO.getProductById(rs.getInt("ProductID"));
-                pv.setProduct(product);
+//                ProductDAO productDAO = new ProductDAO();
+//                Product product = productDAO.getProductById(rs.getInt("ProductID"));
+//                pv.setProduct(product);
                 
                 ProductVariantSizeDAO productVariantSizeDAO = new ProductVariantSizeDAO();
                 pv.setProductvariantsizes(productVariantSizeDAO.getProductVariantSizesByProductVariantId(rs.getInt("ID")));

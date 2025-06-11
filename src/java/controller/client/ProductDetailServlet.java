@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.List;
 import model.Product;
 
 /**
@@ -66,7 +67,7 @@ public class ProductDetailServlet extends HttpServlet {
           Product product = productDAO.getProductById(productId);
 //        FeedbackDAO fb = new FeedbackDAO();
 //        List<Feedback> listF = fb.getFeedbacksByISBN(book_isbn);
-//        List<Product> listBookRelated = productDAO.listBookRelated(productId);
+            List<Product> listBookRelated = productDAO.listBookRelated(productId);
 
 //        double averageRating = fb.getAverageRating(book_isbn);
 //        int totalReviews = fb.getTotalReviews(book_isbn);
@@ -83,7 +84,7 @@ public class ProductDetailServlet extends HttpServlet {
 //        int percent2Star = totalReviews > 0 ? (count2Star * 100 / totalReviews) : 0;
 //        int percent1Star = totalReviews > 0 ? (count1Star * 100 / totalReviews) : 0;
 
-//        request.setAttribute("book_related", listBookRelated);
+        request.setAttribute("product_related", listBookRelated);
         request.setAttribute("detail_product", product);
 //        request.setAttribute("detail_book_stock", bookStockDAO.getBookStock(book_isbn));
 //        request.setAttribute("list_feedback", listF);

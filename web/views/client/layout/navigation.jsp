@@ -1,5 +1,4 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %> <%@ page
-    contentType="text/html;charset=UTF-8" language="java" %> <%@ page
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>  <%@ page
         import="model.Category" %> <%@ page import="dao.CategoryDAO" %> <%@ page
         import="model.Category" %> <%@ page import="java.util.List" %><%-- --%><%
         CategoryDAO categoryDAO = new CategoryDAO(); List<Category>
