@@ -104,7 +104,7 @@ public class ChangePassServlet extends HttpServlet {
         }
 
         // Validate old password
-        if (!a.checkOldPassword(email, oldPassword)) {
+        if (!a.checkOldPassword(email, PasswordHasher.hashPassword(oldPassword))) {
             request.setAttribute("message", "Old password is incorrect.");
             request.setAttribute("messageType", "error");
             request.getRequestDispatcher("/views/client/ChangePass.jsp").forward(request, response);
