@@ -53,26 +53,6 @@
                                 </div>
                             </a>
                         </div>
-                        <!--Post-->
-                        <div class="nav-item-wrapper">
-                            <a
-                                id="posts-manage"
-                                class="nav-link label-1"
-                                href="${pageContext.request.contextPath}/admin/posts"
-                                role="button"
-                                data-bs-toggle=""
-                                aria-expanded="false"
-                                >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon">
-                                        <span data-feather="file-text"></span>
-                                    </span>
-                                    <span class="nav-link-text-wrapper">
-                                        <span class="nav-link-text"> Post Management </span>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
                         <!--Customer-->
                         <div class="nav-item-wrapper">
                             <a
@@ -92,26 +72,6 @@
                                             Customer Management
                                             <!--Customer-->
                                         </span>
-                                    </span>
-                                </div>
-                            </a>
-                        </div>
-                        <!--Slider-->
-                        <div class="nav-item-wrapper">
-                            <a
-                                id="sliders-manage"
-                                class="nav-link label-1"
-                                href="${pageContext.request.contextPath}/admin/sliders"
-                                role="button"
-                                data-bs-toggle=""
-                                aria-expanded="false"
-                                >
-                                <div class="d-flex align-items-center">
-                                    <span class="nav-link-icon">
-                                        <span data-feather="sliders"></span>
-                                    </span>
-                                    <span class="nav-link-text-wrapper">
-                                        <span class="nav-link-text"> Slider Management </span>
                                     </span>
                                 </div>
                             </a>
@@ -175,6 +135,47 @@
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text">Sale Dashboard</span>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                                
+                        <!--Slider-->
+                        <div class="nav-item-wrapper">
+                            <a
+                                id="sliders-manage"
+                                class="nav-link label-1"
+                                href="${pageContext.request.contextPath}/admin/sliders"
+                                role="button"
+                                data-bs-toggle=""
+                                aria-expanded="false"
+                                >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon">
+                                        <span data-feather="sliders"></span>
+                                    </span>
+                                    <span class="nav-link-text-wrapper">
+                                        <span class="nav-link-text"> Slider Management </span>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                                <!--Post-->
+                        <div class="nav-item-wrapper">
+                            <a
+                                id="posts-manage"
+                                class="nav-link label-1"
+                                href="${pageContext.request.contextPath}/admin/posts"
+                                role="button"
+                                data-bs-toggle=""
+                                aria-expanded="false"
+                                >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon">
+                                        <span data-feather="file-text"></span>
+                                    </span>
+                                    <span class="nav-link-text-wrapper">
+                                        <span class="nav-link-text"> Post Management </span>
                                     </span>
                                 </div>
                             </a>
