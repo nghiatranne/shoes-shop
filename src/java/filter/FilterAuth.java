@@ -234,7 +234,7 @@ public class FilterAuth implements Filter {
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
                 || isMktSliderDelReq) {
-            if (roles.contains("MARKETER")) {
+            if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;
             } else {
