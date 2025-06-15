@@ -46,8 +46,8 @@ public class ProductVariantSizeDAO extends DBContext {
         return list;
     }
     
-    public Set<ProductVariantSize> getProductVariantSizesByProductVariantId(int productVariantId) {
-        Set<ProductVariantSize> list = new HashSet<>();
+    public List<ProductVariantSize> getProductVariantSizesByProductVariantId(int productVariantId) {
+        List<ProductVariantSize> list = new ArrayList<>();
         String sql = "SELECT * FROM ProductVariantSize WHERE ProductVariantID = ? AND Status = 1";
         try {
             PreparedStatement st = connection.prepareStatement(sql);

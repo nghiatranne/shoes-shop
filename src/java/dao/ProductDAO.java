@@ -198,7 +198,7 @@ public class ProductDAO extends DBContext{
                 
                 // Get product variants
                 ProductVariantDAO productVariantDAO = new ProductVariantDAO();
-                Set<ProductVariant> variants = productVariantDAO.getProductVariantsByProductId(id);
+                List<ProductVariant> variants = productVariantDAO.getProductVariantsByProductId(id);
                 p.setProductvariants(variants);
                 
                 return p;
