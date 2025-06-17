@@ -22,7 +22,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class Publisher {
+public class Brand {
     private int id;
     private String name;
     private Date createDate;
