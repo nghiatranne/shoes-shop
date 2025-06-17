@@ -21,7 +21,13 @@ import model.Brand;
 import model.Category;
 import model.Product;
 import model.ProductVariant;
+import model.ProductVariantSize;
 import model.Publisher;
+import model.Size;
+import java.sql.Connection;
+import java.sql.Timestamp;
+import jakarta.servlet.http.Part;
+import java.io.IOException;
 
 /**
  *
@@ -172,7 +178,7 @@ public class ProductDAO extends DBContext{
     }
 
     public Product getProductById(int id) {
-        String sql = "SELECT * FROM Product WHERE ID = ? AND Status = 1";
+        String sql = "SELECT * FROM Product WHERE ID = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -187,7 +193,6 @@ public class ProductDAO extends DBContext{
                 p.setUpdateDate(rs.getDate("UpdateDate"));
                 p.setStatus(rs.getBoolean("Status"));
                 
-                // Get publisher
                 BrandDAO brandDAO = new BrandDAO();
                 Brand brand = brandDAO.getBrandById(rs.getInt("BrandID"));
                 p.setBrand(brand);
@@ -197,7 +202,6 @@ public class ProductDAO extends DBContext{
                 Set<Category> categories = categoryDAO.listAll(id);
                 p.setCategories(categories);
                 
-                // Get product variants
                 ProductVariantDAO productVariantDAO = new ProductVariantDAO();
                 List<ProductVariant> variants = productVariantDAO.getProductVariantsByProductId(id);
                 p.setProductvariants(variants);
@@ -208,6 +212,56 @@ public class ProductDAO extends DBContext{
             System.out.println(e);
         }
         return null;
+    }
+    
+    public List<ProductVariant> getListProductVariantByProductId(int productId) {
+        List<ProductVariant> list = new ArrayList<>();
+        String sql = "select * from ProductVariant where ProductID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductVariant productVariant = new ProductVariant();
+                productVariant.setId(rs.getInt("ID"));
+                productVariant.setName(rs.getString("Name"));
+                productVariant.setImportPrice(rs.getDouble("ImportPrice"));
+                productVariant.setPrice(rs.getDouble("Price"));
+                productVariant.setStatus(rs.getBoolean("Status"));
+                productVariant.setCreateDate(rs.getDate("CreateDate"));
+                productVariant.setUpdateDate(rs.getDate("UpdateDate"));
+                productVariant.setImage(rs.getString("Image"));
+                list.add(productVariant);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public List<ProductVariantSize> getListProductVariantSizeByProductId(int productVariantId) {
+        List<ProductVariantSize> list = new ArrayList<>();
+        String sql = "select * from ProductVariantSize pvs "
+                + "left join Size s on pvs.SizeID = s.Id "
+                + "where ProductVariantId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productVariantId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductVariantSize productVariantSize = new ProductVariantSize();
+                productVariantSize.setId(rs.getInt("ID"));
+                productVariantSize.setQuantityHolding(rs.getInt("QuantityHolding"));
+                productVariantSize.setQuantityInStock(rs.getInt("QuantityInStock"));
+                Size s = new Size();
+                s.setValue(rs.getInt("Value"));
+                productVariantSize.setSize(s);
+                list.add(productVariantSize);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
     }
 
     public List<Product> listAllActiveProducts() {
@@ -311,341 +365,126 @@ public class ProductDAO extends DBContext{
         return products;
     }
 
-//
-//    public int addNewBook(Book book) {
-//        SimpleDateFormat sf = new SimpleDateFormat("MM-dd-yyyy");
-//        String sql = "insert into Book(ISBN, Title, Image, [Desc], DescDetail, PublishDate, Language, Price, Pages, Width, Height, Thickness, Weight, QuantityInStock, Available, FormatId, PublisherID) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, book.getIsbn());
-//            ps.setString(2, book.getTitle());
-//            ps.setString(3, book.getImage());
-//            ps.setString(4, book.getDesc());
-//            ps.setString(5, book.getDescDetail());
-//            ps.setString(6, sf.format(book.getPublishDate()));
-//            ps.setString(7, book.getLanguage());
-//            ps.setFloat(8, book.getPrice());
-//            ps.setInt(9, book.getPages());
-//            ps.setFloat(10, book.getWidth());
-//            ps.setFloat(11, book.getHeight());
-//            ps.setFloat(12, book.getThickness());
-//            ps.setFloat(13, book.getWeight());
-//            ps.setInt(14, book.getQuantityInStock());
-//            ps.setBoolean(15, book.isAvailable());
-//            ps.setInt(16, book.getFormat().getId());
-//            ps.setInt(17, book.getPublisher().getId());
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                return rs.getInt(1);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return -1;
-//    }
-//
-//    public void addBookAuthor(String[] authors_id, int book_id) {
-//        String sql = "insert into BookAuthor(AuthorID, BookID) values (?, ?)";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            for (String id : authors_id) {
-//                ps.setInt(1, Integer.parseInt(id));
-//                ps.setInt(2, book_id);
-//                ps.executeUpdate();
-//            }
-//        } catch (NumberFormatException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void deleteBookAuthor(Set<Author> authors, int book_id) {
-//        String sql = "delete from BookAuthor where AuthorID = ? and BookID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            for (Author a : authors) {
-//                ps.setInt(1, a.getId());
-//                ps.setInt(2, book_id);
-//                ps.executeUpdate();
-//            }
-//        } catch (NumberFormatException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void deleteBookCategory(Set<Category> categories, int book_id) {
-//        String sql = "delete from BookCategory where CategoryID = ? and BookID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            for (Category c : categories) {
-//                ps.setInt(1, Integer.parseInt(c.getId()));
-//                ps.setInt(2, book_id);
-//                ps.executeUpdate();
-//            }
-//        } catch (NumberFormatException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void addBookCategory(String[] category_id, int book_id) {
-//        String sql = "insert into BookCategory(CategoryID, BookID) values (?, ?)";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            for (String id : category_id) {
-//                ps.setInt(1, Integer.parseInt(id));
-//                ps.setInt(2, book_id);
-//                ps.executeUpdate();
-//            }
-//        } catch (NumberFormatException | SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public Book getBook(int b_id) {
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//
-//        String sql = "Select * from Book where id = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, b_id);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setDesc(rs.getString("Desc"));
-//                book.setDescDetail(rs.getString("DescDetail"));
-//                book.setPublishDate(rs.getDate("PublishDate"));
-//                book.setLanguage(rs.getString("Language"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setPages(rs.getInt("Pages"));
-//                book.setWidth(rs.getFloat("Width"));
-//                book.setHeight(rs.getFloat("Height"));
-//                book.setThickness(rs.getFloat("Thickness"));
-//                book.setWeight(rs.getFloat("Weight"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setUpdateDate(rs.getDate("UpdateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setAvailable(rs.getBoolean("Available"));
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                book.setAuthors(authorDAO.listAll(book.getId()));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//                book.setHold(rs.getInt("Hold"));
-//                book.setImportPrice(rs.getFloat("ImportPrice"));
-//                return book;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public Book getBook(String isbn) {
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//
-//        String sql = "Select * from Book where ISBN = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, isbn);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setDesc(rs.getString("Desc"));
-//                book.setDescDetail(rs.getString("DescDetail"));
-//                book.setPublishDate(rs.getDate("PublishDate"));
-//                book.setLanguage(rs.getString("Language"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setPages(rs.getInt("Pages"));
-//                book.setWidth(rs.getFloat("Width"));
-//                book.setHeight(rs.getFloat("Height"));
-//                book.setThickness(rs.getFloat("Thickness"));
-//                book.setWeight(rs.getFloat("Weight"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setUpdateDate(rs.getDate("UpdateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setAvailable(rs.getBoolean("Available"));
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                book.setAuthors(authorDAO.listAll(book.getId()));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//                book.setHold(rs.getInt("Hold"));
-//                book.setImportPrice(rs.getFloat("ImportPrice"));
-//                return book;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public void updateStatusBook(String isbn, boolean status) {
-//        String sql = "UPDATE Book SET Status = ? WHERE ISBN = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setBoolean(1, status);
-//            ps.setString(2, isbn);
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public List<Book> listAll(String key) {
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//
-//        List<Book> books = new ArrayList<>();
-//        String sql = "Select * from Book where Title + ' ' + ISBN like '%" + key + "%'";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setDesc(rs.getString("Desc"));
-//                book.setDescDetail(rs.getString("DescDetail"));
-//                book.setPublishDate(rs.getDate("PublishDate"));
-//                book.setLanguage(rs.getString("Language"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setPages(rs.getInt("Pages"));
-//                book.setWidth(rs.getFloat("Width"));
-//                book.setHeight(rs.getFloat("Height"));
-//                book.setThickness(rs.getFloat("Thickness"));
-//                book.setWeight(rs.getFloat("Weight"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setUpdateDate(rs.getDate("UpdateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setAvailable(rs.getBoolean("Available"));
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                book.setAuthors(authorDAO.listAll(book.getId()));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//
-//                books.add(book);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-//
-//    public int updateBook(Book b, String book_isbn) {
-//        String sql = "UPDATE Book SET ISBN = ?, Title = ?, Image = ?, [Desc] = ?, DescDetail = ?, PublishDate = ?, Language = ?, Price = ?, Pages = ?, Width = ?, Height = ?, Thickness = ?, Weight = ?, QuantityInStock = ?, UpdateDate = ?, FormatId = ?, PublisherID = ? WHERE ISBN = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//
-//            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//
-//            ps.setString(1, b.getIsbn());
-//            ps.setString(2, b.getTitle());
-//            ps.setString(3, b.getImage());
-//            ps.setString(4, b.getDesc());
-//            ps.setString(5, b.getDescDetail());
-//            ps.setString(6, sdf.format(b.getPublishDate()));
-//            ps.setString(7, b.getLanguage());
-//            ps.setFloat(8, b.getPrice());
-//            ps.setInt(9, b.getPages());
-//            ps.setFloat(10, b.getWidth());
-//            ps.setFloat(11, b.getHeight());
-//            ps.setFloat(12, b.getThickness());
-//            ps.setFloat(13, b.getWeight());
-//            ps.setInt(14, b.getQuantityInStock());
-//            ps.setString(15, sdf.format(new Date()));
-//            ps.setInt(16, b.getFormat().getId());
-//            ps.setInt(17, b.getPublisher().getId());
-//            ps.setString(18, book_isbn);
-//
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                return rs.getInt(1);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return -1;
-//    }
-//
-//    public List<Book> listBookByCid(int cid) {
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        List<Book> books = new ArrayList<>();
-//
-//        String sql = "SELECT b.*, c.Name AS CategoryName "
-//                + "FROM Book b "
-//                + "JOIN BookCategory bc ON b.ID = bc.BookID "
-//                + "JOIN Category c ON bc.CategoryID = c.ID "
-//                + "WHERE c.ID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, cid);
-//            ResultSet rs = ps.executeQuery();
-//
-//            Map<Integer, Book> bookMap = new HashMap<>();
-//
-//            while (rs.next()) {
-//                int bookId = rs.getInt("ID");
-//                Book book = bookMap.get(bookId);
-//                if (book == null) {
-//                    book = new Book();
-//                    book.setId(bookId);
-//                    book.setIsbn(rs.getString("ISBN"));
-//                    book.setTitle(rs.getString("Title"));
-//                    book.setImage(rs.getString("Image"));
-//                    book.setDesc(rs.getString("Desc"));
-//                    book.setDescDetail(rs.getString("DescDetail"));
-//                    book.setPublishDate(rs.getDate("PublishDate"));
-//                    book.setLanguage(rs.getString("Language"));
-//                    book.setPrice(rs.getFloat("Price"));
-//                    book.setPages(rs.getInt("Pages"));
-//                    book.setWidth(rs.getFloat("Width"));
-//                    book.setHeight(rs.getFloat("Height"));
-//                    book.setThickness(rs.getFloat("Thickness"));
-//                    book.setWeight(rs.getFloat("Weight"));
-//                    book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                    book.setCreateDate(rs.getDate("CreateDate"));
-//                    book.setUpdateDate(rs.getDate("UpdateDate"));
-//                    book.setStatus(rs.getInt("Status") == 1);
-//                    book.setAvailable(rs.getBoolean("Available"));
-//                    book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                    book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                    book.setCategories(categoryDAO.listAll(book.getId()));
-//
-//                    // Fetch authors for the current book using AuthorDAO
-//                    Set<Author> authors = authorDAO.listAll(book.getId());
-//                    book.setAuthors(authors);
-//
-//                    bookMap.put(bookId, book);
-//                    books.add(book);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-//
+    public int addNewProduct(Product product) {
+        String sql = "INSERT INTO Product (Title, Image, Description, CreateDate, UpdateDate, Status, BrandID) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, product.getTitle());
+            ps.setString(2, product.getImage());
+            ps.setString(3, product.getDescription());
+            ps.setDate(4, new java.sql.Date(product.getCreateDate().getTime()));
+            ps.setDate(5, new java.sql.Date(product.getUpdateDate().getTime()));
+            ps.setBoolean(6, product.isStatus());
+            ps.setInt(7, product.getBrand().getId());
+            
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                int productId = rs.getInt(1);
+                
+                // Add categories
+                for (Category category : product.getCategories()) {
+                    addProductCategory(productId, category.getId());
+                }
+                
+                return productId;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    private void addProductCategory(int productId, int categoryId) throws SQLException {
+        String sql = "INSERT INTO ProductCategory (ProductID, CategoryID) VALUES (?, ?)";
+        DBContext db = new DBContext();
+        try (Connection conn = db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            ps.setInt(2, categoryId);
+            ps.executeUpdate();
+        }
+    }
+    
+    private void deleteProductCategories(int productId) throws SQLException {
+        String sql = "DELETE FROM ProductCategory WHERE ProductID = ?";
+        DBContext db = new DBContext();
+        try (Connection conn = db.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+        }
+    }
+
+    public void updateProductCategories(int productId, String[] categoryIds) throws SQLException {
+        // First delete existing categories
+        String deleteSql = "DELETE FROM ProductCategory WHERE ProductID = ?";
+        
+        try {
+            PreparedStatement ps = connection.prepareStatement(deleteSql);
+            ps.setInt(1, productId);
+            ps.executeUpdate();
+            
+            String insertSql = "INSERT INTO ProductCategory (ProductID, CategoryID) VALUES (?, ?)";
+            PreparedStatement ps2 = connection.prepareStatement(insertSql);
+            for (String categoryId : categoryIds) {
+                ps2.setInt(1, productId);
+                ps2.setInt(2, Integer.parseInt(categoryId));
+                ps2.addBatch();
+            }
+            ps2.executeBatch();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public int addProductVariant(ProductVariant variant) {
+        String sql = "INSERT INTO ProductVariant (Name, ImportPrice, Price, ProductID, Status, CreateDate, UpdateDate, Image) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
+            ps.setString(1, variant.getName());
+            ps.setDouble(2, variant.getImportPrice());
+            ps.setDouble(3, variant.getPrice());
+            ps.setInt(4, variant.getProduct().getId());
+            ps.setBoolean(5, variant.isStatus());
+            ps.setDate(6, new java.sql.Date(variant.getCreateDate().getTime()));
+            ps.setDate(7, new java.sql.Date(variant.getUpdateDate().getTime()));
+            ps.setString(8, variant.getImage());
+            
+            ps.executeUpdate();
+            
+            ResultSet rs = ps.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+    
+    public void addProductVariantSize(ProductVariantSize pvs) {
+        String sql = "INSERT INTO ProductVariantSize (SizeID, ProductVariantID, QuantityInStock, QuantityHolding, Status, CreateDate, UpdateDate) "
+                + "VALUES (?, ?, ?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pvs.getSize().getId());
+            ps.setInt(2, pvs.getProductVariant().getId());
+            ps.setInt(3, pvs.getQuantityInStock());
+            ps.setInt(4, pvs.getQuantityHolding());
+            ps.setBoolean(5, pvs.isStatus());
+            ps.setDate(6, new java.sql.Date(pvs.getCreateDate().getTime()));
+            ps.setDate(7, new java.sql.Date(pvs.getUpdateDate().getTime()));
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public List<Product> listBookRelated(int bookID) {
         BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
@@ -693,425 +532,63 @@ public class ProductDAO extends DBContext{
         }
         return books;
     }
-//
-//    public Book getBookByIsbn(String isbn) {
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        Book book = null;
-//
-//        String sql = "SELECT b.*, c.Name AS CategoryName "
-//                + "FROM Book b "
-//                + "JOIN BookCategory bc ON b.ID = bc.BookID "
-//                + "JOIN Category c ON bc.CategoryID = c.ID "
-//                + "WHERE b.ISBN = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, isbn);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setDesc(rs.getString("Desc"));
-//                book.setDescDetail(rs.getString("DescDetail"));
-//                book.setPublishDate(rs.getDate("PublishDate"));
-//                book.setLanguage(rs.getString("Language"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setPages(rs.getInt("Pages"));
-//                book.setWidth(rs.getFloat("Width"));
-//                book.setHeight(rs.getFloat("Height"));
-//                book.setThickness(rs.getFloat("Thickness"));
-//                book.setWeight(rs.getFloat("Weight"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setUpdateDate(rs.getDate("UpdateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setAvailable(rs.getBoolean("Available"));
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//
-//                // Fetch authors for the current book using AuthorDAO
-//                Set<Author> authors = authorDAO.listAll(book.getId());
-//                book.setAuthors(authors);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return book;
-//    }
-//
-//    public int getSoldQuantityByIsbn(String isbn) {
-//        int soldQuantity = 0;
-//
-//        String sql = "SELECT SUM(od.Quantity) AS SoldQuantity "
-//                + "FROM [Order] o "
-//                + "JOIN OrderDetail od ON o.ID = od.OrderID "
-//                + "WHERE od.ISBN = ? AND o.Status = 3";
-//
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, isbn);
-//            ResultSet rs = ps.executeQuery();
-//
-//            if (rs.next()) {
-//                soldQuantity = rs.getInt("SoldQuantity");
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return soldQuantity;
-//    }
-//
-//    public List<Book> getNewBooks() {
-//        List<Book> newBooks = new ArrayList<>();
-//
-//        // Get current date and date 7 days ago
-//        java.util.Date currentDate = new java.util.Date();
-//        java.util.Date sevenDaysAgo = new java.util.Date(currentDate.getTime() - (7 * 24 * 60 * 60 * 1000));
-//
-//        // Convert dates to SQL Date format
-//        java.sql.Date sqlCurrentDate = new java.sql.Date(currentDate.getTime());
-//        java.sql.Date sqlSevenDaysAgo = new java.sql.Date(sevenDaysAgo.getTime());
-//
-//        // SQL query to retrieve books published within the last 7 days
-//        String sql = "SELECT * FROM Book WHERE PublishDate BETWEEN ? AND ?";
-//
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//
-//            ps.setDate(1, sqlSevenDaysAgo);
-//            ps.setDate(2, sqlCurrentDate);
-//
-//            ResultSet rs = ps.executeQuery();
-//
-//            while (rs.next()) {
-//                Book book = new Book();
-//
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setDesc(rs.getString("Desc"));
-//                book.setDescDetail(rs.getString("DescDetail"));
-//                book.setPublishDate(rs.getDate("PublishDate"));
-//                book.setLanguage(rs.getString("Language"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setPages(rs.getInt("Pages"));
-//                book.setWidth(rs.getFloat("Width"));
-//                book.setHeight(rs.getFloat("Height"));
-//                book.setThickness(rs.getFloat("Thickness"));
-//                book.setWeight(rs.getFloat("Weight"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setUpdateDate(rs.getDate("UpdateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setAvailable(rs.getBoolean("Available"));
-//
-//                newBooks.add(book);
-//            }
-//
-//            connection.close();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//        return newBooks;
-//    }
-//
-//    public Book getDetailBookByBookIsbn(String book_isbn_key) {
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//
-//        String sql = "SELECT *\n"
-//                + "FROM Book b\n"
-//                + "LEFT JOIN BookAuthor ba ON b.ID = ba.BookID\n"
-//                + "LEFT JOIN Author a ON ba.AuthorID = a.ID\n"
-//                + "LEFT JOIN BookPublisher bp ON b.ID = bp.BookID\n"
-//                + "LEFT JOIN Publisher p ON bp.PublisherID = p.ID\n"
-//                + "WHERE b.ISBN = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, book_isbn_key);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("id"));
-//                book.setIsbn(rs.getString("isbn"));
-//                book.setTitle(rs.getString("title"));
-//                book.setImage(rs.getString("image"));
-//                book.setDesc(rs.getString("desc"));
-//                book.setDescDetail(rs.getString("descDetail"));
-//                book.setPublishDate(rs.getDate("publishDate"));
-//                book.setLanguage(rs.getString("language"));
-//                book.setPrice(rs.getFloat("price"));
-//                book.setPages(rs.getInt("pages"));
-//                book.setWidth(rs.getFloat("width"));
-//                book.setHeight(rs.getFloat("height"));
-//                book.setThickness(rs.getFloat("thickness"));
-//                book.setWeight(rs.getFloat("weight"));
-//                book.setQuantityInStock(rs.getInt("quantityInStock"));
-//                book.setCreateDate(rs.getDate("createDate"));
-//                book.setUpdateDate(rs.getDate("updateDate"));
-//                book.setStatus(rs.getBoolean("status"));
-//                book.setAvailable(rs.getBoolean("available"));
-//
-//                Author author = new Author();
-//                author.setId(rs.getInt("AuthorID"));
-//                author.setFullName(rs.getString("AuthorFullName"));
-//                author.setDesc(rs.getString("AuthorDesc"));
-//                author.setUpdateDate(rs.getDate("AuthorUpdateDate"));
-//
-//                Publisher publisher = new Publisher();
-//                publisher.setId(rs.getInt("PublisherID"));
-//                publisher.setName(rs.getString("PublisherName"));
-//
-//                book.setPublisher(publisher);
-//                book.setAuthors(new HashSet<>(Arrays.asList(author)));
-//
-//                return book;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//
-//    public List<Book> searchBooks(String keyword) {
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        FormatDAO formatDAO = new FormatDAO();
-//
-//        List<Book> books = new ArrayList<>();
-//        String sql = "SELECT DISTINCT b.* "
-//                + "FROM Book b "
-//                + "LEFT JOIN BookAuthor ba ON b.ID = ba.BookID "
-//                + "LEFT JOIN Author a ON ba.AuthorID = a.ID "
-//                + "WHERE b.Title LIKE ? OR a.FullName LIKE ?";
-//        try (PreparedStatement ps = connection.prepareStatement(sql)) {
-//            String queryParam = "%" + keyword + "%";
-//            ps.setString(1, queryParam);
-//            ps.setString(2, queryParam);
-//            try (ResultSet rs = ps.executeQuery()) {
-//                while (rs.next()) {
-//                    Book book = new Book();
-//                    book.setId(rs.getInt("ID"));
-//                    book.setIsbn(rs.getString("ISBN"));
-//                    book.setTitle(rs.getString("Title"));
-//                    book.setImage(rs.getString("Image"));
-//                    book.setDesc(rs.getString("Desc"));
-//                    book.setDescDetail(rs.getString("DescDetail"));
-//                    book.setPublishDate(rs.getDate("PublishDate"));
-//                    book.setLanguage(rs.getString("Language"));
-//                    book.setPrice(rs.getFloat("Price"));
-//                    book.setPages(rs.getInt("Pages"));
-//                    book.setWidth(rs.getFloat("Width"));
-//                    book.setHeight(rs.getFloat("Height"));
-//                    book.setThickness(rs.getFloat("Thickness"));
-//                    book.setWeight(rs.getFloat("Weight"));
-//                    book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                    book.setCreateDate(rs.getDate("CreateDate"));
-//                    book.setUpdateDate(rs.getDate("UpdateDate"));
-//                    book.setStatus(rs.getInt("Status") == 1);
-//                    book.setAvailable(rs.getBoolean("Available"));
-//                    book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                    book.setFormat(formatDAO.getFormat(rs.getInt("FormatId")));
-//                    book.setAuthors(authorDAO.listAll(book.getId()));
-//                    book.setCategories(categoryDAO.listAll(book.getId()));
-//
-//                    books.add(book);
-//                }
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-//
-//    public void updateQuantity(int bookId, int quantity) {
-//        String sql = "update Book set QuantityInStock = ? where ID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, quantity);
-//            ps.setInt(2, bookId);
-//            ps.executeQuery();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//    
-//    public void updateHold(int bookId, int quantity) {
-//        String sql = "update Book set Hold = ? where ID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setInt(1, quantity);
-//            ps.setInt(2, bookId);
-//            ps.executeQuery();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public void updateAvailableOfBook() {
-//        String sql = "update Book set Available = 1 where PublishDate <= GETDATE()";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.executeQuery();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
-//
-//    public int getTotalBookCreateToday() {
-//        String sql = "select COUNT(*) from Book where CreateDate = CAST(GETDATE() AS DATE)";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                return rs.getInt(1);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return 0;
-//    }
-//
-//    public int getTotalBook() {
-//        String sql = "select COUNT(*) from Book";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                return rs.getInt(1);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return 0;
-//    }
-//
-//    public List<BookRAW> listAllBookWithTotalSaveToCart() {
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        
-//        List<BookRAW> books = new ArrayList<>();
-//        
-//        String sql = "select b.ID, b.ISBN, b.Image, b.Title, b.Price, b.PublisherID, b.Status, b.CreateDate, count(AccountID) [totalAccountSaveToCart] from Cart c "
-//                + "left join Book b on b.ID = BookID "
-//                + "where c.status = 0 and c.CreateAt <= GETDATE() and c.CreateAt >= DATEADD(day, -7, GETDATE()) "
-//                + "group by b.ID, b.ISBN, b.Image, b.Title, b.Price, b.PublisherID, b.Status, b.CreateDate "
-//                + "order by [totalAccountSaveToCart] desc , Price desc";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setAuthors(authorDAO.listAll(book.getId()));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//                
-//                BookRAW bookRAW = new BookRAW(book, rs.getInt("totalAccountSaveToCart"));
-//                
-//                books.add(bookRAW);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-//    
-//    public List<BookRAW> listAllBookWithTotalSaveToCart(Date from, Date to) {
-//        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
-//        PublisherDAO publisherDAO = new PublisherDAO();
-//        AuthorDAO authorDAO = new AuthorDAO();
-//        CategoryDAO categoryDAO = new CategoryDAO();
-//        
-//        List<BookRAW> books = new ArrayList<>();
-//        
-//        String sql = "select b.ID, b.ISBN, b.Image, b.Title, b.Price, b.PublisherID, b.Status, b.CreateDate, count(AccountID) [totalAccountSaveToCart] from Cart c "
-//                + "left join Book b on b.ID = BookID "
-//                + "where c.status = 0 and c.CreateAt <= ? and c.CreateAt >= ? "
-//                + "group by b.ID, b.ISBN, b.Image, b.Title, b.Price, b.PublisherID, b.Status, b.CreateDate "
-//                + "order by [totalAccountSaveToCart] desc , Price desc";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, sf.format(to));
-//            ps.setString(2, sf.format(from));
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setImage(rs.getString("Image"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setCreateDate(rs.getDate("CreateDate"));
-//                book.setStatus(rs.getInt("Status") == 1);
-//                book.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
-//                book.setAuthors(authorDAO.listAll(book.getId()));
-//                book.setCategories(categoryDAO.listAll(book.getId()));
-//                
-//                BookRAW bookRAW = new BookRAW(book, rs.getInt("totalAccountSaveToCart"));
-//                
-//                books.add(bookRAW);
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return books;
-//    }
-//    
-//    public BookForWarehouse getBookForUpdateStock(String b_isbn) {
-//        String sql = "Select ID, ISBN, Title, QuantityInStock, Price, ImportPrice from Book where isbn = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setString(1, b_isbn);
-//            ResultSet rs = ps.executeQuery();
-//            while (rs.next()) {
-//                Book book = new Book();
-//                book.setId(rs.getInt("ID"));
-//                book.setIsbn(rs.getString("ISBN"));
-//                book.setTitle(rs.getString("Title"));
-//                book.setPrice(rs.getFloat("Price"));
-//                book.setQuantityInStock(rs.getInt("QuantityInStock"));
-//                
-//                BookForWarehouse bookForWarehouse = new BookForWarehouse();
-//                bookForWarehouse.setBook(book);
-//                bookForWarehouse.setHold(0);
-//                bookForWarehouse.setImportPrice(rs.getFloat("ImportPrice"));
-//                
-//                return bookForWarehouse;
-//            }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return null;
-//    }
-//    
-//    public void updateStockOfBook(int book_id, float importPrice, int quantityInStock) {
-//        String sql = "update Book set ImportPrice = ?, QuantityInStock = ? where ID = ?";
-//        try {
-//            PreparedStatement ps = connection.prepareStatement(sql);
-//            ps.setFloat(1, importPrice);
-//            ps.setInt(2, quantityInStock);
-//            ps.setInt(3, book_id);
-//            ps.executeUpdate();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//    }
+
+    public void updateProduct(Product product) {
+        String sql = "UPDATE Product SET Title = ?, Image = ?, Description = ?, UpdateDate = ?, Status = ?, BrandID = ? WHERE ID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, product.getTitle());
+            ps.setString(2, product.getImage());
+            ps.setString(3, product.getDescription());
+            ps.setDate(4, new java.sql.Date(product.getUpdateDate().getTime()));
+            ps.setBoolean(5, product.isStatus());
+            ps.setInt(6, product.getBrand().getId());
+            ps.setInt(7, product.getId());
+            
+            ps.executeUpdate();
+            
+            // Update categories
+            updateProductCategories(product.getId(), product.getCategories().stream()
+                    .map(category -> String.valueOf(category.getId()))
+                    .toArray(String[]::new));
+            
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateProductVariant(ProductVariant variant) {
+        String sql = "UPDATE ProductVariant SET Name = ?, ImportPrice = ?, Price = ?, Status = ?, UpdateDate = ?, Image = ? WHERE ID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, variant.getName());
+            ps.setDouble(2, variant.getImportPrice());
+            ps.setDouble(3, variant.getPrice());
+            ps.setBoolean(4, variant.isStatus());
+            ps.setDate(5, new java.sql.Date(variant.getUpdateDate().getTime()));
+            ps.setString(6, variant.getImage());
+            ps.setInt(7, variant.getId());
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public void updateProductVariantSize(ProductVariantSize pvs) {
+        String sql = "UPDATE ProductVariantSize SET SizeID = ?, QuantityInStock = ?, QuantityHolding = ?, Status = ?, UpdateDate = ? WHERE ID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, pvs.getSize().getId());
+            ps.setInt(2, pvs.getQuantityInStock());
+            ps.setInt(3, pvs.getQuantityHolding());
+            ps.setBoolean(4, pvs.isStatus());
+            ps.setDate(5, new java.sql.Date(pvs.getUpdateDate().getTime()));
+            ps.setInt(6, pvs.getId());
+            
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

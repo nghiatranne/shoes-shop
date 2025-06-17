@@ -38,12 +38,12 @@ public class CategoryDAO extends DBContext {
         return categories;
     }
     
-    public Set<Category> listAll(int book_id) {
+    public Set<Category> listAll(int productId) {
         Set<Category> categories = new HashSet<>();
         String sql = "select * from Category c left join ProductCategory bc on c.ID = bc.CategoryID where bc.ProductID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, book_id);
+            ps.setInt(1, productId);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
                 categories.add(new Category(rs.getInt(1), rs.getString(2), rs.getDate(3), rs.getDate(4), null, null));

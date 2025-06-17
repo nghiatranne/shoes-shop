@@ -111,7 +111,7 @@
                                         <span data-feather="credit-card"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
-                                        <span class="nav-link-text">Payment</span>
+                                        <span class="nav-link-text">Payment Management</span>
                                     </span>
                                 </div>
                             </a>
@@ -255,7 +255,27 @@
                                         <span data-feather="credit-card"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
-                                        <span class="nav-link-text">Payment</span>
+                                        <span class="nav-link-text">Payment Management</span>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        <!--Product management-->
+                        <div class="nav-item-wrapper">
+                            <a
+                                id="payment-manage"
+                                class="nav-link label-1"
+                                href="${pageContext.request.contextPath}/admin/products"
+                                role="button"
+                                data-bs-toggle=""
+                                aria-expanded="false"
+                                >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon">
+                                        <span data-feather="credit-card"></span>
+                                    </span>
+                                    <span class="nav-link-text-wrapper">
+                                        <span class="nav-link-text">Product Management</span>
                                     </span>
                                 </div>
                             </a>
