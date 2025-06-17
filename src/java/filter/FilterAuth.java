@@ -181,6 +181,7 @@ public class FilterAuth implements Filter {
         boolean isMktCustomerDetaiReq = url.contains(contextPath + "/admin/customers/customer");
         boolean isMktCustomerAddRes = url.contains(contextPath + "/admin/customers/add");
         boolean isMktSliderDelReq = url.contains(contextPath + "/admin/slider/delete");
+        boolean isMktBrandRequest = url.contains(contextPath + "/admin/brands");
 
         boolean isOrdersListRequest = url.contains(contextPath + "/admin/orders");
         boolean isAssignAccountRequest = url.contains(contextPath + "/order/assign-account");
@@ -234,7 +235,7 @@ public class FilterAuth implements Filter {
                 || isBooksRequest || isCartRequest || isFeedbackRequest || isApiRequest || isApiUserRequst
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
-                || isMktSliderDelReq || isMktSizeRequest) {
+                || isMktSliderDelReq || isMktSizeRequest || isMktBrandRequest) {
             if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;

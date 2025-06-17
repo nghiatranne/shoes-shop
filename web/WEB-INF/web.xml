@@ -7,42 +7,6 @@
         <servlet-name>VerifyEmailServlet</servlet-name>
         <servlet-class>controller.client.VerifyEmailServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>DeleteSizeServlet</servlet-name>
-        <servlet-class>controller.admin.SizeFeatures.DeleteSizeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListSizeServlet</servlet-name>
-        <servlet-class>controller.admin.SizeFeatures.ListSizeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>UpdateSizeServlet</servlet-name>
-        <servlet-class>controller.admin.SizeFeatures.UpdateSizeServlet</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>ListSizeApi</servlet-name>
-        <servlet-class>controller.api.size_api.ListSizeApi</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>VerifyEmailServlet</servlet-name>
-        <url-pattern>/login/verify</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>DeleteSizeServlet</servlet-name>
-        <url-pattern>/admin/sizes/del</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListSizeServlet</servlet-name>
-        <url-pattern>/admin/sizes</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UpdateSizeServlet</servlet-name>
-        <url-pattern>/admin/sizes/edit</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>ListSizeApi</servlet-name>
-        <url-pattern>/api/sizes</url-pattern>
-    </servlet-mapping>
     <session-config>
         <session-timeout>
             60
