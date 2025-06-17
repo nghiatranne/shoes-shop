@@ -235,7 +235,7 @@ public class FilterAuth implements Filter {
                 || isBooksRequest || isCartRequest || isFeedbackRequest || isApiRequest || isApiUserRequst
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
-                || isMktSliderDelReq || isMktSizeRequest || isMktBrandRequest) {
+                || isMktSliderDelReq || isMktSizeRequest || isMktBrandRequest || isMktPaymentRequest) {
             if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;

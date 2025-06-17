@@ -32,7 +32,7 @@ public class Product {
     private Date createDate;
     private Date updateDate;
     private boolean status;
-    private Publisher publisher;
+    private Brand brand;
 
     private Set<Category> categories = new HashSet<>();
     private List<ProductVariant> productvariants = new ArrayList<>();

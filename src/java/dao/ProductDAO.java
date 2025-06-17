@@ -17,6 +17,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import model.Brand;
 import model.Category;
 import model.Product;
 import model.ProductVariant;
@@ -28,7 +29,7 @@ import model.Publisher;
  */
 public class ProductDAO extends DBContext{
     public List<Product> listAll() {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
 
         List<Product> products = new ArrayList<>();
@@ -47,7 +48,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
 
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 // Bạn có thể set thêm productvariants nếu có DAO tương ứng
@@ -62,7 +63,7 @@ public class ProductDAO extends DBContext{
     }
 
     public List<Product> listNewProducts() {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
 
@@ -81,7 +82,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
 
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 // Nếu có DAO cho ProductVariant thì thêm ở đây:
@@ -97,7 +98,7 @@ public class ProductDAO extends DBContext{
     }
 
     public List<Product> listBestSellers() {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
 
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
@@ -123,7 +124,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getBoolean("Status"));
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
 
                 // Nếu cần, có thể load thêm productVariants ở đây
@@ -138,7 +139,7 @@ public class ProductDAO extends DBContext{
         return products;
     }
     public List<Product> listRandomProducts() {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         List<Product> products = new ArrayList<>();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
@@ -158,7 +159,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getBoolean("Status"));
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
@@ -187,9 +188,9 @@ public class ProductDAO extends DBContext{
                 p.setStatus(rs.getBoolean("Status"));
                 
                 // Get publisher
-                PublisherDAO publisherDAO = new PublisherDAO();
-                Publisher publisher = publisherDAO.getPublisherById(rs.getInt("PublisherID"));
-                p.setPublisher(publisher);
+                BrandDAO brandDAO = new BrandDAO();
+                Brand brand = brandDAO.getBrandById(rs.getInt("BrandID"));
+                p.setBrand(brand);
                 
                 // Get categories
                 CategoryDAO categoryDAO = new CategoryDAO();
@@ -210,7 +211,7 @@ public class ProductDAO extends DBContext{
     }
 
     public List<Product> listAllActiveProducts() {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
         List<Product> products = new ArrayList<>();
@@ -230,7 +231,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
@@ -242,7 +243,7 @@ public class ProductDAO extends DBContext{
     }
 
     public List<Product> searchProducts(String keyword) {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
         List<Product> products = new ArrayList<>();
@@ -264,7 +265,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
@@ -276,7 +277,7 @@ public class ProductDAO extends DBContext{
     }
 
     public List<Product> listProductsByCategory(int categoryId) {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
         List<Product> products = new ArrayList<>();
@@ -299,7 +300,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
                 products.add(product);
@@ -646,7 +647,7 @@ public class ProductDAO extends DBContext{
 //    }
 //
     public List<Product> listBookRelated(int bookID) {
-        PublisherDAO publisherDAO = new PublisherDAO();
+        BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
         ProductVariantDAO productVariantDAO = new ProductVariantDAO();
 
@@ -677,7 +678,7 @@ public class ProductDAO extends DBContext{
                 product.setCreateDate(rs.getDate("CreateDate"));
                 product.setUpdateDate(rs.getDate("UpdateDate"));
                 product.setStatus(rs.getInt("Status") == 1);
-                product.setPublisher(publisherDAO.getPublisher(rs.getInt("PublisherID")));
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
 
                 product.setCategories(categoryDAO.listAll(product.getId()));
                 // Nếu có DAO cho ProductVariant thì thêm ở đây:

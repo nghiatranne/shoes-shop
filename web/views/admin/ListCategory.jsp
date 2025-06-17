@@ -153,7 +153,7 @@
             $(document).ready(function () {
                 let list_category_name = [];
 
-                fetch('http://localhost:8080/BookShopping/api/categorys')
+                fetch('http://localhost:8080/ShoesShop/api/categorys')
                         .then(res => res.json())
                         .then(data => {
                             data.forEach((el) => {
