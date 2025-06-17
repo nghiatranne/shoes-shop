@@ -103,10 +103,12 @@
                                 >
                                   ${np.title}
                                 </h5>
-                                <p class="fs--1 text-700 mb-2">
-                                  <c:forEach items="${np.categories}" var="c">
-                                    ${c.name}
-                                  </c:forEach>
+                                <p class="mb-2" style="width: 100%">
+                                    <c:forEach items="${np.categories}" var="c">
+                                        <a class="text-decoration-none" href="">
+                                            <span class="badge badge-tag">${c.name}</span>
+                                        </a>
+                                    </c:forEach>
                                 </p>
                                 <div class="d-flex align-items-center mb-1">
                                   <!--<p class="me-2 text-900 text-decoration-line-through text-danger mb-0">$8.99</p>-->

@@ -30,4 +30,8 @@ public class DBContext {
     private final String portNumber = "1433";
     private final String userId = "sa";
     private final String psw = "123";
+    
+    public Connection getConnection() {
+        return connection;
+    }
 }
