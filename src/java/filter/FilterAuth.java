@@ -174,7 +174,9 @@ public class FilterAuth implements Filter {
         boolean isMktPaymentRequest = url.contains(contextPath + "/admin/payments");
         boolean isMktAuthorRequest = url.contains(contextPath + "/admin/authors");
         boolean isMktCategoryRequest = url.contains(contextPath + "/admin/categories");
+        boolean isMktSizeRequest = url.contains(contextPath + "/admin/sizes");
         boolean isMktFormatRequest = url.contains(contextPath + "/admin/formats");
+        boolean isMktBrandRequest = url.contains(contextPath + "/admin/brands");
         boolean isMktPublisherRequest = url.contains(contextPath + "/admin/publishers");
         boolean isMktAddPublisherRequest = url.contains(contextPath + "/admin/publishers/save");
         boolean isMktCustomerDetaiReq = url.contains(contextPath + "/admin/customers/customer");
@@ -227,13 +229,13 @@ public class FilterAuth implements Filter {
         }
         
         if (isMktBookRequest || isMktPostsRequest || isMktSlidersRequest || isMktCustomersRequest || isMktAuthorRequest
-                || isMktFeedbacksRequest || isMktPaymentRequest || isMyOrdersRequest || isMktCategoryRequest
+                || isMktFeedbacksRequest || isMktPaymentRequest || isMyOrdersRequest || isMktCategoryRequest || isMktSizeRequest
                 || isMktFormatRequest || isMktPublisherRequest || isProfileRequest
                 || isHomePageRequest || isBlogsListRequest || isCancelRequest || isBlogDetailsRequest
                 || isBooksRequest || isCartRequest || isFeedbackRequest || isApiRequest || isApiUserRequst
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
-                || isMktSliderDelReq) {
+                || isMktSliderDelReq || isMktBrandRequest) {
             if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;
@@ -247,7 +249,7 @@ public class FilterAuth implements Filter {
                 || isHomePageRequest || isBlogsListRequest || isCancelRequest || isBlogDetailsRequest
                 || isBooksRequest || isCartRequest || isFeedbackRequest || isApiRequest || isApiUserRequst
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
-                || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isSaleDashboardReq) {
+                || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isSaleDashboardReq || isMktSizeRequest) {
             if (roles.contains("SALE") || roles.contains("SALE MANAGER") || roles.contains("WAREHOUSE")) {
                 chain.doFilter(request, response);
                 return;
