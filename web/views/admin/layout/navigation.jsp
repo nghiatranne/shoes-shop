@@ -180,7 +180,7 @@
                                 </div>
                             </a>
                         </div>
-                        <!--Post-->
+                        <!--Category-->
                         <div class="nav-item-wrapper">
                             <a
                                 id="posts-manage"
@@ -196,6 +196,26 @@
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text"> Category Management </span>
+                                    </span>
+                                </div>
+                            </a>
+                        </div>
+                        <!--Size-->
+                        <div class="nav-item-wrapper">
+                            <a
+                                id="posts-manage"
+                                class="nav-link label-1"
+                                href="${pageContext.request.contextPath}/admin/sizes"
+                                role="button"
+                                data-bs-toggle=""
+                                aria-expanded="false"
+                                >
+                                <div class="d-flex align-items-center">
+                                    <span class="nav-link-icon">
+                                        <span data-feather="file-text"></span>
+                                    </span>
+                                    <span class="nav-link-text-wrapper">
+                                        <span class="nav-link-text"> Size Management </span>
                                     </span>
                                 </div>
                             </a>
