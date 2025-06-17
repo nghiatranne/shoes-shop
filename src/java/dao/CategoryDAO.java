@@ -56,10 +56,9 @@ public class CategoryDAO extends DBContext {
 
     public Map<Category, Integer> getAllCategory() {
         Map<Category, Integer> totalBookOfCategory = new HashMap<>();
-        String sql = "SELECT a.ID, a.Name,a.CreateDate,a.UpdateDate,"
-                + "COUNT(bc.BookID) AS NumberOfcategoty "
-                + " FROM Category a LEFT JOIN BookCategory bc ON a.ID = bc.CategoryID"
-                + " GROUP BY a.ID, a.Name,a.CreateDate,a.UpdateDate";
+        String sql = "SELECT c.ID, c.Name,c.CreateDate,c.UpdateDate, COUNT(pc.ProductId) AS NumberOfcategoty "
+                + "FROM Category c LEFT JOIN ProductCategory pc ON c.ID = pc.CategoryID "
+                + "GROUP BY c.ID, c.Name,c.CreateDate,c.UpdateDate";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -91,16 +90,16 @@ public class CategoryDAO extends DBContext {
         }
     }
 
-    public Category getCategoryById(int id) {
+    public Category getCategoryById(String id) {
         try {
-            String sql = "select * from Category where ID = ?";
+            String sql = "select * from Category where id = ?";
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, id);
+            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-
+                int cId = rs.getInt(1);
                 String name = rs.getString(2);
-                return new Category(id, name, null, null, null, null);
+                return new Category(cId, name, null, null, null, null);
 
             }
         } catch (Exception e) {
