@@ -174,12 +174,14 @@ public class FilterAuth implements Filter {
         boolean isMktPaymentRequest = url.contains(contextPath + "/admin/payments");
         boolean isMktAuthorRequest = url.contains(contextPath + "/admin/authors");
         boolean isMktCategoryRequest = url.contains(contextPath + "/admin/categories");
+        boolean isMktSizeRequest = url.contains(contextPath + "/admin/sizes");
         boolean isMktFormatRequest = url.contains(contextPath + "/admin/formats");
         boolean isMktPublisherRequest = url.contains(contextPath + "/admin/publishers");
         boolean isMktAddPublisherRequest = url.contains(contextPath + "/admin/publishers/save");
         boolean isMktCustomerDetaiReq = url.contains(contextPath + "/admin/customers/customer");
         boolean isMktCustomerAddRes = url.contains(contextPath + "/admin/customers/add");
         boolean isMktSliderDelReq = url.contains(contextPath + "/admin/slider/delete");
+        boolean isMktBrandRequest = url.contains(contextPath + "/admin/brands");
 
         boolean isOrdersListRequest = url.contains(contextPath + "/admin/orders");
         boolean isAssignAccountRequest = url.contains(contextPath + "/order/assign-account");
@@ -188,6 +190,11 @@ public class FilterAuth implements Filter {
         boolean isAddminRoleRequest = url.equals(contextPath + "/admin/roles");
         
         boolean isSaleDashboardReq = url.equals(contextPath + "/admin/sale-dashboard"); 
+        boolean isProductReq = url.equals(contextPath + "/admin/products");
+        boolean isProductDetailReq = url.equals(contextPath + "/admin/products/product");
+        boolean isProductAddReq = url.equals(contextPath + "/admin/products/add");
+        boolean isProductSaveReq = url.equals(contextPath + "/admin/products/add/save");
+        boolean isProductEditReq = url.equals(contextPath + "/admin/products/edit");
 
 // Common feature accessible by all logged in users
         if (isLoginRequest || isRegisterRequest || isResetPasswordRequest || isChangePasswordRequest || isSignOutRequest || isForgotPassRequest || isAdminLoginRequest) {
@@ -233,8 +240,9 @@ public class FilterAuth implements Filter {
                 || isBooksRequest || isCartRequest || isFeedbackRequest || isApiRequest || isApiUserRequst
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
-                || isMktSliderDelReq) {
-            if (roles.contains("MARKETER")) {
+                || isMktSliderDelReq || isMktSizeRequest || isMktBrandRequest || isMktPaymentRequest || isProductReq || isProductDetailReq
+                || isProductAddReq || isProductSaveReq || isProductEditReq) {
+            if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;
             } else {

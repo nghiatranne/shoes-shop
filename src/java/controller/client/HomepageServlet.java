@@ -66,23 +66,14 @@ public class HomepageServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         System.out.println("This is home page");
-        ProductDAO dao = new ProductDAO();
-        PostDAO postDAO = new PostDAO();
         SliderDAO sliderDao = new SliderDAO();
-        List<Product> listB = dao.listNewProducts();
+        ProductDAO productDAO = new ProductDAO();
+        
         List<Slider> sliders = sliderDao.getAllSliders();
-        List<Product> listBS = dao.listBestSellers();
-        List<Product> listRCM = dao.listRandomProducts();
-        List<Post> listBlogs = postDAO.listAllPosts();
+        List<Product> newProducts = productDAO.listNewProducts();
         
-        request.setAttribute("listB", listB);
-        request.setAttribute("listBS", listBS);
         request.setAttribute("sliders", sliders);
-        request.setAttribute("listRCM", listRCM);
-                request.setAttribute("listBlog", listBlogs);
-
-        
-//        request.setAttribute("gamesPuzzles_books", gamesPuzzles_books);
+        request.setAttribute("newProducts", newProducts);
         request.getRequestDispatcher("/views/client/Homepage.jsp").forward(request, response);
     }
 

@@ -58,50 +58,24 @@ public class ProductDetailServlet extends HttpServlet {
         @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
         int productId = Integer.parseInt(request.getParameter("id"));
-        
+        String variantIdParam = request.getParameter("product_variant_id");
+        Integer selectedVariantId = null;
+        if (variantIdParam != null && !variantIdParam.isEmpty()) {
+            try {
+                selectedVariantId = Integer.parseInt(variantIdParam);
+            } catch (NumberFormatException e) {
+                selectedVariantId = null;
+            }
+        }
+
         ProductDAO productDAO = new ProductDAO();
-        
-//        int quantitySold = ProductDAO.getSoldQuantityByIsbn(productId);
-          Product product = productDAO.getProductDetailById(productId);
-//        FeedbackDAO fb = new FeedbackDAO();
-//        List<Feedback> listF = fb.getFeedbacksByISBN(book_isbn);
-//          List<Product> listBookRelated = productDAO.listBookRelated(productId);
+        Product product = productDAO.getProductById(productId);
 
-//        double averageRating = fb.getAverageRating(book_isbn);
-//        int totalReviews = fb.getTotalReviews(book_isbn);
-//
-//        int count5Star = fb.getCountByStar(book_isbn, 5);
-//        int count4Star = fb.getCountByStar(book_isbn, 4);
-//        int count3Star = fb.getCountByStar(book_isbn, 3);
-//        int count2Star = fb.getCountByStar(book_isbn, 2);
-//        int count1Star = fb.getCountByStar(book_isbn, 1);
-
-//        int percent5Star = totalReviews > 0 ? (count5Star * 100 / totalReviews) : 0;
-//        int percent4Star = totalReviews > 0 ? (count4Star * 100 / totalReviews) : 0;
-//        int percent3Star = totalReviews > 0 ? (count3Star * 100 / totalReviews) : 0;
-//        int percent2Star = totalReviews > 0 ? (count2Star * 100 / totalReviews) : 0;
-//        int percent1Star = totalReviews > 0 ? (count1Star * 100 / totalReviews) : 0;
-
-//        request.setAttribute("product_related", listBookRelated);
         request.setAttribute("detail_product", product);
-//        request.setAttribute("detail_book_stock", bookStockDAO.getBookStock(book_isbn));
-//        request.setAttribute("list_feedback", listF);
-//        request.setAttribute("quantitySold", quantitySold);
-//        request.setAttribute("averageRating", averageRating);
-//        request.setAttribute("totalReviews", totalReviews);
-//        request.setAttribute("count5Star", count5Star);
-//        request.setAttribute("count4Star", count4Star);
-//        request.setAttribute("count3Star", count3Star);
-//        request.setAttribute("count2Star", count2Star);
-//        request.setAttribute("count1Star", count1Star);
-//        request.setAttribute("percent5Star", percent5Star);
-//        request.setAttribute("percent4Star", percent4Star);
-//        request.setAttribute("percent3Star", percent3Star);
-//        request.setAttribute("percent2Star", percent2Star);
-//        request.setAttribute("percent1Star", percent1Star);
-
+        if (selectedVariantId != null) {
+            request.setAttribute("selected_variant_id", selectedVariantId);
+        }
         request.getRequestDispatcher("/views/client/layout/DetailProduct.jsp").forward(request, response);
     }
 

@@ -4,8 +4,10 @@
  */
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -30,9 +32,9 @@ public class Product {
     private Date createDate;
     private Date updateDate;
     private boolean status;
-    private Publisher publisher;
+    private Brand brand;
 
     private Set<Category> categories = new HashSet<>();
-    private Set<ProductVariant> productvariants = new HashSet<>();
+    private List<ProductVariant> productvariants = new ArrayList<>();
 
 }

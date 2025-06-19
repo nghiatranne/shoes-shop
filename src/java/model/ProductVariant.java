@@ -4,8 +4,10 @@
  */
 package model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,6 +35,6 @@ public class ProductVariant {
     private Date updateDate;
     private String image;
     
-    private Set<ProductVariantSize> productvariantsizes = new HashSet<>();
+    private List<ProductVariantSize> productvariantsizes = new ArrayList<>();
 
 }
