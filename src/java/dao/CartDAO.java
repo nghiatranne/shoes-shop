@@ -71,7 +71,7 @@ public class CartDAO extends DBContext {
     
     public List<CartRAW> listAll(int acc_id) {
         List<CartRAW> cartRAWs = new ArrayList<>();
-        String sql = "SELECT pvs.ID, c.Quantity, pv.Image as productVariantImage, s.Value as sizeValue, p.Title as productName " +
+        String sql = "SELECT pvs.ID, c.Quantity, pv.Image as productVariantImage, s.Value as sizeValue, p.Title as productName, pv.Price as price, pv.Name as productVariantName " +
                      "FROM Cart c " +
                      "LEFT JOIN ProductVariantSize pvs ON c.ProductVariantSizeID = pvs.ID " +
                      "LEFT JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID " +
@@ -85,10 +85,13 @@ public class CartDAO extends DBContext {
             while (rs.next()) {
                 cartRAWs.add(new CartRAW(
                     rs.getInt("ID"),
+                                            rs.getString("productVariantName"),
+
                     rs.getInt("Quantity"),
                     rs.getString("productVariantImage"),
                     rs.getInt("sizeValue"),
-                    rs.getString("productName")
+                    rs.getString("productName"),
+                    rs.getDouble("price")
                 ));
             }
         } catch (SQLException e) {

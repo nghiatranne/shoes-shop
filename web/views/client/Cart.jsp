@@ -10,6 +10,52 @@ contentType="text/html" pageEncoding="UTF-8"%>
 		<title>Cart</title>
 
 		<jsp:include page="import-css.jsp" />
+		<style>
+			#cart-table-body td,
+			#cart-table-body th {
+				vertical-align: middle;
+				text-align: center;
+			}
+			#cart-table-body img {
+				border-radius: 8px;
+				border: 1px solid #eee;
+				background: #fafafa;
+			}
+			.cart-qty-btn {
+				background: #f5f5f5;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				width: 28px;
+				height: 28px;
+				font-weight: bold;
+				color: #333;
+				transition: background 0.2s;
+			}
+			.cart-qty-btn:disabled {
+				opacity: 0.5;
+			}
+			.cart-qty-btn:hover:not(:disabled) {
+				background: #e0e0e0;
+			}
+			.cart-remove-btn {
+				background: #fff0f0;
+				border: 1px solid #ffb3b3;
+				color: #d90429;
+				border-radius: 4px;
+				padding: 2px 10px;
+				font-weight: bold;
+				transition: background 0.2s, color 0.2s;
+			}
+			.cart-remove-btn:hover {
+				background: #ffb3b3;
+				color: #fff;
+			}
+			.cart-total-bold {
+				font-weight: bold;
+				color: #1a1a1a;
+				font-size: 1.1em;
+			}
+		</style>
 	</head>
 	<body>
 		<main class="main" id="top">
@@ -35,50 +81,13 @@ contentType="text/html" pageEncoding="UTF-8"%>
 									<table class="table fs--1 mb-0 border-top border-200">
 										<thead>
 											<tr>
-												<th
-													class="sort white-space-nowrap align-middle fs--2"
-													scope="col"
-													style="min-width: 100px"
-												></th>
-												<th
-													class="sort white-space-nowrap align-middle"
-													e="col"
-													style="min-width: 150px"
-												>
-													Image
-												</th>
-												<th
-													class="sort align-middle"
-													scope="col"
-													style="width: 80px"
-												>
-													Product
-												</th>
-												<th
-													class="sort align-middle"
-													scope="col"
-													style="width: 150px"
-												>
-													Size
-												</th>
-												<th
-													class="sort align-middle text-end"
-													pe="col"
-													style="width: 400px"
-												>
-													Price
-												</th>
-												<th
-													class="sort align-middle ps-5"
-													scope="col"
-													style="width: 200px"
-												>
-													Quantity
-												</th>
-												<th
-													class="sort text-end align-middle pe-0"
-													scope="col"
-												></th>
+												<th>Image</th>
+												<th>Product</th>
+												<th>Size</th>
+												<th>Price</th>
+												<th>Quantity</th>
+												<th></th>
+												<th>Total</th>
 											</tr>
 										</thead>
 										<tbody class="list" id="cart-table-body"></tbody>
@@ -140,39 +149,64 @@ contentType="text/html" pageEncoding="UTF-8"%>
 		function renderCart(cartItems) {
 			const tbody = document.getElementById("cart-table-body");
 			tbody.innerHTML = "";
-			cartItems.forEach((item) => {
-				const tr = document.createElement("tr");
-				tr.innerHTML = `
-                <td>
-                    <img src="/resources/product_image/${
-											item.productVariantImage
-										}" style="width:60px;height:60px;object-fit:cover;">
-                </td>
-                <td>${item.productName}</td>
-                <td>${item.sizeValue}</td>
-                <td>
-                    <button onclick="changeQuantity(${item.pvsId}, ${
-					item.quantity - 1
-				})" ${item.quantity <= 1 ? "disabled" : ""}>-</button>
-                    <span style="margin:0 8px;">${item.quantity}</span>
-                    <button onclick="changeQuantity(${item.pvsId}, ${
-					item.quantity + 1
-				})">+</button>
-                </td>
-                <td>
-                    <button onclick="removeCart(${
-											item.pvsId
-										})" style="color:red;">Xóa</button>
-                </td>
-            `;
-				tbody.appendChild(tr);
+			let subTotal = 0;
+			cartItems.forEach(function (item) {
+				const itemTotal = item.price * item.quantity;
+				subTotal += itemTotal;
+				var productDisplay = "<strong>" + item.productVariantName + "</strong>";
+				
+				var newRow =
+					"<tr>" +
+					'<td><img src="http://localhost:9999/ShoesShop/resources/product_image/' +
+					item.productVariantImage +
+					'" style="width:60px;height:60px;object-fit:cover;"></td>' +
+					"<td>" +
+					productDisplay +
+					"</td>" +
+					"<td>" +
+					item.sizeValue +
+					"</td>" +
+					"<td class='cart-total-bold'>" +
+					item.price.toLocaleString("vi-VN") +
+					" đ</td>" +
+					"<td>" +
+					'<button class="cart-qty-btn" onclick="changeQuantity(' +
+					item.pvsId +
+					", " +
+					(item.quantity - 1) +
+					')" ' +
+					(item.quantity <= 1 ? "disabled" : "") +
+					">-</button>" +
+					'<span style="margin:0 8px;min-width:32px;display:inline-block;">' +
+					item.quantity +
+					"</span>" +
+					'<button class="cart-qty-btn" onclick="changeQuantity(' +
+					item.pvsId +
+					", " +
+					(item.quantity + 1) +
+					')">+</button>' +
+					"</td>" +
+					'<td><button class="cart-remove-btn" onclick="removeCart(' +
+					item.pvsId +
+					')">Xóa</button></td>' +
+					'<td class="text-end cart-total-bold">' +
+					itemTotal.toLocaleString("vi-VN") +
+					" đ</td>" +
+					"</tr>";
+				tbody.innerHTML += newRow;
 			});
+			document.getElementById("sub_total").textContent =
+				subTotal.toLocaleString("vi-VN") + " đ";
+			document.getElementById("total").textContent =
+				subTotal.toLocaleString("vi-VN") + " đ";
 		}
 
 		function changeQuantity(pvsId, newQuantity) {
 			if (newQuantity < 1) return;
 			const url =
-				newQuantity > 1 ? "http://localhost:9999/ShoesShop/api/carts/increase" : "http://localhost:9999/ShoesShop/api/carts/decrease";
+				newQuantity > 1
+					? "http://localhost:9999/ShoesShop/api/carts/increase"
+					: "http://localhost:9999/ShoesShop/api/carts/decrease";
 			fetch(url, {
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -183,7 +217,9 @@ contentType="text/html" pageEncoding="UTF-8"%>
 		}
 
 		function removeCart(pvsId) {
-			fetch(`http://localhost:9999/ShoesShop/api/carts/del?book_id=${pvsId}`).then((res) => fetchCart());
+			fetch(
+				`http://localhost:9999/ShoesShop/api/carts/del?book_id=${pvsId}`
+			).then((res) => fetchCart());
 		}
 
 		document.addEventListener("DOMContentLoaded", fetchCart);

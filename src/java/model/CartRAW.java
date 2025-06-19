@@ -21,8 +21,10 @@ import lombok.ToString;
 @ToString
 public class CartRAW {
     private int pvsId;
+    private String productVariantName;
     private int quantity;
     private String productVariantImage;
     private int sizeValue;
     private String productName;
+    private double price;
 }
