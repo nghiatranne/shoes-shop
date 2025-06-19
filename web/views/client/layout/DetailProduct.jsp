@@ -243,7 +243,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 										</div>
 									</div>
 								</div>
-								<div class="d-flex">
+<!--								<div class="d-flex">
 									<button
 										class="btn btn-lg btn-outline-warning rounded-pill w-100 me-3 px-2 px-sm-4 fs--1 fs-sm-0"
 									>
@@ -253,7 +253,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 									>
 										<span class="fas fa-shopping-cart me-2"></span>Add to cart
 									</button>
-								</div>
+								</div>-->
 							</div>
 							<div class="col-12 col-lg-6">
 								<div class="d-flex flex-column justify-content-between h-100">
@@ -325,83 +325,80 @@ contentType="text/html" pageEncoding="UTF-8"%>
 												<p><strong>Brand:</strong> ${detail_product.brand.name}</p>
 											</div>
 										</div>
-										<!-- Danh sách variant (color/option) -->
-										<div class="mb-3">
-											<p class="fw-semi-bold mb-2 text-900">Color :</p>
-											<div class="d-flex product-variants-list" id="variant-list">
-												<c:forEach items="${detail_product.productvariants}" var="variant" varStatus="loop">
-													<c:choose>
-														<c:when test="${not empty selected_variant_id && variant.id == selected_variant_id}">
-															<button type="button" class="btn btn-outline-primary me-2 variant-btn active" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
-														</c:when>
-														<c:otherwise>
-															<button type="button" class="btn btn-outline-primary me-2 variant-btn" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</div>
-										</div>
-										<div class="row g-3 g-sm-5 align-items-end">
-											<div class="col-12 col-sm-auto">
-												<p class="fw-semi-bold mb-2 text-900">Size :</p>
-												<div class="d-flex align-items-center">
-													<select class="form-select w-auto" id="size-select">
+										<form id="addToCartForm" action="add-to-cart" method="POST">
+											<input type="hidden" name="productId" value="${detail_product.id}">
+											<input type="hidden" name="variantId" id="selected-variant-id">
+											<!-- Danh sách variant (color/option) -->
+											<div class="mb-3">
+												<p class="fw-semi-bold mb-2 text-900">Color :</p>
+												<div class="d-flex product-variants-list" id="variant-list">
+													<c:forEach items="${detail_product.productvariants}" var="variant" varStatus="loop">
 														<c:choose>
-															<c:when test="${not empty selected_variant_id}">
-																<c:forEach items="${detail_product.productvariants}" var="variant">
-																	<c:if test="${variant.id == selected_variant_id}">
-																		<c:forEach items="${variant.productvariantsizes}" var="size">
-																			<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
-																			<option value="${size.size.value}" <c:if test="${stock <= 0}">disabled</c:if>>
-																				${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
-																			</option>
-																		</c:forEach>
-																	</c:if>
-																</c:forEach>
+															<c:when test="${not empty selected_variant_id && variant.id == selected_variant_id}">
+																<button type="button" class="btn btn-outline-primary me-2 variant-btn active" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
 															</c:when>
 															<c:otherwise>
-																<c:forEach items="${detail_product.productvariants[0].productvariantsizes}" var="size">
-																	<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
-																	<option value="${size.size.value}" <c:if test="${stock <= 0}">disabled</c:if>>
-																		${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
-																	</option>
-																</c:forEach>
+																<button type="button" class="btn btn-outline-primary me-2 variant-btn" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
 															</c:otherwise>
 														</c:choose>
-													</select>
+													</c:forEach>
 												</div>
 											</div>
-											<div class="col-12 col-sm">
-												<p class="fw-semi-bold mb-2 text-900">Quantity :</p>
-												<div
-													class="d-flex justify-content-between align-items-end"
-												>
-													<div
-														class="d-flex flex-between-center"
-														data-quantity="data-quantity"
-													>
-														<button
-															class="btn btn-phoenix-primary px-3"
-															data-type="minus"
-														>
-															<span class="fas fa-minus"></span></button
-														><input
-															class="form-control text-center input-spin-none bg-transparent border-0 outline-none"
-															style="width: 50px"
-															type="number"
-															min="1"
-															value="1"
-															id="quantity-input"
-														/><button
-															class="btn btn-phoenix-primary px-3"
-															data-type="plus"
-														>
-															<span class="fas fa-plus"></span>
-														</button>
+											<div class="row g-3 g-sm-5 align-items-end">
+												<div class="col-12 col-sm-auto">
+													<p class="fw-semi-bold mb-2 text-900">Size :</p>
+													<div class="d-flex align-items-center">
+														<select class="form-select w-auto" id="size-select" name="size">
+															<c:choose>
+																<c:when test="${not empty selected_variant_id}">
+																	<c:forEach items="${detail_product.productvariants}" var="variant">
+																		<c:if test="${variant.id == selected_variant_id}">
+																			<c:forEach items="${variant.productvariantsizes}" var="size">
+																				<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
+																				<option value="${size.size.id}" <c:if test="${stock <= 0}">disabled</c:if>>
+																					${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
+																				</option>
+																			</c:forEach>
+																		</c:if>
+																	</c:forEach>
+																</c:when>
+																<c:otherwise>
+																	<c:forEach items="${detail_product.productvariants[0].productvariantsizes}" var="size">
+																		<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
+																		<option value="${size.size.id}" <c:if test="${stock <= 0}">disabled</c:if>>
+																			${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
+																		</option>
+																	</c:forEach>
+																</c:otherwise>
+															</c:choose>
+														</select>
+													</div>
+												</div>
+												<div class="col-12 col-sm">
+													<p class="fw-semi-bold mb-2 text-900">Quantity :</p>
+													<div class="d-flex justify-content-between align-items-end">
+														<div class="d-flex flex-between-center" data-quantity="data-quantity">
+															<button type="button" class="btn btn-phoenix-primary px-3 quantity-btn" data-type="minus">
+																<span class="fas fa-minus"></span>
+															</button>
+															<input class="form-control text-center input-spin-none bg-transparent border-0 outline-none"
+																style="width: 50px" type="number" min="1" value="1" id="quantity-input" name="quantity"/>
+															<button type="button" class="btn btn-phoenix-primary px-3 quantity-btn" data-type="plus">
+																<span class="fas fa-plus"></span>
+															</button>
+														</div>
 													</div>
 												</div>
 											</div>
-										</div>
+											<div class="d-flex mt-4">
+												<button type="button" class="btn btn-lg btn-outline-warning rounded-pill w-100 me-3 px-2 px-sm-4 fs--1 fs-sm-0">
+													<span class="me-2 far fa-heart"></span>Add to wishlist
+												</button>
+												<button type="submit" class="btn btn-lg btn-warning rounded-pill w-100 fs--1 fs-sm-0">
+													<span class="fas fa-shopping-cart me-2"></span>Add to cart
+												</button>
+											</div>
+										</form>
 									</div>
 								</div>
 							</div>
@@ -1630,13 +1627,22 @@ contentType="text/html" pageEncoding="UTF-8"%>
 				if (selectedVariantId === '' || selectedVariantId === 'null') selectedVariantId = null; else selectedVariantId = parseInt(selectedVariantId);
 				if (selectedVariantId) {
 					var btn = $(".variant-btn[data-variant-id='" + selectedVariantId + "']");
-					if (btn.length) btn.trigger('click');
+					if (btn.length) {
+						btn.trigger('click');
+						$('#selected-variant-id').val(selectedVariantId);
+					}
+				} else if (variants.length > 0) {
+					// Nếu không có variant được chọn, chọn variant đầu tiên
+					$('#selected-variant-id').val(variants[0].id);
 				}
+
 				// Khi click variant
 				$(document).on('click', '.variant-btn', function() {
 					$('.variant-btn').removeClass('active');
 					$(this).addClass('active');
 					var idx = $(this).data('variant-index');
+					var variantId = $(this).data('variant-id');
+					$('#selected-variant-id').val(variantId);
 					var v = variants[idx];
 					$('#variant-title').text(v.name);
 					$('#variant-price').text(v.price.toLocaleString('vi-VN') + '₫');
@@ -1656,6 +1662,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 					var swiperInstance = $('.product-image-swiper')[0]?.swiper;
 					if (swiperInstance) swiperInstance.slideTo(idx + 1);
 				});
+
 				// Khi chọn size, cập nhật số lượng còn lại
 				$('#size-select').on('change', function() {
 					var idx = $('.variant-btn.active').data('variant-index');
@@ -1667,7 +1674,96 @@ contentType="text/html" pageEncoding="UTF-8"%>
 					});
 					$('#stock-value').text(stock);
 				});
+
+				// Xử lý nút tăng giảm số lượng
+				$(document).on('click', '.quantity-btn', function(e) {
+					e.preventDefault(); // Ngăn form submit
+					var type = $(this).data('type');
+					var input = $('#quantity-input');
+					var currentVal = parseInt(input.val()) || 1; // Nếu không phải số thì mặc định là 1
+					var maxStock = parseInt($('#stock-value').text()) || 0;
+
+					if (type === 'plus' && currentVal < maxStock) {
+						input.val(currentVal + 1);
+					} else if (type === 'minus' && currentVal > 1) {
+						input.val(currentVal - 1);
+					}
+				});
+
+				// Xử lý khi người dùng nhập trực tiếp vào input
+				$('#quantity-input').on('input', function() {
+					var currentVal = parseInt($(this).val()) || 1;
+					var maxStock = parseInt($('#stock-value').text()) || 0;
+
+					if (currentVal < 1) {
+						$(this).val(1);
+					} else if (currentVal > maxStock) {
+						$(this).val(maxStock);
+					}
+				});
+
+				// Validate form trước khi submit
+				$('#addToCartForm').on('submit', function(e) {
+					e.preventDefault();
+					var productId = $('input[name="productId"]').val();
+					var variantId = $('#selected-variant-id').val();
+					var size = $('#size-select').val();
+					var quantity = parseInt($('#quantity-input').val());
+
+					// Kiểm tra giá trị
+					console.log('productId:', productId, 'variantId:', variantId, 'size:', size, 'quantity:', quantity);
+
+					if (!variantId) {
+						alert('Please select a color/variant');
+						return false;
+					}
+					if (!size) {
+						alert('Please select a size');
+						return false;
+					}
+					if (quantity < 1) {
+						alert('Quantity must be at least 1');
+						return false;
+					}
+					if (quantity > stock) {
+						alert('Quantity cannot exceed available stock');
+						return false;
+					}
+
+					addToCart(productId, variantId, size, quantity);
+				});
 			});
+
+			function addToCart(productId, variantId, size, quantity) {
+				var url = 'http://localhost:9999/ShoesShop/api/cart/add'
+					+ '?productId=' + encodeURIComponent(productId)
+					+ '&variantId=' + encodeURIComponent(variantId)
+					+ '&size=' + encodeURIComponent(size)
+					+ '&quantity=' + encodeURIComponent(quantity);
+
+				$.ajax({
+					url: url,
+					type: 'POST',
+					contentType: 'application/json',
+					dataType: 'json',
+					success: function (data) {
+						if (data.success) {
+							alert("Thêm vào giỏ hàng thành công!");
+							// Nếu muốn cập nhật số lượng trên icon giỏ hàng, có thể làm ở đây
+							// updateCartNumber(data.cartItemCount);
+						} else {
+							alert(data.message || "Có lỗi xảy ra khi thêm vào giỏ hàng.");
+						}
+					},
+					error: function (xhr, status, error) {
+						if (xhr.status === 403) {
+							alert("Bạn cần đăng nhập để mua hàng!");
+						} else {
+							alert("Lỗi kết nối đến server hoặc lỗi khác.");
+						}
+					}
+				});
+			}
 		</script>
 	</body>
 </html>

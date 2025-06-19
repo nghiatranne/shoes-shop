@@ -78,6 +78,39 @@ public class ProductVariantSizeDAO extends DBContext {
         }
         return list;
     }
+    public ProductVariantSize getProductVariantSizesByProductVariantId(int productVariantId, int sizeId) {
+        String sql = "SELECT * FROM ProductVariantSize WHERE ProductVariantID = ? AND SizeID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productVariantId);
+            st.setInt(2, sizeId);
+
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                ProductVariantSize pvs = new ProductVariantSize();
+                pvs.setId(rs.getInt("ID"));
+               
+                pvs.setQuantityInStock(rs.getInt("QuantityInStock"));
+                pvs.setQuantityHolding(rs.getInt("QuantityHolding"));
+                pvs.setStatus(rs.getBoolean("Status"));
+                
+//                // Get product variant
+//                ProductVariantDAO pvDAO = new ProductVariantDAO();
+//                ProductVariant pv = pvDAO.getProductVariantById(rs.getInt("ProductVariantID"));
+//                pvs.setProductVariant(pv);
+                
+                // Get size
+                SizeDAO sizeDAO = new SizeDAO();
+                Size size = sizeDAO.getSizeById(rs.getInt("SizeID"));
+                pvs.setSize(size);
+                
+                return pvs;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
     
     public ProductVariantSize getProductVariantSizeById(int id) {
         String sql = "SELECT * FROM product_variant_size WHERE id = ? AND status = 1";

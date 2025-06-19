@@ -232,17 +232,17 @@
 </script>
 
 <script>
-//    console.log("OK");
-//    if ("${sessionScope.uName}" !== null) {
-//        localStorage.removeItem("book_cart_key");
-//        fetch("http://localhost:8080/BookShopping/api/carts")
-//                .then((res) => res.json())
-//                .then((data) => {
-//                    localStorage.setItem("book_cart_key", JSON.stringify(data));
-//                    $("#cart_number").empty().append(data.length);
-//                })
-//                .catch((error) => {
-//                    console.log(error);
-//                });
-//    }
+    console.log("OK");
+    if ("${sessionScope.uName}" !== null) {
+        localStorage.removeItem("book_cart_key");
+        fetch("http://localhost:9999/ShoesShop/api/carts")
+                .then((res) => res.json())
+                .then((data) => {
+                    localStorage.setItem("product_cart_key", JSON.stringify(data));
+                    $("#cart_number").empty().append(data.length);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+    }
 </script>
