@@ -208,6 +208,93 @@ public class ProductDAO extends DBContext{
         }
         return null;
     }
+    
+    public Product getProductDetailById(int id) {
+        String sql = "SELECT * FROM Product WHERE ID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                Product p = new Product();
+                p.setId(rs.getInt("ID"));
+                p.setTitle(rs.getString("Title"));
+                p.setImage(rs.getString("Image"));
+                p.setDescription(rs.getString("Description"));
+                p.setCreateDate(rs.getDate("CreateDate"));
+                p.setUpdateDate(rs.getDate("UpdateDate"));
+                p.setStatus(rs.getBoolean("Status"));
+                
+                BrandDAO brandDAO = new BrandDAO();
+                Brand brand = brandDAO.getBrandById(rs.getInt("BrandID"));
+                p.setBrand(brand);
+                
+                // Get categories
+                CategoryDAO categoryDAO = new CategoryDAO();
+                Set<Category> categories = categoryDAO.listAll(id);
+                p.setCategories(categories);
+                
+                ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+                List<ProductVariant> variants = productVariantDAO.getProductVariantsByProductId(id);
+                p.setProductvariants(variants);
+                
+                return p;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
+    public List<ProductVariant> getListProductVariantByProductId(int productId) {
+        List<ProductVariant> list = new ArrayList<>();
+        String sql = "select * from ProductVariant where ProductID = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductVariant productVariant = new ProductVariant();
+                productVariant.setId(rs.getInt("ID"));
+                productVariant.setName(rs.getString("Name"));
+                productVariant.setImportPrice(rs.getDouble("ImportPrice"));
+                productVariant.setPrice(rs.getDouble("Price"));
+                productVariant.setStatus(rs.getBoolean("Status"));
+                productVariant.setCreateDate(rs.getDate("CreateDate"));
+                productVariant.setUpdateDate(rs.getDate("UpdateDate"));
+                productVariant.setImage(rs.getString("Image"));
+                list.add(productVariant);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
+    
+    public List<ProductVariantSize> getListProductVariantSizeByProductId(int productVariantId) {
+        List<ProductVariantSize> list = new ArrayList<>();
+        String sql = "select * from ProductVariantSize pvs "
+                + "left join Size s on pvs.SizeID = s.Id "
+                + "where ProductVariantId = ?";
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, productVariantId);
+            ResultSet rs = st.executeQuery();
+            while (rs.next()) {
+                ProductVariantSize productVariantSize = new ProductVariantSize();
+                productVariantSize.setId(rs.getInt("ID"));
+                productVariantSize.setQuantityHolding(rs.getInt("QuantityHolding"));
+                productVariantSize.setQuantityInStock(rs.getInt("QuantityInStock"));
+                Size s = new Size();
+                s.setValue(rs.getInt("Value"));
+                productVariantSize.setSize(s);
+                list.add(productVariantSize);
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return list;
+    }
 
     public List<Product> listAllActiveProducts() {
         PublisherDAO publisherDAO = new PublisherDAO();
