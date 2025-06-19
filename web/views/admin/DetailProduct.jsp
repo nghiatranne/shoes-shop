@@ -29,7 +29,7 @@
                             </div>
                             <div class="col-12 col-md-auto">
                                 <div class="d-flex">
-                                    <a class="btn btn-phoenix-secondary me-2" href="${pageContext.request.contextPath}/admin/books/book/edit?book_isbn=${detailBook.isbn}">
+                                    <a class="btn btn-phoenix-secondary me-2" href="${pageContext.request.contextPath}/admin/products/edit?product_id=${productId}">
                                         Update Product
                                     </a>
                                     <c:choose>

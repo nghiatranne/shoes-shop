@@ -18,11 +18,13 @@ contentType="text/html" pageEncoding="UTF-8"%>
   margin-bottom: 1rem;
 }
 
-.product-price-range {
-  font-size: 2rem;
+.product-price-range, #variant-price {
+  font-size: 2.5rem;
   font-weight: bold;
-  color: #355f8b;
-  margin-bottom: 1rem;
+  color: #007bff;
+  margin-bottom: 1.2rem;
+  margin-top: 0.5rem;
+  display: block;
 }
 
 .product-stock-status {
@@ -176,6 +178,15 @@ contentType="text/html" pageEncoding="UTF-8"%>
 				margin: auto;
 				padding: 0 15px;
 			}
+
+			#variant-stock {
+				font-size: 1.3rem;
+				color: #28a745;
+				font-weight: 600;
+				margin-bottom: 1rem;
+				margin-top: 0.5rem;
+				display: block;
+			}
 		</style>
 	</head>
 	<body>
@@ -212,19 +223,25 @@ contentType="text/html" pageEncoding="UTF-8"%>
 							<div class="col-12 col-lg-6">
 								<div class="row g-3 mb-3">
 									<div class="col-12">
-                                                                        <div class="text-center">
-                                                                          <img
-                                                                              src="../resources/product_image/${detail_product.image}"
-                                                                            alt="${detail_product.title}"
-                                                                            class="img-fluid rounded border"
-                                                                            style="height: 400px; width: 400px; object-fit: contain;"
-                                                                          />
-                                                                        </div>
-                                                                      </div>
-
-                                                                      <div class="col-12 col-md-8">
-                                                                        <!-- Nội dung mô tả sản phẩm, giá, nút chọn, v.v. -->
-                                                                      </div>
+										<!-- Swiper ảnh sản phẩm -->
+										<div class="swiper-container product-image-swiper">
+											<div class="swiper-wrapper">
+												<div class="swiper-slide">
+													<img src="../resources/product_image/${detail_product.image}" alt="${detail_product.title}" class="img-fluid rounded border" style="height: 600px; width: 600px; object-fit: contain;" />
+												</div>
+												<c:forEach items="${detail_product.productvariants}" var="variant">
+													<c:if test="${not empty variant.image}">
+														<div class="swiper-slide">
+															<img src="../resources/product_image/${variant.image}" alt="${variant.name}" class="img-fluid rounded border" style="height: 600px; width: 600px; object-fit: contain;" />
+														</div>
+													</c:if>
+												</c:forEach>
+											</div>
+											<div class="swiper-button-next"></div>
+											<div class="swiper-button-prev"></div>
+											<div class="swiper-pagination"></div>
+										</div>
+									</div>
 								</div>
 								<div class="d-flex">
 									<button
@@ -242,181 +259,116 @@ contentType="text/html" pageEncoding="UTF-8"%>
 								<div class="d-flex flex-column justify-content-between h-100">
 									<div>
 										<div class="d-flex flex-wrap">
-											<div class="me-2">
-												<span class="fa fa-star text-warning"></span
-												><span class="fa fa-star text-warning"></span
-												><span class="fa fa-star text-warning"></span
-												><span class="fa fa-star text-warning"></span
-												><span class="fa fa-star text-warning"></span>
-											</div>
 											<p class="text-primary fw-semi-bold mb-2">
 												6548 People rated and reviewed
 											</p>
 										</div>
 										<div class="product-detail">
-  <h3 class="mb-3 lh-sm">${detail_product.title}</h3>
-
-  <div class="d-flex flex-wrap align-items-center product-price-range">
-    <h1 class="me-3">
-												<c:set var="minPrice" value="${Double.MAX_VALUE}" />
-												<c:set var="maxPrice" value="${0.0}" />
-												<c:forEach
-													items="${detail_product.productvariants}"
-													var="variant"
-												>
-													<c:if test="${variant.status == true}">
-														<c:if test="${variant.price < minPrice}">
-															<c:set var="minPrice" value="${variant.price}" />
-														</c:if>
-														<c:if test="${variant.price > maxPrice}">
-															<c:set var="maxPrice" value="${variant.price}" />
-														</c:if>
-													</c:if>
-												</c:forEach>
-												<c:if test="${minPrice != Double.MAX_VALUE}">
-													<fmt:formatNumber
-														value="${minPrice}"
-														type="currency"
-														currencySymbol="₫"
-														maxFractionDigits="0"
-													/>
-													<c:if test="${minPrice != maxPrice}">
-														-
-														<fmt:formatNumber
-															value="${maxPrice}"
-															type="currency"
-															currencySymbol="₫"
-															maxFractionDigits="0"
-														/>
-													</c:if>
-												</c:if>
-											</h1>
-  </div>
-
-  <p class="product-stock-status">In stock</p>
-
-  <div class="product-meta">
-    <p>
-      <strong>Categories:</strong>
-      <c:forEach items="${detail_product.categories}" var="category" varStatus="loop">
-        ${category.name}${!loop.last ? ', ' : ''}
-      </c:forEach>
-    </p>
-    <p>
-      <strong>Brand:</strong>
-      ${detail_product.publisher.name}
-    </p>
-  </div>
-
-  <a href="/ShoesShop/blog/post-details?id=12" class="btn btn-link text-decoration-none p-0 product-size-guide">
-    <i class="fas fa-ruler me-2"></i>Size selection guide
-  </a>
-</div>
-
-									<div>
+											<!-- Giá và số lượng -->
+											<div id="variant-info">
+												<c:choose>
+													<c:when test="${not empty selected_variant_id}">
+														<c:forEach items="${detail_product.productvariants}" var="variant">
+															<c:if test="${variant.id == selected_variant_id}">
+																<h3 id="variant-title">${variant.name}</h3>
+																<div id="variant-price" class="product-price-range">
+																	<span><fmt:formatNumber value="${variant.price}" type="currency" currencySymbol="₫" maxFractionDigits="0"/></span>
+																</div>
+																<div id="variant-stock">
+																	In stock: <span id="stock-value">
+																		<c:set var="stock" value="${not empty variant.productvariantsizes ? variant.productvariantsizes[0].quantityInStock - variant.productvariantsizes[0].quantityHolding : 0}" />
+																		${stock}
+																	</span>
+																</div>
+															</c:if>
+														</c:forEach>
+													</c:when>
+													<c:otherwise>
+														<h3 id="variant-title">${detail_product.title}</h3>
+														<div id="variant-price" class="product-price-range">
+															Price: <span>
+															<c:set var="minPrice" value="${Double.MAX_VALUE}" />
+															<c:set var="maxPrice" value="${0.0}" />
+															<c:forEach items="${detail_product.productvariants}" var="variant">
+																<c:if test="${variant.status == true}">
+																	<c:if test="${variant.price < minPrice}">
+																		<c:set var="minPrice" value="${variant.price}" />
+																	</c:if>
+																	<c:if test="${variant.price > maxPrice}">
+																		<c:set var="maxPrice" value="${variant.price}" />
+																	</c:if>
+																</c:if>
+															</c:forEach>
+															<c:if test="${minPrice != Double.MAX_VALUE}">
+																<fmt:formatNumber value="${minPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
+																<c:if test="${minPrice != maxPrice}">
+																	- <fmt:formatNumber value="${maxPrice}" type="currency" currencySymbol="₫" maxFractionDigits="0"/>
+																</c:if>
+															</c:if>
+															</span>
+														</div>
+														<div id="variant-stock">
+															In stock: <span id="stock-value">
+																<c:set var="stock" value="${not empty detail_product.productvariants[0].productvariantsizes ? detail_product.productvariants[0].productvariantsizes[0].quantityInStock - detail_product.productvariants[0].productvariantsizes[0].quantityHolding : 0}" />
+																${stock}
+															</span>
+														</div>
+													</c:otherwise>
+												</c:choose>
+											</div>
+											<div class="product-meta">
+												<p><strong>Categories:</strong>
+													<c:forEach items="${detail_product.categories}" var="category" varStatus="loop">
+														${category.name}${!loop.last ? ', ' : ''}
+													</c:forEach>
+												</p>
+												<p><strong>Brand:</strong> ${detail_product.brand.name}</p>
+											</div>
+										</div>
+										<!-- Danh sách variant (color/option) -->
 										<div class="mb-3">
-											<p class="fw-semi-bold mb-2 text-900">
-												Color :
-												<span
-													class="text-1100"
-													data-product-color="data-product-color"
-													>Blue</span
-												>
-											</p>
-											<div
-												class="d-flex product-color-variants"
-												data-product-color-variants="data-product-color-variants"
-											>
-												<div
-													class="rounded-1 border me-2 active"
-													data-variant="Blue"
-													data-products-images='["../../../assets/img/products/details/blue_front.png","../../../assets/img/products/details/blue_back.png","../../../assets/img/products/details/blue_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/blue_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Red"
-													data-products-images='["../../../assets/img/products/details/red_front.png","../../../assets/img/products/details/red_back.png","../../../assets/img/products/details/red_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/red_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Green"
-													data-products-images='["../../../assets/img/products/details/green_front.png","../../../assets/img/products/details/green_back.png","../../../assets/img/products/details/green_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/green_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Purple"
-													data-products-images='["../../../assets/img/products/details/purple_front.png","../../../assets/img/products/details/purple_back.png","../../../assets/img/products/details/purple_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/purple_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Silver"
-													data-products-images='["../../../assets/img/products/details/silver_front.png","../../../assets/img/products/details/silver_back.png","../../../assets/img/products/details/silver_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/silver_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Yellow"
-													data-products-images='["../../../assets/img/products/details/yellow_front.png","../../../assets/img/products/details/yellow_back.png","../../../assets/img/products/details/yellow_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/yellow_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
-												<div
-													class="rounded-1 border me-2"
-													data-variant="Orange"
-													data-products-images='["../../../assets/img/products/details/orange_front.png","../../../assets/img/products/details/orange_back.png","../../../assets/img/products/details/orange_side.png"]'
-												>
-													<img
-														src="../../../assets/img/products/details/orange_front.png"
-														alt=""
-														width="38"
-													/>
-												</div>
+											<p class="fw-semi-bold mb-2 text-900">Color :</p>
+											<div class="d-flex product-variants-list" id="variant-list">
+												<c:forEach items="${detail_product.productvariants}" var="variant" varStatus="loop">
+													<c:choose>
+														<c:when test="${not empty selected_variant_id && variant.id == selected_variant_id}">
+															<button type="button" class="btn btn-outline-primary me-2 variant-btn active" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
+														</c:when>
+														<c:otherwise>
+															<button type="button" class="btn btn-outline-primary me-2 variant-btn" data-variant-index="${loop.index}" data-variant-id="${variant.id}">${variant.name}</button>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
 											</div>
 										</div>
 										<div class="row g-3 g-sm-5 align-items-end">
 											<div class="col-12 col-sm-auto">
 												<p class="fw-semi-bold mb-2 text-900">Size :</p>
 												<div class="d-flex align-items-center">
-													<select class="form-select w-auto">
-														<option value="44">44</option>
-														<option value="22">22</option>
-														<option value="18">18</option></select
-													><a class="ms-2 fs--1 fw-semi-bold" href="#!"
-														>Size chart</a
-													>
+													<select class="form-select w-auto" id="size-select">
+														<c:choose>
+															<c:when test="${not empty selected_variant_id}">
+																<c:forEach items="${detail_product.productvariants}" var="variant">
+																	<c:if test="${variant.id == selected_variant_id}">
+																		<c:forEach items="${variant.productvariantsizes}" var="size">
+																			<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
+																			<option value="${size.size.value}" <c:if test="${stock <= 0}">disabled</c:if>>
+																				${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
+																			</option>
+																		</c:forEach>
+																	</c:if>
+																</c:forEach>
+															</c:when>
+															<c:otherwise>
+																<c:forEach items="${detail_product.productvariants[0].productvariantsizes}" var="size">
+																	<c:set var="stock" value="${size.quantityInStock - size.quantityHolding}" />
+																	<option value="${size.size.value}" <c:if test="${stock <= 0}">disabled</c:if>>
+																		${size.size.value} <c:if test="${stock <= 0}">(Hết hàng)</c:if>
+																	</option>
+																</c:forEach>
+															</c:otherwise>
+														</c:choose>
+													</select>
 												</div>
 											</div>
 											<div class="col-12 col-sm">
@@ -438,7 +390,8 @@ contentType="text/html" pageEncoding="UTF-8"%>
 															style="width: 50px"
 															type="number"
 															min="1"
-															value="2"
+															value="1"
+															id="quantity-input"
 														/><button
 															class="btn btn-phoenix-primary px-3"
 															data-type="plus"
@@ -446,9 +399,6 @@ contentType="text/html" pageEncoding="UTF-8"%>
 															<span class="fas fa-plus"></span>
 														</button>
 													</div>
-													<button class="btn btn-phoenix-primary px-3 border-0">
-														<span class="fas fa-share-alt fs-1"></span>
-													</button>
 												</div>
 											</div>
 										</div>
@@ -1021,7 +971,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 														<div
 															class="card h-100 bg-100 p-1"
 														>
-															<img class="img-thumbnail hover-shadow"
+                                                                                                                    <img style="width: 100% !important" class="img-thumbnail hover-shadow"
 															src="<c:url
 																value="/resources/product_image/${l.image}"
 															/>" alt="${l.title}" style="height: 220px;
@@ -1653,5 +1603,71 @@ contentType="text/html" pageEncoding="UTF-8"%>
 		</div>
 
 		<jsp:include page="../import-js.jsp" />
+		<script src="../resources/vendors/swiper/swiper-bundle.min.js"></script>
+		<script>
+			var variants = [
+				<c:forEach items="${detail_product.productvariants}" var="variant" varStatus="loop">
+					{
+						id: "${variant.id}",
+						name: "${variant.name}",
+						price: ${variant.price},
+						image: "${variant.image}",
+						sizes: [
+							<c:forEach items="${variant.productvariantsizes}" var="size" varStatus="sizeLoop">
+								{
+									value: "${size.size.value}",
+									stock: ${size.quantityInStock - size.quantityHolding}
+								}<c:if test="${!sizeLoop.last}">,</c:if>
+							</c:forEach>
+						]
+					}<c:if test="${!loop.last}">,</c:if>
+				</c:forEach>
+			];
+
+			$(document).ready(function() {
+				// Nếu có selected_variant_id thì tự động chọn variant đó
+				var selectedVariantId = '<c:out value="${selected_variant_id}"/>';
+				if (selectedVariantId === '' || selectedVariantId === 'null') selectedVariantId = null; else selectedVariantId = parseInt(selectedVariantId);
+				if (selectedVariantId) {
+					var btn = $(".variant-btn[data-variant-id='" + selectedVariantId + "']");
+					if (btn.length) btn.trigger('click');
+				}
+				// Khi click variant
+				$(document).on('click', '.variant-btn', function() {
+					$('.variant-btn').removeClass('active');
+					$(this).addClass('active');
+					var idx = $(this).data('variant-index');
+					var v = variants[idx];
+					$('#variant-title').text(v.name);
+					$('#variant-price').text(v.price.toLocaleString('vi-VN') + '₫');
+					// Render lại size
+					var $sizeSelect = $('#size-select');
+					$sizeSelect.empty();
+					$.each(v.sizes, function(i, s) {
+						var text = s.value + (s.stock <= 0 ? ' (Hết hàng)' : '');
+						var $opt = $('<option></option>').val(s.value).text(text);
+						if (s.stock <= 0) $opt.prop('disabled', true);
+						$sizeSelect.append($opt);
+					});
+					// Cập nhật số lượng còn lại theo size đầu tiên
+					var stock = v.sizes.length > 0 ? v.sizes[0].stock : 0;
+					$('#stock-value').text(stock);
+					// Chuyển slide swiper (swiper instance đã được khởi tạo bởi import-js.jsp)
+					var swiperInstance = $('.product-image-swiper')[0]?.swiper;
+					if (swiperInstance) swiperInstance.slideTo(idx + 1);
+				});
+				// Khi chọn size, cập nhật số lượng còn lại
+				$('#size-select').on('change', function() {
+					var idx = $('.variant-btn.active').data('variant-index');
+					var v = variants[idx] || variants[0];
+					var selectedSize = $(this).val();
+					var stock = 0;
+					$.each(v.sizes, function(i, s) {
+						if (s.value == selectedSize) stock = s.stock;
+					});
+					$('#stock-value').text(stock);
+				});
+			});
+		</script>
 	</body>
 </html>

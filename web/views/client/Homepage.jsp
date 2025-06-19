@@ -55,12 +55,88 @@
         </div>
       </div>
 
-      <div class="ecommerce-homepage pt-5 mb-9">
+      <div class="ecommerce-homepage pt-5 mb-5">
         <section class="py-0 px-xl-3">
           <div class="container-small px-xl-0 px-xxl-3">
             <div class="row mb-3">
               <div class="d-flex flex-between-center mb-3">
                 <h3>New Shoes!</h3>
+                <a
+                  class="btn btn-phoenix-primary me-1 mb-1"
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="top"
+                  title="View all"
+                  href="books?cid=14"
+                  type="button"
+                >
+                  <span data-feather="arrow-right" class="fs--1 ms-1"></span>
+                </a>
+              </div>
+              <div class="col-lg-12 col-xxl-12">
+                <div class="row gx-3 mb-8" style="align-items: flex-start">
+                  <c:forEach items="${newProducts}" var="np" varStatus="item">
+                    <c:if test="${item.index < 8 && np.status == true}">
+                      <div class="col-12 col-sm-6 col-md-4 col-xxl-3">
+                        <div class="product-card-container h-100">
+                          <div
+                            class="position-relative text-decoration-none product-card h-100"
+                          >
+                            <div
+                              class="d-flex flex-col flex-wrap align-items-center h-100 gap-2"
+                            >
+                              <div>
+                                <div
+                                  class="border border-1 rounded-3 position-relative mb-3"
+                                >
+                                    <img style="height: 300px;object-fit: contain;" class="img-thumbnail" src="<c:url
+                                    value="/resources/product_image/${np.image}"
+                                  />" alt=""/>
+                                </div>
+                                <a
+                                  class="stretched-link text-decoration-none"
+                                  href="${pageContext.request.contextPath}/products/product-detail?id=${np.id}"
+                                ></a>
+                              </div>
+                              <div>
+                                <h5
+                                  class="mb-2 lh-sm line-clamp-3 product-name"
+                                >
+                                  ${np.title}
+                                </h5>
+                                <p class="mb-2" style="width: 100%">
+                                    <c:forEach items="${np.categories}" var="c">
+                                        <a class="text-decoration-none" href="">
+                                            <span class="badge badge-tag">${c.name}</span>
+                                        </a>
+                                    </c:forEach>
+                                </p>
+                                <div class="d-flex align-items-center mb-1">
+                                  <!--<p class="me-2 text-900 text-decoration-line-through text-danger mb-0">$8.99</p>-->
+                                  <h4 class="text-1100 mb-0">
+                                    <fmt:formatNumber value="${np.productvariants[0].price}" type="currency" pattern="###,### ₫"/>
+                                  </h4>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </c:if>
+                  </c:forEach>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- end of .container-->
+        </section>
+      </div>
+      
+      <div class="ecommerce-homepage mb-9">
+        <section class="py-0 px-xl-3">
+          <div class="container-small px-xl-0 px-xxl-3">
+            <div class="row mb-3">
+              <div class="d-flex flex-between-center mb-3">
+                <h3>Featured Products</h3>
                 <a
                   class="btn btn-phoenix-primary me-1 mb-1"
                   data-bs-toggle="tooltip"

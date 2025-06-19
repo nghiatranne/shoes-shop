@@ -192,7 +192,7 @@
                                 >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon">
-                                        <span data-feather="file-text"></span>
+                                        <span data-feather="tag"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text"> Category Management </span>
@@ -212,7 +212,7 @@
                                 >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon">
-                                        <span data-feather="file-text"></span>
+                                        <span data-feather="package"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text"> Brand Management </span>
@@ -232,7 +232,7 @@
                                 >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon">
-                                        <span data-feather="file-text"></span>
+                                        <span data-feather="crop"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text"> Sizes Management </span>
@@ -272,7 +272,7 @@
                                 >
                                 <div class="d-flex align-items-center">
                                     <span class="nav-link-icon">
-                                        <span data-feather="credit-card"></span>
+                                        <span data-feather="box"></span>
                                     </span>
                                     <span class="nav-link-text-wrapper">
                                         <span class="nav-link-text">Product Management</span>
