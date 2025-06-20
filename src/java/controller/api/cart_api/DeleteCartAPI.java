@@ -73,11 +73,11 @@ public class DeleteCartAPI extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
         Account account = accountDAO.getAccountByEmail(uname);
         
-        int book_id = Integer.parseInt(request.getParameter("book_id"));
+        int pvsId = Integer.parseInt(request.getParameter("pvsId"));
         int acc_id = account.getId();
         
         CartDAO cartDAO = new CartDAO();
-        cartDAO.deleteCart(book_id, acc_id);
+        cartDAO.deleteCart(pvsId, acc_id);
         
         response.getWriter().write("{'msg': 'Delete book cart success!'}");
     } 

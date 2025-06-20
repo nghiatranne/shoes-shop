@@ -203,14 +203,19 @@ contentType="text/html" pageEncoding="UTF-8"%>
 
 		function changeQuantity(pvsId, newQuantity) {
 			if (newQuantity < 1) return;
-			const url =
+                        
+                        
+			var url =
 				newQuantity > 1
 					? "http://localhost:9999/ShoesShop/api/carts/increase"
 					: "http://localhost:9999/ShoesShop/api/carts/decrease";
+                                        
+                        url = url + '?pvsId=' + encodeURIComponent(pvsId)
+					+ '&quantity=' + encodeURIComponent(newQuantity);
 			fetch(url, {
 				method: "POST",
 				headers: { "Content-Type": "application/x-www-form-urlencoded" },
-				body: `book_id=${pvsId}&quantity=${newQuantity}`,
+				
 			}).then((res) => {
 				fetchCart();
 			});
@@ -218,7 +223,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 
 		function removeCart(pvsId) {
 			fetch(
-				`http://localhost:9999/ShoesShop/api/carts/del?book_id=${pvsId}`
+				"http://localhost:9999/ShoesShop/api/carts/del?pvsId=" + pvsId
 			).then((res) => fetchCart());
 		}
 

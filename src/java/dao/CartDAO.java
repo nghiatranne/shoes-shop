@@ -101,7 +101,7 @@ public class CartDAO extends DBContext {
     }
     
     public void deleteCart(int book_id, int acc_id) {
-        String sql = "delete from Cart where AccountID = ? and BookID = ?";
+        String sql = "delete from Cart where AccountID = ? and ProductVariantSizeID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, acc_id);
@@ -112,13 +112,13 @@ public class CartDAO extends DBContext {
         }
     }
     
-    public void updateQuantity(int book_id, int acc_id, int quantity) {
+    public void updateQuantity(int pvsId, int acc_id, int quantity) {
         String sql = "update Cart set Quantity = ? where AccountID = ? and ProductVariantSizeID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, quantity);
             ps.setInt(2, acc_id);
-            ps.setInt(3, book_id);
+            ps.setInt(3, pvsId);
             ps.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();

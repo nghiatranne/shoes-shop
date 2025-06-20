@@ -89,12 +89,12 @@ public class IncreaseQuantityAPI extends HttpServlet {
         AccountDAO accountDAO = new AccountDAO();
         Account account = accountDAO.getAccountByEmail(uname);
 
-        int book_id = Integer.parseInt(request.getParameter("book_id"));
+        int pvsId = Integer.parseInt(request.getParameter("pvsId"));
         int acc_id = account.getId();
         int quantity = Integer.parseInt(request.getParameter("quantity"));
 
         CartDAO cartDAO = new CartDAO();
-        cartDAO.updateQuantity(book_id, acc_id, quantity);
+        cartDAO.updateQuantity(pvsId, acc_id, quantity);
 
         response.getWriter().write("{'msg': 'Increase book cart success!'}");
     }
