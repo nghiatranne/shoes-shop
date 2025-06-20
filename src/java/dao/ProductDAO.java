@@ -628,4 +628,82 @@ public class ProductDAO extends DBContext{
             e.printStackTrace();
         }
     }
+
+    public List<Product> getFilterProduct(List<Integer> categoryIds, List<Integer> brandIds, Double minPrice, Double maxPrice, Integer rating) {
+        List<Product> products = new ArrayList<>();
+        BrandDAO brandDAO = new BrandDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT DISTINCT p.* FROM Product p ");
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            sql.append("INNER JOIN ProductCategory pc ON p.ID = pc.ProductID ");
+        }
+        if (brandIds != null && !brandIds.isEmpty()) {
+            // nothing to join, just filter
+        }
+        sql.append("LEFT JOIN ProductVariant pv ON p.ID = pv.ProductID ");
+        // Nếu lọc rating, cần join bảng đánh giá (giả sử có bảng FeedbackStatistics hoặc Feedback)
+        if (rating != null && rating > 0) {
+            sql.append("LEFT JOIN Feedback f ON p.ID = f.ProductID ");
+        }
+        sql.append("WHERE p.Status = 1 ");
+        List<Object> params = new ArrayList<>();
+        if (categoryIds != null && !categoryIds.isEmpty()) {
+            sql.append("AND pc.CategoryID IN (");
+            for (int i = 0; i < categoryIds.size(); i++) {
+                sql.append("?");
+                if (i < categoryIds.size() - 1) sql.append(",");
+                params.add(categoryIds.get(i));
+            }
+            sql.append(") ");
+        }
+        if (brandIds != null && !brandIds.isEmpty()) {
+            sql.append("AND p.BrandID IN (");
+            for (int i = 0; i < brandIds.size(); i++) {
+                sql.append("?");
+                if (i < brandIds.size() - 1) sql.append(",");
+                params.add(brandIds.get(i));
+            }
+            sql.append(") ");
+        }
+        if (minPrice != null) {
+            sql.append("AND pv.Price >= ? ");
+            params.add(minPrice);
+        }
+        if (maxPrice != null) {
+            sql.append("AND pv.Price <= ? ");
+            params.add(maxPrice);
+        }
+        if (rating != null && rating > 0) {
+            sql.append("GROUP BY p.ID, p.Title, p.Image, p.Description, p.CreateDate, p.UpdateDate, p.Status, p.BrandID ");
+            sql.append("HAVING AVG(f.Stars) >= ? ");
+            params.add(rating.doubleValue());
+        }
+        sql.append("ORDER BY p.CreateDate DESC");
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql.toString());
+            for (int i = 0; i < params.size(); i++) {
+                ps.setObject(i + 1, params.get(i));
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description"));
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 }

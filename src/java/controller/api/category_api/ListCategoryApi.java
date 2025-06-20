@@ -20,7 +20,7 @@ import model.Category;
  *
  * @author USA
  */
-@WebServlet(name="ListCategoryApi", urlPatterns={"/api/categorys"})
+@WebServlet(name="ListCategoryApi", urlPatterns={"/api/categories"})
 public class ListCategoryApi extends HttpServlet {
    
     /** 

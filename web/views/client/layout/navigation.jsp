@@ -28,7 +28,7 @@
                                             <div class="col-12 col-sm-6 col-md-4">
                                                 <a
                                                     class="text-black d-block mb-1 text-decoration-none hover-bg-100 px-2 py-1 rounded-2"
-                                                    href="${pageContext.request.contextPath}/books?cid=${c.id}"
+                                                    href="${pageContext.request.contextPath}/products?category=${c.id}"
                                                     >${c.name}</a
                                                 >
                                             </div>
@@ -44,6 +44,13 @@
                                 class="nav-link ps-0 active me-2"
                                 href="${pageContext.request.contextPath}/homepage"
                                 >Home</a
+                            >
+                        </li>
+                        <li class="nav-item" data-nav-item="data-nav-item">
+                            <a
+                                class="nav-link ps-0 active me-2"
+                                href="${pageContext.request.contextPath}/products"
+                                >Products</a
                             >
                         </li>
                         <li class="nav-item" data-nav-item="data-nav-item">
