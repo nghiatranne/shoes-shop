@@ -202,13 +202,14 @@
                         <div class="search-box ecommerce-search-box w-100">
                             <form
                                 class="position-relative m-0"
-                                action="${pageContext.request.contextPath}/books"
+                                action="${pageContext.request.contextPath}/products"
                                 >
                                 <input
                                     class="form-control search-input search form-control-sm"
                                     type="search"
                                     placeholder="Search your shoes here..."
                                     name="key"
+                                    value="${param.key != null ? param.key : ''}"
                                     aria-label="Search"
                                     />
                                 <span class="fas fa-search search-box-icon"></span>

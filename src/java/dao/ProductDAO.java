@@ -629,7 +629,7 @@ public class ProductDAO extends DBContext{
         }
     }
 
-    public List<Product> getFilterProduct(List<Integer> categoryIds, List<Integer> brandIds, Double minPrice, Double maxPrice, Integer rating) {
+    public List<Product> getFilterProduct(List<Integer> categoryIds, List<Integer> brandIds, Double minPrice, Double maxPrice, Integer rating, String key) {
         List<Product> products = new ArrayList<>();
         BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();
@@ -643,7 +643,6 @@ public class ProductDAO extends DBContext{
             // nothing to join, just filter
         }
         sql.append("LEFT JOIN ProductVariant pv ON p.ID = pv.ProductID ");
-        // Nếu lọc rating, cần join bảng đánh giá (giả sử có bảng FeedbackStatistics hoặc Feedback)
         if (rating != null && rating > 0) {
             sql.append("LEFT JOIN Feedback f ON p.ID = f.ProductID ");
         }
@@ -674,6 +673,11 @@ public class ProductDAO extends DBContext{
         if (maxPrice != null) {
             sql.append("AND pv.Price <= ? ");
             params.add(maxPrice);
+        }
+        if (key != null && !key.trim().isEmpty()) {
+            sql.append("AND (p.Title LIKE ? OR p.Description LIKE ?) ");
+            params.add("%" + key.trim() + "%");
+            params.add("%" + key.trim() + "%");
         }
         if (rating != null && rating > 0) {
             sql.append("GROUP BY p.ID, p.Title, p.Image, p.Description, p.CreateDate, p.UpdateDate, p.Status, p.BrandID ");

@@ -76,6 +76,7 @@ public class ProductFilterServlet extends HttpServlet {
         String minPriceStr = request.getParameter("minPrice");
         String maxPriceStr = request.getParameter("maxPrice");
         String ratingStr = request.getParameter("rating");
+        String key = request.getParameter("key");
 
         List<Integer> categoryIds = new ArrayList<>();
         if (categoryParams != null) {
@@ -102,7 +103,7 @@ public class ProductFilterServlet extends HttpServlet {
             try { rating = Integer.parseInt(ratingStr); } catch (Exception ex) {}
         }
 
-        List<Product> products = productDAO.getFilterProduct(categoryIds, brandIds, minPrice, maxPrice, rating);
+        List<Product> products = productDAO.getFilterProduct(categoryIds, brandIds, minPrice, maxPrice, rating, key);
 
         int numPerPage = NumberPerPage.SIZE.getValue();
         int numProducts = products.size();
