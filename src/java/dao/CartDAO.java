@@ -125,11 +125,11 @@ public class CartDAO extends DBContext {
         }
     }
     
-    public void updateStatus(int bookId, int accountId) {
+    public void updateStatus(int pvsId, int accountId) {
         String sql = "update Cart set status = 1 where ProductVariantSizeID = ? and AccountID = ?";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, bookId);
+            ps.setInt(1, pvsId);
             ps.setInt(2, accountId);
             ps.executeUpdate();
         } catch (SQLException e) {

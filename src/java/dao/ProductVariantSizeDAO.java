@@ -9,11 +9,24 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import model.Product;
 import model.ProductVariantSize;
 import model.ProductVariant;
 import model.Size;
 
 public class ProductVariantSizeDAO extends DBContext {
+    
+    public void updateHold(int bookId, int quantity) {
+        String sql = "update ProductVariantSize set ProductVariantSize = ? where ID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, quantity);
+            ps.setInt(2, bookId);
+            ps.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     
     public List<ProductVariantSize> getAllProductVariantSizes() {
         List<ProductVariantSize> list = new ArrayList<>();
@@ -113,7 +126,12 @@ public class ProductVariantSizeDAO extends DBContext {
     }
     
     public ProductVariantSize getProductVariantSizeById(int id) {
-        String sql = "SELECT * FROM product_variant_size WHERE id = ? AND status = 1";
+        ProductDAO productDAO = new ProductDAO();
+        
+        String sql = "SELECT * FROM ProductVariantSize pvs " +
+                "left join ProductVariant pv on pvs.ProductVariantID = pv.ID " +
+                "left join Size s on s.Id = pvs.SizeId " +
+                "WHERE pvs.id = ? ";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, id);
@@ -121,19 +139,21 @@ public class ProductVariantSizeDAO extends DBContext {
             if (rs.next()) {
                 ProductVariantSize pvs = new ProductVariantSize();
                 pvs.setId(rs.getInt("id"));
-                pvs.setQuantityInStock(rs.getInt("quantity_in_stock"));
-                pvs.setQuantityHolding(rs.getInt("quantity_holding"));
+                pvs.setQuantityInStock(rs.getInt("QuantityInStock"));
+                pvs.setQuantityHolding(rs.getInt("QuantityHolding"));
                 pvs.setStatus(rs.getBoolean("status"));
-                
-                // Get product variant
-                ProductVariantDAO pvDAO = new ProductVariantDAO();
-                ProductVariant pv = pvDAO.getProductVariantById(rs.getInt("product_variant_id"));
+                ProductVariant pv = new ProductVariant();
+                pv.setId(rs.getInt("ProductVariantID"));
+                pv.setName(rs.getString("Name"));
+                pv.setImportPrice(rs.getDouble("ImportPrice"));
+                pv.setImage(rs.getString("image"));
+                pv.setPrice(rs.getDouble("Price"));
+                pv.setProduct(productDAO.getProductById(rs.getInt("ProductId")));
                 pvs.setProductVariant(pv);
-                
-                // Get size
-                SizeDAO sizeDAO = new SizeDAO();
-                Size size = sizeDAO.getSizeById(rs.getInt("size_id"));
-                pvs.setSize(size);
+                Size s = new Size();
+                s.setId(rs.getInt("SizeId"));
+                s.setValue(rs.getInt("Value"));
+                pvs.setSize(s);
                 
                 return pvs;
             }
@@ -186,7 +206,7 @@ public class ProductVariantSizeDAO extends DBContext {
     }
     
     public void updateQuantity(int id, int quantity) {
-        String sql = "UPDATE product_variant_size SET quantity_in_stock = quantity_in_stock - ? WHERE id = ?";
+        String sql = "UPDATE ProductVariantSize SET QuantityInStock = ? WHERE id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, quantity);
@@ -198,7 +218,7 @@ public class ProductVariantSizeDAO extends DBContext {
     }
     
     public void updateHoldingQuantity(int id, int quantity) {
-        String sql = "UPDATE product_variant_size SET quantity_holding = quantity_holding + ? WHERE id = ?";
+        String sql = "UPDATE ProductVariantSize SET QuantityHolding = ? WHERE id = ?";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             st.setInt(1, quantity);

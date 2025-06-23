@@ -168,26 +168,28 @@
                     <button class="btn p-1" type="button" data-bs-dismiss="modal" aria-label="Close"><span class="fas fa-times fs--1"></span></button>
                 </div>
                 <div class="modal-body">
-                    <div class="mb-2">
-                        <label class="form-label" for="name">Full name </label>
-                        <input class="form-control" name="name" id="name" placeholder="Name" />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="address">Address </label>
-                        <input class="form-control" name="address" id="address" placeholder="Address" />
-                    </div>
-                    <div class="mb-2">
-                        <label class="form-label" for="tel">Telephone </label>
-                        <input class="form-control" name="tel" id="tel" placeholder="Telephone" />
-                    </div>
-                    <div class="mb-2">
-                        <input class="form-check-input me-1" id="isDefault" type="checkbox" name="isDefault"/>
-                        <label class="form-check-label" for="isDefault">Set as default information</label>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <button class="btn btn-phoenix-primary me-1 mb-1 w-50" type="submit" id="btnCreateAddress">Create</button>
-                        <button class="btn btn-phoenix-secondary me-1 mb-1 w-50" type="button" data-bs-toggle="modal" data-bs-target="#verticallyCentered" onclick="loadAddresses()">Choose address</button>
-                    </div>
+                    <form id="addressForm" class="m-0 p-0">
+                        <div class="mb-2">
+                            <label class="form-label" for="fullName">Full name </label>
+                            <input class="form-control" name="name" id="name" placeholder="Name" required="true" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="address">Address </label>
+                            <input class="form-control" name="address" id="address" placeholder="Address" required="true" />
+                        </div>
+                        <div class="mb-2">
+                            <label class="form-label" for="tel">Telephone </label>
+                            <input class="form-control" name="tel" id="tel" placeholder="Telephone" required="true"/>
+                        </div>
+                        <div class="mb-2">
+                            <input class="form-check-input me-1" id="isDefault" type="checkbox" name="isDefault"/>
+                            <label class="form-check-label" for="isDefault">Set as default information</label>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button class="btn btn-phoenix-primary me-1 mb-1 w-50" type="submit" id="btnCreateAddress">Create</button>
+                            <button class="btn btn-phoenix-secondary me-1 mb-1 w-50" type="button" data-bs-toggle="modal" data-bs-target="#verticallyCentered" onclick="loadAddresses()">Choose address</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -197,44 +199,83 @@
 
     <script>
         $(document).ready(function () {
-            // Attach a submit event handler to the form or button click event
-            $('#btnCreateAddress').on('click', function (e) {
-                e.preventDefault();  // Prevent default form submission
-
-                // Send the POST request to the server endpoint
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/api/address/add', // The URL of the API endpoint on your server
-                    type: 'POST',
-                    contentType: "application/x-www-form-urlencoded",
-                    data: {
-                        address: $('#address').val(),
-                        name: $('#name').val(),
-                        telephone: $('#tel').val(),
-                        isDefault: $('#isDefault').is(':checked')
+            $("#addressForm").validate({
+                errorPlacement: function (label, element) {
+                    label.addClass('invalid-feedback');
+                    label.insertAfter(element);
+                },
+                wrapper: 'div',
+                rules: {
+                    name: {
+                        required: true,
+                        maxlength: 30,
+                        minlength: 2
                     },
-                    success: function (data) {
-                        showToast("Add new address successfull");
-
-                        $('#address').val('');
-                        $('#name').val('');
-                        $('#tel').val('');
-                        $('#isDefault').prop('checked', false);
-
-                        if (data.address.choosen) {
-                            window.location.reload();
-                        }
+                    tel: {
+                        required: true,
+                        maxlength: 10,
+                        minlength: 10,
+                        digits: true
                     },
-                    error: function (xhr, status, error) {
-
+                    address: {
+                        required: true,
+                        minlength: 5
                     }
-                });
+                },
+                messages: {
+                    name: {
+                        required: "Full name is cannot empty!",
+                        maxlength: "Full name must be less than 30 characters!",
+                        minlength: "Full name must be at least 2 characters!"
+                    },
+                    tel: {
+                        required: "Telephone number is cannot empty!",
+                        maxlength: "Telephone number must be 10 characters!",
+                        minlength: "Telephone number must be 10 characters!",
+                        digits: "Telephone number must contain only digits!"
+                    },
+                    address: {
+                        required: "Address sender is cannot empty!",
+                        minlength: "Address must be at least 5 characters!"
+                    }
+                },
+                submitHandler: function(form) {
+                    // This function will only be called if validation passes
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/api/address/add',
+                        type: 'POST',
+                        contentType: "application/x-www-form-urlencoded",
+                        data: {
+                            address: $('#address').val(),
+                            name: $('#name').val(),
+                            telephone: $('#tel').val(),
+                            isDefault: $('#isDefault').is(':checked')
+                        },
+                        success: function (data) {
+                            showToast("Add new address successfull");
+
+                            $('#address').val('');
+                            $('#name').val('');
+                            $('#tel').val('');
+                            $('#isDefault').prop('checked', false);
+
+                            if (data.address.choosen) {
+                                window.location.reload();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error:', error);
+                        }
+                    });
+                    return false; // Prevent default form submission
+                }
             });
         });
     </script>
 
     <script>
         function loadAddresses() {
-            fetch('http://localhost:8080/BookShopping/api/addresses')
+            fetch('http://localhost:8080/ShoesShop/api/addresses')
                     .then(res => res.json())
                     .then(data => {
                         var addressTable = document.getElementById('address-table');
@@ -283,49 +324,32 @@
         };
 
         const loadData = () => {
-            let carts = [];
 
-            fetch('http://localhost:8080/BookShopping/api/books')
+            fetch('http://localhost:8080/ShoesShop/api/carts')
                     .then(res => res.json())
                     .then(data => {
-                        data.forEach((el) => {
-                            let quantity = isBook_cart_keys(el.isbn);
-
-                            if (quantity) {
-                                carts.push({
-                                    book_isbn: el.isbn,
-                                    image: el.image,
-                                    title: el.title,
-                                    author: el.authors[0].fullName,
-                                    language: el.language,
-                                    price: el.price,
-                                    quantity: quantity
-                                });
-                            }
-                        });
-
                         $('#list_book_category').empty();
-                        $('#list_book_quantity').empty();
+//                        $('#list_book_quantity').empty();
                         let total = 0;
-                        carts.forEach((item) => {
+                        data.forEach((item) => {
                             total += item.price * item.quantity;
                             total = parseFloat(total.toFixed(2));
                             let newRow = '<div class="row align-items-center mb-2 g-3">' +
                                     '<div class="col-8 col-md-7 col-lg-7">' +
                                     '<div class="d-flex align-items-center">' +
-                                    '<h6 class="fw-semi-bold text-1000 lh-base">' + item.title + '</h6>' +
+                                    '<h6 class="fw-semi-bold text-1000 lh-base">' + item.productVariantName + '</h6>' +
                                     '</div>' +
                                     '</div>' +
                                     '<div class="col-2 col-md-3 col-lg-2">' +
                                     '<h6 class="fs--2 mb-0">x' + item.quantity + '</h6>' +
                                     '</div>' +
                                     '<div class="col-3 ps-0">' +
-                                    '<h5 class="mb-0 fw-semi-bold text-end text-lg-end pe-2">$' + formatCurrency(parseFloat(item.price * item.quantity)) + '</h5>' +
+                                    '<h5 class="mb-0 fw-semi-bold text-end text-lg-end pe-2">' + formatCurrency(parseFloat(item.price * item.quantity)) + '</h5>' +
                                     '</div>' +
                                     '</div>';
                             let key_books = '<input type="text" name="book_isbn" value="' + item.book_isbn + '" />' +
                                     '<input type="text" name="quantity" value="' + item.quantity + '" />';
-                            $('#list_book_quantity').append(key_books);
+//                            $('#list_book_quantity').append(key_books);
                             $('#list_book_category').append(newRow);
                         });
 
@@ -338,45 +362,5 @@
         };
 
         loadData();
-
-        $("#informationForm").validate({
-            errorPlacement: function (label, element) {
-                label.addClass('invalid-feedback');
-                label.insertAfter(element);
-            },
-            wrapper: 'div',
-            rules: {
-                fullName: {
-                    required: true,
-                    maxlength: 30
-                },
-                phone: {
-                    required: true,
-                    maxlength: 10
-                },
-                address_sender: {
-                    required: true
-                },
-                address_receiver: {
-                    required: true
-                }
-            },
-            messages: {
-                fullName: {
-                    required: "Full name is cannot empty!",
-                    maxlength: "Full name must be less than 30 characters!"
-                },
-                phone: {
-                    required: "Telephone number is cannot empty!",
-                    maxlength: "Telephone number must be 10 characters!"
-                },
-                address_sender: {
-                    required: "Address sender is cannot empty!"
-                },
-                address_receiver: {
-                    required: "Address receiver is cannot empty!"
-                }
-            }
-        });
     </script>
 </html>
