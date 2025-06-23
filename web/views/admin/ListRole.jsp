@@ -154,7 +154,7 @@
             let list_role_name = [];
             let delete_role_id;
 
-            fetch('http://localhost:8080/BookShopping/api/roles')
+            fetch('http://localhost:8080/ShoesShop/api/roles')
                 .then(res => res.json())
                 .then(data => {
                     data.forEach((el) => {

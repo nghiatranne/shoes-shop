@@ -65,7 +65,7 @@
                 let list_category_name = [];
                 let category_name_update = $('#categoryNameIn').val()
 
-                fetch('http://localhost:8080/BookShopping/api/categorys')
+                fetch('http://localhost:8080/ShoesShop/api/categories')
                         .then(res => res.json())
                         .then(data => {
                             data.forEach((el) => {
