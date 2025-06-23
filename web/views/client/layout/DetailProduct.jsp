@@ -382,7 +382,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 																<span class="fas fa-minus"></span>
 															</button>
 															<input class="form-control text-center input-spin-none bg-transparent border-0 outline-none"
-																style="width: 50px" type="number" min="1" value="1" id="quantity-input" name="quantity"/>
+																style="width: 50px" type="text" min="1" value="1" id="quantity-input" name="quantity"/>
 															<button type="button" class="btn btn-phoenix-primary px-3 quantity-btn" data-type="plus">
 																<span class="fas fa-plus"></span>
 															</button>

@@ -90,7 +90,7 @@ public class AddToCartAPI extends HttpServlet {
         
         int productId = Integer.parseInt(request.getParameter("productId"));
         int quantity = Integer.parseInt(request.getParameter("quantity"));
-        int sizeId = Integer.parseInt(request.getParameter("sizeId"));
+        int sizeId = Integer.parseInt(request.getParameter("size"));
         int variantId = Integer.parseInt(request.getParameter("variantId"));
 
 
