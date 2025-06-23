@@ -1709,6 +1709,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 					var variantId = $('#selected-variant-id').val();
 					var size = $('#size-select').val();
 					var quantity = parseInt($('#quantity-input').val());
+                                        var stock = parseInt($('#stock-value').text()) || 0;
 
 					// Kiểm tra giá trị
 					console.log('productId:', productId, 'variantId:', variantId, 'size:', size, 'quantity:', quantity);
