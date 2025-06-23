@@ -1612,6 +1612,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 						sizes: [
 							<c:forEach items="${variant.productvariantsizes}" var="size" varStatus="sizeLoop">
 								{
+                                                                    id: "${size.size.id}",
 									value: "${size.size.value}",
 									stock: ${size.quantityInStock - size.quantityHolding}
 								}<c:if test="${!sizeLoop.last}">,</c:if>
@@ -1651,7 +1652,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 					$sizeSelect.empty();
 					$.each(v.sizes, function(i, s) {
 						var text = s.value + (s.stock <= 0 ? ' (Hết hàng)' : '');
-						var $opt = $('<option></option>').val(s.value).text(text);
+						var $opt = $('<option></option>').val(s.id).text(text);
 						if (s.stock <= 0) $opt.prop('disabled', true);
 						$sizeSelect.append($opt);
 					});
@@ -1670,7 +1671,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 					var selectedSize = $(this).val();
 					var stock = 0;
 					$.each(v.sizes, function(i, s) {
-						if (s.value == selectedSize) stock = s.stock;
+						if (s.id == selectedSize) stock = s.stock;
 					});
 					$('#stock-value').text(stock);
 				});
@@ -1736,7 +1737,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 			});
 
 			function addToCart(productId, variantId, size, quantity) {
-				var url = 'http://localhost:9999/ShoesShop/api/cart/add'
+				var url = 'http://localhost:8080/ShoesShop/api/cart/add'
 					+ '?productId=' + encodeURIComponent(productId)
 					+ '&variantId=' + encodeURIComponent(variantId)
 					+ '&size=' + encodeURIComponent(size)

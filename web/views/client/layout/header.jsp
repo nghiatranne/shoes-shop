@@ -236,7 +236,7 @@
     console.log("OK");
     if ("${sessionScope.uName}" !== null) {
         localStorage.removeItem("book_cart_key");
-        fetch("http://localhost:9999/ShoesShop/api/carts")
+        fetch("http://localhost:8080/ShoesShop/api/carts")
                 .then((res) => res.json())
                 .then((data) => {
                     localStorage.setItem("product_cart_key", JSON.stringify(data));

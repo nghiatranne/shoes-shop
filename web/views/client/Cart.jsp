@@ -141,7 +141,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 
 	<script>
 		function fetchCart() {
-			fetch("http://localhost:9999/ShoesShop/api/carts")
+			fetch("http://localhost:8080/ShoesShop/api/carts")
 				.then((res) => res.json())
 				.then((data) => renderCart(data));
 		}
@@ -157,7 +157,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 				
 				var newRow =
 					"<tr>" +
-					'<td><img src="http://localhost:9999/ShoesShop/resources/product_image/' +
+					'<td><img src="http://localhost:8080/ShoesShop/resources/product_image/' +
 					item.productVariantImage +
 					'" style="width:60px;height:60px;object-fit:cover;"></td>' +
 					"<td>" +
@@ -207,8 +207,8 @@ contentType="text/html" pageEncoding="UTF-8"%>
                         
 			var url =
 				newQuantity > 1
-					? "http://localhost:9999/ShoesShop/api/carts/increase"
-					: "http://localhost:9999/ShoesShop/api/carts/decrease";
+					? "http://localhost:8080/ShoesShop/api/carts/increase"
+					: "http://localhost:8080/ShoesShop/api/carts/decrease";
                                         
                         url = url + '?pvsId=' + encodeURIComponent(pvsId)
 					+ '&quantity=' + encodeURIComponent(newQuantity);
@@ -223,7 +223,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 
 		function removeCart(pvsId) {
 			fetch(
-				"http://localhost:9999/ShoesShop/api/carts/del?pvsId=" + pvsId
+				"http://localhost:8080/ShoesShop/api/carts/del?pvsId=" + pvsId
 			).then((res) => fetchCart());
 		}
 
