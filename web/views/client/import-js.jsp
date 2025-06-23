@@ -10,6 +10,7 @@
 <script src="<c:url value="/resources/vendors/dayjs/dayjs.min.js"/>"></script>
 <script src="<c:url value="/resources/assets/js/phoenix.js"/>"></script>
 <script src="<c:url value="/resources/vendors/swiper/swiper-bundle.min.js"/>"></script>
+<script src="<c:url value="/resources/assets/js/jquery-3.7.1.min.js"/>"></script>
 <script src="<c:url value="/resources/assets/js/jquery.validate.min.js"/>"></script>
 <script src="<c:url value="/resources/assets/js/toastify.js"/>"></script>
 <script src="<c:url value="/resources/assets/js/show_toast.js"/>"></script>

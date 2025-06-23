@@ -64,7 +64,7 @@
             let list_paymentMethod = [];
             let payment_method_update = $('#paymentMethodIn').val()
 
-            fetch('http://localhost:9999/bookshop/api/payments')
+            fetch('http://localhost:8080/ShoesShop/api/payments')
                 .then(res => res.json())
                 .then(data => {
                     data.forEach((el) => {

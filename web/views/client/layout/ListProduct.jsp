@@ -439,7 +439,7 @@ pageEncoding="UTF-8"%>
 	<script>
 		const addToCart = (book_isbn, id) => {
 			$.ajax({
-				url: "http://localhost:8080/BookShopping/api/cart/add?book_id=" + id,
+				url: "http://localhost:8080/ShoesShop/api/cart/add?book_id=" + id,
 				type: "POST",
 				contentType: "application/json",
 				dataType: "json",
