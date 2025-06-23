@@ -76,7 +76,7 @@
                             <table class="table fs--1 mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="white-space-nowrap fs--1 align-middle ps-0" style="width:150px;">IMAGE</th>
+                                        <th class="white-space-nowrap fs--1 align-middle ps-0" style="width:300px;">IMAGE</th>
                                         <th class="sort white-space-nowrap align-middle ps-4" data-sort="title" scope="col" style="width:400px;">TITLE</th>
                                         <th class="sort align-middle ps-3 text-end" data-sort="author" scope="col" style="width:250px;">AUTHOR</th>
                                         <th class="align-middle ps-3" scope="col" style="width:250px;">CATEGORIES</th>

@@ -18,7 +18,7 @@
 
         <jsp:include page="layout/header-nav.jsp"/>
         
-        <div class="content">
+        <div class="content" style="padding-bottom: 0px">
             <form id="addNewProductForm" method="post" action="${pageContext.request.contextPath}/admin/products/add/save" enctype="multipart/form-data">
                 <div class="row g-3 flex-between-end mb-5">
                     <div class="col-auto">
@@ -30,55 +30,59 @@
                     </div>
                 </div>
 
-                <!-- Basic Information -->
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h4 class="mb-3">Basic Information</h4>
-                        <div class="row g-3">
-                            <div class="col-12">
-                                <label class="form-label" for="title">Product Title</label>
-                                <input class="form-control" id="title" name="title" type="text" required/>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="description">Description</label>
-                                <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="brand">Brand</label>
-                                <select class="form-select" id="brand" name="brandId" required>
-                                    <option value="">Select brand</option>
-                                    <c:forEach items="${brands}" var="brand">
-                                        <option value="${brand.id}">${brand.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="categories">Categories</label>
-                                <select class="form-select" id="categories" name="categoryIds" multiple required>
-                                    <c:forEach items="${categories}" var="category">
-                                        <option value="${category.id}">${category.name}</option>
-                                    </c:forEach>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label" for="mainImage">Main Image</label>
-                                <input class="form-control" id="mainImage" name="mainImage" type="file" accept="image/*" required/>
+                <div style="display: flex; gap: 12px">
+                    <!-- Basic Information -->
+                    <div class="card col-6">
+                        <div class="card-body">
+                            <h4 class="mb-3">Basic Information</h4>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <label class="form-label" for="title">Product Title</label>
+                                    <input class="form-control" id="title" name="title" type="text" required/>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="description">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="brand">Brand</label>
+                                    <select class="form-select" id="brand" name="brandId" required>
+                                        <option value="">Select brand</option>
+                                        <c:forEach items="${brands}" var="brand">
+                                            <option value="${brand.id}">${brand.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="categories">Categories</label>
+                                    <select class="form-select" id="categories" name="categoryIds" multiple required>
+                                        <c:forEach items="${categories}" var="category">
+                                            <option value="${category.id}">${category.name}</option>
+                                        </c:forEach>
+                                    </select>
+                                </div>
+                                <div class="col-6">
+                                    <label class="form-label" for="mainImage">Main Image</label>
+                                    <input class="form-control" id="mainImage" name="mainImage" type="file" accept="image/*" required/>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <!-- Product Variants -->
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <h4 class="mb-0">Product Variants</h4>
-                            <button type="button" class="btn btn-phoenix-secondary btn-sm" id="addVariantBtn">
-                                <span class="fas fa-plus me-2"></span>Add Variant
-                            </button>
+                    <!-- Product Variants -->
+                    <div class="card col-6" style="max-height: 750px; overflow: auto">
+                        <div class="card-header" style="position: sticky; top: 0; background: #fff; z-index: 2;">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h4 class="mb-0">Product Variants</h4>
+                                <button type="button" class="btn btn-phoenix-secondary btn-sm" id="addVariantBtn">
+                                    <span class="fas fa-plus me-2"></span>Add Variant
+                                </button>
+                            </div>
                         </div>
-                        <div id="variantsContainer">
-                            <!-- Variant template will be cloned here -->
+                        <div class="card-body" style="position: relative;">
+                            <div id="variantsContainer">
+                                <!-- Variant template will be cloned here -->
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -134,6 +138,7 @@
         <template id="sizeTemplate">
             <div class="size-row row g-3 mb-2">
                 <div class="col-md-4">
+                    <label class="form-label">Size value</label>
                     <select class="form-select" name="sizeValues[]" required>
                         <option value="">Select size</option>
                         <c:forEach items="${sizes}" var="size">
@@ -142,12 +147,14 @@
                     </select>
                 </div>
                 <div class="col-md-3">
+                    <label class="form-label">Quantity In Stock</label>
                     <input class="form-control" name="quantities[]" type="number" placeholder="Quantity" required/>
                 </div>
                 <div class="col-md-3">
-                    <input class="form-control" name="holdings[]" type="number" placeholder="Holding" value="0" required/>
+                    <label class="form-label">Quantity Holding</label>
+                    <input class="form-control" name="holdings[]" type="number" placeholder="Holding" value="0" required disabled="true"/>
                 </div>
-                <div class="col-md-2">
+                <div class="col-md-2" style="display: flex;flex-direction: column-reverse; align-items: flex-start;">
                     <button type="button" class="btn btn-phoenix-danger btn-sm remove-size">
                         <span class="fas fa-trash"></span>
                     </button>

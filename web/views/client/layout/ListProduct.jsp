@@ -372,13 +372,13 @@ pageEncoding="UTF-8"%>
 							<div class="row gx-3 gy-6 mb-8">
 								<c:forEach items="${products}" var="p">
 									<c:if test="${p.status == true}">
-										<div class="col-4">
+										<div class="col-3">
 											<div class="product-card-container h-100">
 												<div class="position-relative text-decoration-none product-card h-100">
 													<div class="d-flex flex-col flex-wrap align-items-center h-100 gap-2">
 														<div>
 															<div class="border border-1 rounded-3 position-relative mb-3">
-																<img style="height: 240px;object-fit: contain;" class="img-thumbnail" src="<c:url value='/resources/product_image/${p.image}'/>" alt=""/>
+																<img style="object-fit: contain;" class="img-thumbnail" src="<c:url value='/resources/product_image/${p.image}'/>" alt=""/>
 															</div>
 															<a class="stretched-link text-decoration-none" href="${pageContext.request.contextPath}/products/product-detail?id=${p.id}"></a>
 														</div>

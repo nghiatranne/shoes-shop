@@ -72,7 +72,7 @@
                             <table class="table fs--1 mb-0">
                                 <thead>
                                     <tr>
-                                        <th class="white-space-nowrap fs--1 align-middle ps-0" style="width:150px;">IMAGE</th>
+                                        <th class="white-space-nowrap fs--1 align-middle ps-0" style="width:350px;">IMAGE</th>
                                         <th class="sort white-space-nowrap fs--1 align-middle ps-3" data-sort="isbn" style="max-width:150px; width: 150px;">ID</th>
                                         <th class="sort white-space-nowrap align-middle ps-4" data-sort="title" scope="col" style="width:400px;">TITLE</th>
                                         <th class="sort align-middle text-end ps-4" data-sort="price" scope="col" style="width:150px;">DESCRIPTION</th>
