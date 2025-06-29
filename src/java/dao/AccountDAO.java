@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Set;
 import model.Account;
 import model.Role;
+import model.SaleRAW;
 //import model.SaleRAW;
 
 /**
@@ -23,6 +24,35 @@ import model.Role;
  */
 public class AccountDAO extends DBContext {
 
+    public List<SaleRAW> getListAccountRoleSale() {
+        List<SaleRAW> sales = new ArrayList<>();
+        String sql = "select a.ID, a.FullName, COUNT(CASE WHEN o.Status = 0 THEN mo.OrderID ELSE NULL END) [total] "
+                + "from Account a left join RoleAccount ra on a.ID = ra.AccountID "
+                + "left join [Role] r on r.ID = ra.RoleID "
+                + "left join ManageOrder mo on a.ID = mo.AccountID "
+                + "left join [Order] o on mo.OrderID = o.ID "
+                + "where r.RoleName = 'SALE' "
+                + "group by a.ID, a.FullName";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                int acc_id = rs.getInt("id");
+                String acc_fullname = rs.getString("fullname");
+                int totalOrder = rs.getInt("total");
+
+                Account account = new Account(acc_id, null, acc_fullname, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null);
+
+                SaleRAW saleRAW = new SaleRAW(account, totalOrder);
+
+                sales.add(saleRAW);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return sales;
+    }
+    
     public List<String> listAllEmail() {
         List<String> emails = new ArrayList<>();
         String sql = "select email from Account";

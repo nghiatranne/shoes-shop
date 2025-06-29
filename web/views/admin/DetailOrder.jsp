@@ -33,10 +33,9 @@
                                     <thead>
                                         <tr>
                                             <th class=" white-space-nowrap align-middle" scope="col">IMAGE</th>
-                                            <th class=" white-space-nowrap align-middle" scope="col" style="min-width:400px;">TITLE</th>
-                                            <th class=" align-middle ps-4" scope="col" style="width:150px;">AUTHOR</th>
-                                            <th class=" align-middle ps-4" scope="col" style="width:300px;">ISBN</th>
-                                            <th class=" align-middle text-end ps-4" scope="col" style="width:150px;">PRICE</th>
+                                            <th class=" white-space-nowrap align-middle" scope="col" style="min-width:400px;">NAME</th>
+                                            <th class=" align-middle ps-4" scope="col" style="width:150px;">CATEGORIES</th>
+                                            <th class=" align-middle text-end ps-4" scope="col" style="width:250px;">PRICE</th>
                                             <th class=" align-middle text-end ps-4" scope="col" style="width:200px;">QUANTITY</th>
                                             <th class=" align-middle text-end ps-4" scope="col" style="width:250px;">TOTAL</th>
                                         </tr>
@@ -46,20 +45,19 @@
                                             <tr class="hover-actions-trigger btn-reveal-trigger position-static">
                                                 <td class="align-middle white-space-nowrap py-2">
                                                     <div class="border rounded-2">
-                                                        <img src="<c:url value="/resources/book_image/${od.book.image}"/>" alt="" width="100" />
+                                                        <img src="<c:url value="/resources/product_image/${od.productVariantSize.productVariant.image}"/>" alt="" width="100" />
                                                     </div>
                                                 </td>
                                                 <td class="products align-middle py-0">
-                                                    <a class="fw-semi-bold line-clamp-2 mb-0" href="${pageContext.request.contextPath}/books/book-detail?book_isbn=${od.book.isbn}">${od.book.title}</a>
+                                                    <a class="fw-semi-bold line-clamp-2 mb-0" href="${pageContext.request.contextPath}/products/product-detail?id=${od.productVariantSize.productVariant.id}">${od.productVariantSize.productVariant.name}</a>
                                                 </td>
                                                 <td class="color align-middle white-space-nowrap text-900 py-0 ps-4">
-                                                    <c:forEach items="${od.book.authors}" var="a">
+                                                    <c:forEach items="${od.productVariantSize.productVariant.product.categories}" var="c">
                                                         <a class="text-decoration-none" href="">
-                                                            <span class="badge badge-tag me-2 mb-2">${a.fullName}</span>
+                                                            <span class="badge badge-tag me-2 mb-2">${c.name}</span>
                                                         </a>
                                                     </c:forEach>
                                                 </td>
-                                                <td class="size align-middle white-space-nowrap text-700 fw-semi-bold py-0 ps-4">${od.book.isbn}</td>
                                                 <td class="price align-middle text-900 fw-semi-bold text-end py-0 ps-4">
                                                     <fmt:formatNumber value="${od.orderDetail.price}" type="currency" pattern="###,### ₫"/>
                                                 </td>

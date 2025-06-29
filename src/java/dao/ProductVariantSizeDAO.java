@@ -59,6 +59,54 @@ public class ProductVariantSizeDAO extends DBContext {
         return list;
     }
     
+    public ProductVariantSize getProductVariantSizeId(int id) {
+        System.out.println("EXECUTE " + id);
+        ProductDAO productDAO = new ProductDAO();
+        String sql = "SELECT pvs.*, pv.*, s.* FROM ProductVariantSize pvs "
+                + "left join ProductVariant pv on pv.Id = pvs.ProductVariantId "
+                + "left join Size s on s.Id = pvs.SizeId "
+                + "left join Product p on p.Id = pv.ProductId "
+                + "WHERE pvs.id = ?";
+        
+        try {
+            PreparedStatement st = connection.prepareStatement(sql);
+            st.setInt(1, id);
+            ResultSet rs = st.executeQuery();
+            if (rs.next()) {
+                ProductVariantSize pvs = new ProductVariantSize();
+                pvs.setId(rs.getInt("ID"));
+               
+                pvs.setQuantityInStock(rs.getInt("QuantityInStock"));
+                pvs.setQuantityHolding(rs.getInt("QuantityHolding"));
+                pvs.setStatus(rs.getBoolean("Status"));
+                
+//                // Get product variant
+//                ProductVariantDAO pvDAO = new ProductVariantDAO();
+//                ProductVariant pv = pvDAO.getProductVariantById(rs.getInt("ProductVariantID"));
+//                pvs.setProductVariant(pv);
+
+                ProductVariant pv = new ProductVariant();
+                pv.setId(rs.getInt("ProductVariantId"));
+                pv.setName(rs.getString("Name"));
+                pv.setImportPrice(rs.getDouble("ImportPrice"));
+                pv.setPrice(rs.getDouble("price"));
+                pv.setImage(rs.getString("image"));
+                pv.setProduct(productDAO.getProductById(rs.getInt("productId")));
+                pvs.setProductVariant(pv);
+
+                Size s = new Size();
+                s.setId(rs.getInt("SizeId"));
+                s.setValue(rs.getInt("value"));
+                pvs.setSize(s);
+                
+                return pvs;
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        return null;
+    }
+    
     public List<ProductVariantSize> getProductVariantSizesByProductVariantId(int productVariantId) {
         List<ProductVariantSize> list = new ArrayList<>();
         String sql = "SELECT * FROM ProductVariantSize WHERE ProductVariantID = ? AND Status = 1";
@@ -91,6 +139,7 @@ public class ProductVariantSizeDAO extends DBContext {
         }
         return list;
     }
+    
     public ProductVariantSize getProductVariantSizesByProductVariantId(int productVariantId, int sizeId) {
         String sql = "SELECT * FROM ProductVariantSize WHERE ProductVariantID = ? AND SizeID = ?";
         try {

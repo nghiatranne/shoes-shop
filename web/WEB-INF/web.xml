@@ -7,6 +7,38 @@
         <servlet-name>VerifyEmailServlet</servlet-name>
         <servlet-class>controller.client.VerifyEmailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AssignAccount</servlet-name>
+        <servlet-class>controller.admin.OrderFeatures.AssignAccount</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ChangeStatusOrderServlet</servlet-name>
+        <servlet-class>controller.admin.OrderFeatures.ChangeStatusOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>ListOrderServlet</servlet-name>
+        <servlet-class>controller.admin.OrderFeatures.ListOrderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>DetailOrderServlet</servlet-name>
+        <servlet-class>controller.admin.OrderFeatures.DetailOrderServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>AssignAccount</servlet-name>
+        <url-pattern>/order/assign-account</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChangeStatusOrderServlet</servlet-name>
+        <url-pattern>/admin/orders/order/change-status</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ListOrderServlet</servlet-name>
+        <url-pattern>/admin/orders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>DetailOrderServlet</servlet-name>
+        <url-pattern>/admin/orders/order</url-pattern>
+    </servlet-mapping>
     <session-config>
         <session-timeout>
             60
@@ -23,11 +55,11 @@
     </context-param>
     <context-param>
         <param-name>user</param-name>
-        <param-value>bookshopswp391.fpt@gmail.com</param-value>
+        <param-value>shoesshop.isp@gmail.com</param-value>
     </context-param>
     <context-param>
         <param-name>pass</param-name>
-        <param-value>sryo iufn bdcs tcfu</param-value>
+        <param-value>egdi ikkc cahh jkkd</param-value>
     </context-param>
     <welcome-file-list>
         <welcome-file>EmailForm.jsp</welcome-file>
