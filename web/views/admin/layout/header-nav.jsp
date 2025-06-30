@@ -13,8 +13,8 @@
             </a>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/homepage" class="btn btn-phoenix-secondary me-1 mb-1" type="button">
-                <i    class="fas fa-home"></i> Home
+            <a href="${pageContext.request.contextPath}/homepage" class="btn btn-phoenix-secondary me-1 mb-1 fs-1" type="button">
+                <i    class="fas fa-home"></i>
               </a>
         </div>
     </div>
