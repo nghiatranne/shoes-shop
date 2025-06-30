@@ -30,7 +30,7 @@
 </style>
 
 <section class="py-0">
-	<div class="container">
+	<div class="container-small">
 		<div class="ecommerce-topbar">
 			<nav class="navbar navbar-expand-lg navbar-light px-0">
 				<div class="row gx-0 gy-2 w-100 flex-between-center">
