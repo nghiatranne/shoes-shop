@@ -13,7 +13,9 @@
             </a>
         </div>
         <div>
-            <a href="${pageContext.request.contextPath}/homepage" class="btn btn-phoenix-secondary me-1 mb-1" type="button">Go To Homepage</a>
+            <a href="${pageContext.request.contextPath}/homepage" class="btn btn-phoenix-secondary me-1 mb-1" type="button">
+                <i    class="fas fa-home"></i> Home
+              </a>
         </div>
     </div>
 </nav>
