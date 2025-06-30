@@ -36,13 +36,13 @@
                         <div class="card-body">
                             <h4 class="mb-3">Basic Information</h4>
                             <div class="row g-3">
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label class="form-label" for="title">Product Title</label>
                                     <input class="form-control" id="title" name="title" type="text" required/>
                                 </div>
-                                <div class="col-6">
+                                <div class="col-12">
                                     <label class="form-label" for="description">Description</label>
-                                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                    <textarea class="form-control" id="description" name="description" rows="5" required></textarea>
                                 </div>
                                 <div class="col-6">
                                     <label class="form-label" for="brand">Brand</label>
