@@ -38,10 +38,10 @@
             <form id="addNewPost" method="post" action="" enctype="multipart/form-data">
                 <div class="row g-3 flex-between-end mb-5">
                     <div class="col-auto">
-                        <h2 class="mb-2">Create New Book</h2>
+                        <h2 class="mb-2">Create New Post </h2>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-phoenix-primary me-2 mb-2 mb-sm-0" type="submit">Create post</button>
+                     <button class="btn btn-phoenix-primary btn-lg me-2 mb-2 mb-sm-0" style="font-size: 1.8rem; padding: 1rem 2rem;" type="submit">Create post</button>
                     </div>
                 </div>
                 <div class="row g-5">
