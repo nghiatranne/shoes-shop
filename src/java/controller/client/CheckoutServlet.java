@@ -163,7 +163,7 @@ public class CheckoutServlet extends HttpServlet {
         if (paymentMethod.equalsIgnoreCase("VNPay")) {
             response.sendRedirect(request.getContextPath() + "/payment?order_id=" + order_id + "&amount=" + total);
         } else {
-            orderDAO.assignOrderToMarketer(order_id);
+//            orderDAO.assignOrderToMarketer(order_id);
 
             for (CartRAW cartRAW : cartRAWs) {
                 ProductVariantSize productVariantSize = productVariantSizeDAO.getProductVariantSizeById(cartRAW.getPvsId());

@@ -7,6 +7,10 @@
         <servlet-name>VerifyEmailServlet</servlet-name>
         <servlet-class>controller.client.VerifyEmailServlet</servlet-class>
     </servlet>
+    <servlet-mapping>
+        <servlet-name>VerifyEmailServlet</servlet-name>
+        <url-pattern>/login/verify</url-pattern>
+    </servlet-mapping>
     <servlet>
         <servlet-name>AssignAccount</servlet-name>
         <servlet-class>controller.admin.OrderFeatures.AssignAccount</servlet-class>

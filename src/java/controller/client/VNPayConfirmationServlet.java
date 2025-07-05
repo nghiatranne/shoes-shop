@@ -105,7 +105,7 @@ public class VNPayConfirmationServlet extends HttpServlet {
             Account account = accountDAO.getAccountByEmail(uname);
             List<CartRAW> cartRAWs = cartDAO.listAll(account.getId());
             
-            orderDAO.assignOrderToMarketer(vnp_TxnRef);
+//            orderDAO.assignOrderToMarketer(vnp_TxnRef);
 
             for (CartRAW cartRAW : cartRAWs) {
                 ProductVariantSize productVariantSize = productVariantSizeDAO.getProductVariantSizeById(cartRAW.getPvsId());

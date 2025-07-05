@@ -9,7 +9,9 @@ import dal.DBContext;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -24,6 +26,7 @@ import model.OrderDetailUser;
 import model.OrderRAW;
 import model.OrderRAW2;
 import model.OrderRAW3;
+import model.OrderRevenue;
 import model.PaymentMethod;
 
 /**
@@ -31,6 +34,104 @@ import model.PaymentMethod;
  * @author hoaht
  */
 public class OrderDAO extends DBContext {
+    
+    public int getTotalOrderByStatus(OrderStatus orderStatus, Date from, Date to) {
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String sql;
+        if (from != null && to != null) {
+            sql = "select COUNT(*) from [Order] where Status = ? and CreateDate <= ? and CreateDate >= ?";
+        } else {
+            sql = "select COUNT(*) from [Order] where Status = ?";
+        }
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            if (from != null && to != null) {
+                ps.setInt(1, OrderStatus.statusToInt(orderStatus));
+                ps.setString(2, sf.format(to));
+                ps.setString(3, sf.format(from));
+            } else {
+                ps.setInt(1, OrderStatus.statusToInt(orderStatus));
+            }
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public int getTotalOrder() {
+        String sql = "select COUNT(*) from [Order]";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+    
+    public List<OrderRevenue> listOrderRevenue(Date from, Date to, Integer sellerID, Integer status) {
+        List<OrderRevenue> orderRevenues = new ArrayList<>();
+        SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
+        String sql = "DECLARE @StartDate DATE = ?; "
+                + "DECLARE @EndDate DATE = ?; "
+                + "WITH DateRange AS ( "
+                + "    SELECT @StartDate AS DateValue "
+                + "    UNION ALL\n"
+                + "    SELECT DATEADD(DAY, 1, DateValue) "
+                + "    FROM DateRange "
+                + "    WHERE DATEADD(DAY, 1, DateValue) <= @EndDate "
+                + ") "
+                + "SELECT DateRange.DateValue as [Date], SUM(COALESCE(table1.TotalPrice, 0)) [TotalRevenue] "
+                + "FROM DateRange "
+                + "left join ( "
+                + "	select o.ID, o.CreateDate, SUM(od.Quantity * od.Price) [TotalPrice] "
+                + "	from [OrderDetail] od "
+                + "	left join [Order] o on od.OrderID = o.ID "
+                + "	left join [ManageOrder] mo on mo.OrderID = o.ID ";
+
+        if (sellerID != null) {
+            sql += "where mo.AccountID = ? ";
+        } else if (status != null) {
+            sql += "where o.Status = ? ";
+        } else if (sellerID != null && status != null) {
+            sql += "where o.Status = ? and mo.AccountID = ? ";
+        }
+        sql += "	group by o.ID, o.CreateDate "
+                + ") as [table1] ON CAST(table1.CreateDate AS DATE) = DateRange.DateValue "
+                + "GROUP BY DateRange.DateValue "
+                + "OPTION (MAXRECURSION 1000);";
+
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setString(1, sf.format(from));
+            ps.setString(2, sf.format(to));
+
+            if (sellerID != null) {
+                ps.setInt(3, sellerID);
+            } else if (status != null) {
+                ps.setInt(3, status);
+            } else if (sellerID != null && status != null) {
+                ps.setInt(3, sellerID);
+                ps.setInt(4, status);
+            }
+
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                orderRevenues.add(new OrderRevenue(rs.getString("Date"), rs.getFloat("TotalRevenue")));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return orderRevenues;
+    }
+    
     public Map<Order, Float> searchOrders(int accId, String query) {
         Map<Order, Float> orderMap = new HashMap<>();
         AccountDAO accountDAO = new AccountDAO();

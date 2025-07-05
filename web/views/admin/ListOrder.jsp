@@ -222,9 +222,6 @@
                                         <th class="align-middle text-start" scope="col" style="width:10%;">QUANTITY OF PRODUCT</th>
                                         <th class="sort align-middle text-start" data-sort="status" scope="col" style="width:10%;">STATUS</th>
                                         <th class="align-middle text-start" scope="col" style="width:10%;">PAYMENT STATUS</th>
-                                            <c:if test="${sessionScope.isSaleManager}">
-                                            <th class="align-middle text-end" scope="col" style="width:15%;">SELLER</th>
-                                            </c:if>
                                         <th style="min-width:100px;" class="" scope="col"></th>
                                     </tr>
                                 </thead>
@@ -279,11 +276,6 @@
                                                     </c:otherwise>
                                                 </c:choose>
                                             </td>
-                                            <c:if test="${sessionScope.isSaleManager}">
-                                                <td class="align-middle text-end">
-                                                    ${o.managerName}
-                                                </td>
-                                            </c:if>
                                             <td class="align-middle">
                                                 <c:if test="${statusCur == 'SUBMITTED' && (sessionScope.isSaleManager || sessionScope.isSale)}">
                                                     <a href="${pageContext.request.contextPath}/admin/orders/order/change-status?order_id=${o.order.order_id}&order_status=CONFIRMED" class="btn btn-phoenix-success btn-icon fs--2 px-0 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="CONFIRM">
@@ -296,12 +288,12 @@
                                                     </a>
                                                 </c:if>
 
-                                                <c:if test="${statusCur == 'CONFIRMED' && sessionScope.isWarehouse}">
+                                                <c:if test="${statusCur == 'CONFIRMED' && (sessionScope.isSaleManager || sessionScope.isSale || sessionScope.isWarehouse)}">
                                                     <a href="${pageContext.request.contextPath}/admin/orders/order/change-status?order_id=${o.order.order_id}&order_status=PACKAGING" class="btn btn-phoenix-success btn-icon fs--2 px-0 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="PACKAGING">
                                                         <span class="" data-feather="check"></span>
                                                     </a>
                                                 </c:if>
-                                                <c:if test="${statusCur == 'PACKAGING' && sessionScope.isWarehouse}">
+                                                <c:if test="${statusCur == 'PACKAGING' && (sessionScope.isSaleManager || sessionScope.isSale || sessionScope.isWarehouse)}">
                                                     <a href="${pageContext.request.contextPath}/admin/orders/order/change-status?order_id=${o.order.order_id}&order_status=SHIPPING" class="btn btn-phoenix-success btn-icon fs--2 px-0 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="SHIPPING">
                                                         <span class="" data-feather="check"></span>
                                                     </a>
