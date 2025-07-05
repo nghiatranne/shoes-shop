@@ -17,7 +17,7 @@
         <jsp:include page="layout/navigation.jsp"/>
 
         <jsp:include page="layout/header-nav.jsp"/>
-        
+
         <div class="content" style="padding-bottom: 0px">
             <form id="addNewProductForm" method="post" action="${pageContext.request.contextPath}/admin/products/add/save" enctype="multipart/form-data">
                 <div class="row g-3 flex-between-end mb-5">
@@ -25,8 +25,12 @@
                         <h2 class="mb-2">Add New Product</h2>
                     </div>
                     <div class="col-auto">
-                        <button class="btn btn-phoenix-primary me-2 mb-2 mb-sm-0" type="submit">Add new product</button>
-                        <button class="btn btn-phoenix-warning me-2 mb-2 mb-sm-0" type="reset">Reset</button>
+                        <button class="btn btn-phoenix-primary btn-lg fs-3.5 px-2.5 py-0.5 me-0.5 mb-0.5 mb-sm-0" type="submit">
+                            <i class="fas fa-plus me-2"></i> Add new product
+                        </button>
+                        <button class="btn btn-phoenix-warning btn-lg fs-3.5 px-2.5 py-0.5 me-0.5 mb-0.5 mb-sm-0" type="reset">
+                            <i class="fas fa-plus me-2"></i> Reset
+                        </button>
                     </div>
                 </div>
 
@@ -116,7 +120,7 @@
                             <label class="form-label">Variant Image</label>
                             <input class="form-control" name="variantImages[]" type="file" accept="image/*" required/>
                         </div>
-                        
+
                         <!-- Sizes -->
                         <div class="col-12">
                             <div class="d-flex justify-content-between align-items-center mb-2">
@@ -165,7 +169,7 @@
         <jsp:include page="import-js.jsp"/>
 
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 // Set active menu
                 $('#book-manage').addClass('active');
 
@@ -178,31 +182,31 @@
                 });
 
                 // Add variant functionality
-                $('#addVariantBtn').on('click', function() {
+                $('#addVariantBtn').on('click', function () {
                     const template = $('#variantTemplate').html();
                     $('#variantsContainer').append(template);
                 });
 
                 // Remove variant functionality using event delegation
-                $(document).on('click', '.remove-variant', function() {
+                $(document).on('click', '.remove-variant', function () {
                     $(this).closest('.variant-item').remove();
                 });
 
                 // Add size functionality using event delegation
-                $(document).on('click', '.add-size', function() {
+                $(document).on('click', '.add-size', function () {
                     const template = $('#sizeTemplate').html();
                     $(this).closest('.variant-item').find('.sizes-container').append(template);
                 });
 
                 // Remove size functionality using event delegation
-                $(document).on('click', '.remove-size', function() {
+                $(document).on('click', '.remove-size', function () {
                     $(this).closest('.size-row').remove();
                 });
 
                 // Form validation
-                $('#addNewProductForm').on('submit', function(e) {
+                $('#addNewProductForm').on('submit', function (e) {
                     e.preventDefault();
-                    
+
                     // Validate at least one variant
                     if ($('.variant-item').length === 0) {
                         showToast('error', 'Please add at least one variant');
@@ -211,7 +215,7 @@
 
                     // Validate each variant has at least one size
                     let valid = true;
-                    $('.variant-item').each(function() {
+                    $('.variant-item').each(function () {
                         if ($(this).find('.size-row').length === 0) {
                             valid = false;
                             return false; // break the loop
