@@ -4,23 +4,30 @@
  */
 package model;
 
-/**
- *
- * @author USA
- */
-import java.util.Map;
+import java.util.Date;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+/**
+ *
+ * @author hoaht
+ */
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class FeedbackStatistics {
-    private double averageStars;
-    private Map<String, Double> averageStarsByCategory;
+
+public class Feedback {
+    private ProductVariantSize pvs;
+    private Account account;
+    private String content;
+    private int ratedStar;
+    private boolean status;
+    private String image;
+    private Date createDate;
+    private Date updateDate;
 }

@@ -8,6 +8,29 @@ contentType="text/html" pageEncoding="UTF-8"%>
 		<title>${detail_product.title}</title>
 		<jsp:include page="../import-css.jsp" />
 		<style>
+                    .header-info {
+    display: flex;
+    align-items: center;
+    gap: 12px; /* khoảng cách giữa avatar và phần chữ */
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0; /* giữ kích thước cố định */
+}
+
+.info .name {
+    font-weight: bold;
+}
+
+.info .date {
+    font-size: 0.875rem;
+    color: #6c757d;
+}
                     .product-detail {
   margin-bottom: 2rem;
 }
@@ -260,7 +283,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 									<div>
 										<div class="d-flex flex-wrap">
 											<p class="text-primary fw-semi-bold mb-2">
-												6548 People rated and reviewed
+												${allFeedbacks.size()} People rated and reviewed
 											</p>
 										</div>
 										<div class="product-detail">
@@ -470,460 +493,80 @@ contentType="text/html" pageEncoding="UTF-8"%>
 										role="tabpanel"
 										aria-labelledby="reviews-tab"
 									>
+										<%-- Phần hiển thị rating trung bình --%>
 										<div class="bg-white rounded-3 p-4 border border-200">
 											<div class="row g-3 justify-content-between mb-4">
 												<div class="col-auto">
 													<div class="d-flex align-items-center flex-wrap">
 														<h2 class="fw-bolder me-3">
-															4.9<span class="fs-0 text-500 fw-bold">/5</span>
+															<fmt:formatNumber value="${avgRating}" maxFractionDigits="1"/>
+															<span class="fs-0 text-500 fw-bold">/5</span>
 														</h2>
 														<div class="me-3">
-															<span class="fa fa-star text-warning fs-2"></span
-															><span class="fa fa-star text-warning fs-2"></span
-															><span class="fa fa-star text-warning fs-2"></span
-															><span class="fa fa-star text-warning fs-2"></span
-															><span
-																class="fa fa-star-half-alt star-icon text-warning fs-2"
-															></span>
+															<c:forEach var="i" begin="1" end="5">
+																<span class="fa fa-star <c:if test='${i > avgRating}'>text-secondary</c:if> text-warning fs-2"></span>
+															</c:forEach>
 														</div>
 														<p class="text-900 mb-0 fw-semi-bold fs-1">
-															6548 ratings and 567 reviews
+															<c:out value="${allFeedbacks.size()}"/> ratings &amp; reviews
 														</p>
 													</div>
 												</div>
-												<div class="col-auto">
-													<button
-														class="btn btn-primary rounded-pill"
-														data-bs-toggle="modal"
-														data-bs-target="#reviewModal"
-													>
-														Rate this product
-													</button>
-													<div
-														class="modal fade"
-														id="reviewModal"
-														tabindex="-1"
-														aria-hidden="true"
-													>
-														<div class="modal-dialog modal-dialog-centered">
-															<div class="modal-content p-4">
-																<div class="d-flex flex-between-center mb-2">
-																	<h5 class="modal-title fs-0 mb-0">
-																		Your rating
-																	</h5>
-																	<button class="btn p-0 fs--2">Clear</button>
-																</div>
-																<div
-																	class="mb-3"
-																	data-rater='{"starSize":32,"step":0.5}'
-																></div>
-																<div class="mb-3">
-																	<h5 class="text-1000 mb-3">Your review</h5>
-																	<textarea
-																		class="form-control"
-																		id="reviewTextarea"
-																		rows="5"
-																		placeholder="Write your review"
-																	>
-																	</textarea>
-																</div>
-																<div
-																	class="dropzone dropzone-multiple p-0 mb-3"
-																	id="my-awesome-dropzone"
-																	data-dropzone
-																>
-																	<div class="fallback">
-																		<input name="file" type="file" multiple />
-																	</div>
-																	<div class="dz-preview d-flex flex-wrap">
-																		<div
-																			class="border bg-white rounded-3 d-flex flex-center position-relative me-2 mb-2"
-																			style="height: 80px; width: 80px"
-																		>
-																			<img
-																				class="dz-image"
-																				src="../../../assets/img/products/23.png"
-																				alt="..."
-																				data-dz-thumbnail
-																			/><a
-																				class="dz-remove text-400"
-																				href="#!"
-																				data-dz-remove
-																				><span data-feather="x"></span
-																			></a>
-																		</div>
-																	</div>
-																	<div
-																		class="dz-message text-600 fw-bold fs--1 p-4"
-																		data-dz-message
-																	>
-																		Drag your photo here
-																		<span class="text-800">or </span
-																		><button class="btn btn-link p-0">
-																			Browse from device</button
-																		><br /><img
-																			class="mt-3 me-2"
-																			src="../../../assets/img/icons/image-icon.png"
-																			width="24"
-																			alt=""
-																		/>
-																	</div>
-																</div>
-																<div class="d-sm-flex flex-between-center">
-																	<div class="form-check flex-1">
-																		<input
-																			class="form-check-input"
-																			id="reviewAnonymously"
-																			type="checkbox"
-																			value=""
-																			checked=""
-																		/><label
-																			class="form-check-label mb-0 text-1100 fw-semi-bold"
-																			for="reviewAnonymously"
-																			>Review anonymously</label
-																		>
-																	</div>
-																	<button
-																		class="btn ps-0"
-																		data-bs-dismiss="modal"
-																	>
-																		Close</button
-																	><button class="btn btn-primary rounded-pill">
-																		Submit
-																	</button>
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
 											</div>
-											<div
-												class="mb-4 hover-actions-trigger btn-reveal-trigger"
-											>
-												<div class="d-flex justify-content-between">
-													<h5 class="mb-2">
-														<span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="text-800 ms-1"> by</span> Zingko
-														Kudobum
-													</h5>
-													<div
-														class="font-sans-serif btn-reveal-trigger position-static"
-													>
-														<button
-															class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal"
-															type="button"
-															data-bs-toggle="dropdown"
-															data-boundary="window"
-															aria-haspopup="true"
-															aria-expanded="false"
-															data-bs-reference="parent"
-														>
-															<span class="fas fa-ellipsis-h fs--2"></span>
-														</button>
-														<div class="dropdown-menu dropdown-menu-end py-2">
-															<a class="dropdown-item" href="#!">View</a
-															><a class="dropdown-item" href="#!">Export</a>
-															<div class="dropdown-divider"></div>
-															<a class="dropdown-item text-danger" href="#!"
-																>Remove</a
-															>
+											<div class="feedback-section">
+												<h3>Customer Feedback</h3>
+												<c:set var="pageSize" value="5"/>
+												<c:set var="page" value="${param.page != null ? param.page : 1}"/>
+												<c:set var="start" value="${(page-1)*pageSize}"/>
+												<c:set var="end" value="${start+pageSize > allFeedbacks.size() ? allFeedbacks.size() : start+pageSize}"/>
+												<c:forEach var="fb" items="${allFeedbacks}" varStatus="loop">
+													<c:if test="${loop.index >= start && loop.index < end}">
+														<div class="feedback mb-4 hover-actions-trigger btn-reveal-trigger">
+															<div class="content1">
+    <div class="header-info">
+        <img src="https://ui-avatars.com/api/?name=${fb.accountName}&background=0D8ABC&color=fff" alt="Avatar" class="avatar" style="margin: 0px !important">
+        <div class="info">
+            <div class="name">
+                ${fb.accountName}
+                <span class="badge bg-info">${fb.productVariantName}</span>
+            </div>
+            <div class="date">
+                <fmt:formatDate value="${fb.createDate}" pattern="dd/MM/yyyy"/>
+            </div>
+        </div>
+    </div>
+
+    <div class="rating-stars">
+        <c:forEach var="i" begin="1" end="5">
+            <c:choose>
+                <c:when test="${i <= fb.ratedStar}">
+                    <span class="fa fa-star text-warning"></span>
+                </c:when>
+                <c:otherwise>
+                    <span class="fa fa-star text-secondary"></span>
+                </c:otherwise>
+            </c:choose>
+        </c:forEach>
+    </div>
+
+    <div class="text">${fb.content}</div>
+
+    <c:if test="${not empty fb.image}">
+        <img src="../resources/feedback_image/${fb.image}" alt="Feedback image"/>
+    </c:if>
+</div>
+
 														</div>
-													</div>
-												</div>
-												<p class="text-700 fs--1 mb-1">35 mins ago</p>
-												<p class="text-1000 mb-3">100% satisfied</p>
-												<div class="row g-2 mb-2">
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-11.jpg"
-															data-gallery="gallery-0"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-11.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-12.jpg"
-															data-gallery="gallery-0"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-12.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-13.jpg"
-															data-gallery="gallery-0"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-13.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-												</div>
-												<div class="d-flex">
-													<span class="fas fa-reply fa-rotate-180 me-2"></span>
-													<div>
-														<h5>
-															Respond from store<span
-																class="text-700 fs--1 ms-2"
-																>5 mins ago</span
-															>
-														</h5>
-														<p class="text-1000 mb-0">
-															Thank you for your valuable feedback
-														</p>
-													</div>
-												</div>
-												<div class="hover-actions top-0">
-													<button class="btn btn-sm btn-phoenix-secondary me-2">
-														<span class="fas fa-thumbs-up"></span></button
-													><button
-														class="btn btn-sm btn-phoenix-secondary me-1"
-													>
-														<span class="fas fa-thumbs-down"></span>
-													</button>
-												</div>
-											</div>
-											<div
-												class="mb-4 hover-actions-trigger btn-reveal-trigger"
-											>
-												<div class="d-flex justify-content-between">
-													<h5 class="mb-2">
-														<span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span
-															class="fa-regular fa-star text-warning-300"
-														></span
-														><span class="text-800 ms-1"> by</span> Piere
-														Auguste Renoir
-													</h5>
-													<div
-														class="font-sans-serif btn-reveal-trigger position-static"
-													>
-														<button
-															class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal"
-															type="button"
-															data-bs-toggle="dropdown"
-															data-boundary="window"
-															aria-haspopup="true"
-															aria-expanded="false"
-															data-bs-reference="parent"
-														>
-															<span class="fas fa-ellipsis-h fs--2"></span>
-														</button>
-														<div class="dropdown-menu dropdown-menu-end py-2">
-															<a class="dropdown-item" href="#!">View</a
-															><a class="dropdown-item" href="#!">Export</a>
-															<div class="dropdown-divider"></div>
-															<a class="dropdown-item text-danger" href="#!"
-																>Remove</a
-															>
-														</div>
-													</div>
-												</div>
-												<p class="text-700 fs--1 mb-1">23 Oct, 12:09 PM</p>
-												<p class="text-1000 mb-1">
-													Since the spring loaded event, I've been wanting an
-													iMac, and it's exceeded my expectations. The screen is
-													clear, the colors are vibrant (I got the blue one! ),
-													and the performance is more than adequate for my needs
-													as a college student. That's how good it is.
-												</p>
-												<div class="hover-actions top-0">
-													<button class="btn btn-sm btn-phoenix-secondary me-2">
-														<span class="fas fa-thumbs-up"></span></button
-													><button
-														class="btn btn-sm btn-phoenix-secondary me-1"
-													>
-														<span class="fas fa-thumbs-down"></span>
-													</button>
-												</div>
-											</div>
-											<div
-												class="mb-4 hover-actions-trigger btn-reveal-trigger"
-											>
-												<div class="d-flex justify-content-between">
-													<h5 class="mb-2">
-														<span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span
-															class="fa fa-star-half-alt star-icon text-warning"
-														></span
-														><span
-															class="fa-regular fa-star text-warning-300"
-														></span
-														><span class="text-800 ms-1"> by</span> Abel
-														Kablmann
-													</h5>
-													<div
-														class="font-sans-serif btn-reveal-trigger position-static"
-													>
-														<button
-															class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal"
-															type="button"
-															data-bs-toggle="dropdown"
-															data-boundary="window"
-															aria-haspopup="true"
-															aria-expanded="false"
-															data-bs-reference="parent"
-														>
-															<span class="fas fa-ellipsis-h fs--2"></span>
-														</button>
-														<div class="dropdown-menu dropdown-menu-end py-2">
-															<a class="dropdown-item" href="#!">View</a
-															><a class="dropdown-item" href="#!">Export</a>
-															<div class="dropdown-divider"></div>
-															<a class="dropdown-item text-danger" href="#!"
-																>Remove</a
-															>
-														</div>
-													</div>
-												</div>
-												<p class="text-700 fs--1 mb-1">21 Oct, 12:00 PM</p>
-												<p class="text-1000 mb-1">
-													Over the years, I've preferred Apple products. My job
-													has allowed me to use Windows products on laptops and
-													PCs. I've owned Windows laptops and desktops for home
-													use in the past and will never use them again.
-												</p>
-												<div class="hover-actions top-0">
-													<button class="btn btn-sm btn-phoenix-secondary me-2">
-														<span class="fas fa-thumbs-up"></span></button
-													><button
-														class="btn btn-sm btn-phoenix-secondary me-1"
-													>
-														<span class="fas fa-thumbs-down"></span>
-													</button>
-												</div>
-											</div>
-											<div
-												class="mb-4 hover-actions-trigger btn-reveal-trigger"
-											>
-												<div class="d-flex justify-content-between">
-													<h5 class="mb-2">
-														<span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="fa fa-star text-warning"></span
-														><span class="text-800 ms-1"> by</span> Pennywise
-														Alfred
-													</h5>
-													<div
-														class="font-sans-serif btn-reveal-trigger position-static"
-													>
-														<button
-															class="btn btn-sm dropdown-toggle dropdown-caret-none transition-none btn-reveal"
-															type="button"
-															data-bs-toggle="dropdown"
-															data-boundary="window"
-															aria-haspopup="true"
-															aria-expanded="false"
-															data-bs-reference="parent"
-														>
-															<span class="fas fa-ellipsis-h fs--2"></span>
-														</button>
-														<div class="dropdown-menu dropdown-menu-end py-2">
-															<a class="dropdown-item" href="#!">View</a
-															><a class="dropdown-item" href="#!">Export</a>
-															<div class="dropdown-divider"></div>
-															<a class="dropdown-item text-danger" href="#!"
-																>Remove</a
-															>
-														</div>
-													</div>
-												</div>
-												<p class="text-700 fs--1 mb-1">35 mins ago</p>
-												<p class="text-1000 mb-3">
-													Nice and beautiful product.
-												</p>
-												<div class="row g-2 mb-2">
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-14.jpg"
-															data-gallery="gallery-3"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-14.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-15.jpg"
-															data-gallery="gallery-3"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-15.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-													<div class="col-auto">
-														<a
-															href="../../../assets/img/e-commerce/review-16.jpg"
-															data-gallery="gallery-3"
-															><img
-																class="w-100"
-																src="../../../assets/img/e-commerce/review-16.jpg"
-																alt=""
-																height="164"
-														/></a>
-													</div>
-												</div>
-												<div class="hover-actions top-0">
-													<button class="btn btn-sm btn-phoenix-secondary me-2">
-														<span class="fas fa-thumbs-up"></span></button
-													><button
-														class="btn btn-sm btn-phoenix-secondary me-1"
-													>
-														<span class="fas fa-thumbs-down"></span>
-													</button>
-												</div>
-											</div>
-											<div class="d-flex justify-content-center">
-												<nav>
-													<ul class="pagination mb-0">
-														<li class="page-item">
-															<a class="page-link" href="#!"
-																><span class="fas fa-chevron-left"> </span
-															></a>
-														</li>
-														<li class="page-item">
-															<a class="page-link" href="#!">1</a>
-														</li>
-														<li class="page-item">
-															<a class="page-link" href="#!">2</a>
-														</li>
-														<li class="page-item">
-															<a class="page-link" href="#!">3</a>
-														</li>
-														<li class="page-item active">
-															<a class="page-link" href="#!">4</a>
-														</li>
-														<li class="page-item">
-															<a class="page-link" href="#!">5</a>
-														</li>
-														<li class="page-item">
-															<a class="page-link" href="#!"
-																><span class="fas fa-chevron-right"></span
-															></a>
-														</li>
+													</c:if>
+												</c:forEach>
+												<nav aria-label="Feedback pagination">
+													<ul class="pagination">
+														<c:set var="totalPages" value="${(allFeedbacks.size() + pageSize - 1) / pageSize}"/>
+														<c:forEach var="i" begin="1" end="${totalPages}">
+															<li class="page-item <c:if test='${i == page}'>active</c:if>">
+																<a class="page-link" href="?id=${detail_product.id}&page=${i}#tab-reviews">${i}</a>
+															</li>
+														</c:forEach>
 													</ul>
 												</nav>
 											</div>

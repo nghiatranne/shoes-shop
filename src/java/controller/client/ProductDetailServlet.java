@@ -5,6 +5,7 @@
 
 package controller.client;
 
+import dao.FeedbackDAO;
 import dao.ProductDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,8 +14,12 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
+import model.FeedbackDto;
 import model.Product;
+import model.ProductVariant;
+import model.ProductVariantSize;
 
 /**
  *
@@ -72,7 +77,29 @@ public class ProductDetailServlet extends HttpServlet {
         ProductDAO productDAO = new ProductDAO();
         Product product = productDAO.getProductById(productId);
 
+        // Lấy tất cả feedback của các ProductVariantSize thuộc product này
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
+        List<ProductVariant> variants = product.getProductvariants();
+        List<FeedbackDto> allFeedbacks = new ArrayList<>();
+        double totalRating = 0;
+        int countRating = 0;
+        for (ProductVariant variant : variants) {
+            for (ProductVariantSize pvs : variant.getProductvariantsizes()) {
+                List<FeedbackDto> feedbacks = feedbackDAO.getFeedbacksByProductVariantSize(pvs.getId());
+                for (FeedbackDto fb : feedbacks) {
+                    allFeedbacks.add(fb);
+                    totalRating += fb.getRatedStar();
+                    countRating++;
+                }
+            }
+        }
+        double avgRating = countRating > 0 ? (totalRating / countRating) : 0;
+
         request.setAttribute("detail_product", product);
+                request.setAttribute("variants", variants);
+
+        request.setAttribute("allFeedbacks", allFeedbacks);
+        request.setAttribute("avgRating", avgRating);
         if (selectedVariantId != null) {
             request.setAttribute("selected_variant_id", selectedVariantId);
         }

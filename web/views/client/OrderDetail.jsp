@@ -186,12 +186,12 @@
                                                 <fmt:formatNumber value="${od.orderDetail.quantity * od.orderDetail.price}" type="currency" pattern="###,### ₫"/>
                                             </td>
                                             <td class="border-0 align-middle">
-                                                <a href="${pageContext.request.contextPath}/products/product-detail?id=${od.orderDetail.productVariantSize.productVariant.product.id}" class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Re buy">
+                                                <a href="${pageContext.request.contextPath}/products/product-detail?id=${od.orderDetail.productVariantSize.id}" class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Re buy">
                                                     <span class="" data-feather="shopping-bag"></span>
                                                 </a>
                                                 <c:choose>
                                                     <c:when test="${detailOrder.status == 'COMPLETED' && od.feedback == false}">
-                                                        <a class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Feedback" href="${pageContext.request.contextPath}/orders/order-detail/feedback?id=${od.orderDetail.productVariantSize.productVariant.product.id}&order_id=${detailOrder.order_id}">
+                                                        <a class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Feedback" href="${pageContext.request.contextPath}/orders/order-detail/feedback?id=${od.orderDetail.productVariantSize.id}&order_id=${detailOrder.order_id}">
                                                             <span class="" data-feather="message-square"></span>
                                                         </a>
                                                     </c:when>
