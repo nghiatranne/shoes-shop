@@ -346,6 +346,10 @@ contentType="text/html" pageEncoding="UTF-8"%>
 													</c:forEach>
 												</p>
 												<p><strong>Brand:</strong> ${detail_product.brand.name}</p>
+												<a href="http://localhost:8080/ShoesShop/blog/post-details?id=12" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: #007bff; text-decoration: none; font-weight: 500; margin-bottom: 10px;">
+    <span class="fa fa-ruler" style="font-size: 1.2em;"></span>
+    Hướng dẫn chọn Size
+</a>
 											</div>
 										</div>
 										<form id="addToCartForm" action="add-to-cart" method="POST">
@@ -468,7 +472,6 @@ contentType="text/html" pageEncoding="UTF-8"%>
 								<div
 									class="tab-content"
 									id="productTabContent"
-									style="height: 1200px"
 								>
 									<div
 										class="tab-pane pe-lg-6 pe-xl-12 fade show active text-1100"
@@ -585,7 +588,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 
 			<!-- ============================================-->
 			<!-- <section> begin ============================-->
-			<section class="py-0 mb-9">
+<!--			<section class="py-0 mb-9">
 				<div class="container">
 					<div class="d-flex flex-between-center mb-3">
 						<div>
@@ -694,8 +697,8 @@ contentType="text/html" pageEncoding="UTF-8"%>
 								</div>
 							</div>
 				</div>
-				<!-- end of .container-->
-			</section>
+				 end of .container
+			</section>-->
 			<!-- <section> close ============================-->
 			<!-- ============================================-->
 
