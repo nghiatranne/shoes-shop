@@ -24,13 +24,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="pie-chart"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Marketing Dashboard</span
 										>
 									</span>
@@ -48,13 +48,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="book"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Book Management
 										</span>
@@ -73,13 +73,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="user"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Customer Management
 											<!--Customer-->
@@ -99,13 +99,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="message-square"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Feedback Management
 										</span>
@@ -124,13 +124,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="credit-card"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Payment Management</span
 										>
 									</span>
@@ -153,13 +153,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="pie-chart"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Sale Dashboard</span
 										>
 									</span>
@@ -178,13 +178,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="sliders"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Slider Management
 										</span>
@@ -203,13 +203,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="file-text"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Post Management
 										</span>
@@ -228,13 +228,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="tag"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Category Management
 										</span>
@@ -253,13 +253,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="package"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Brand Management
 										</span>
@@ -278,13 +278,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="crop"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Sizes Management
 										</span>
@@ -303,13 +303,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="credit-card"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Payment Management</span
 										>
 									</span>
@@ -327,13 +327,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="box"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Product Management</span
 										>
 									</span>
@@ -351,13 +351,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="shopping-cart"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Orders Management
 											<!--Orders-->
@@ -379,13 +379,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="pie-chart"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 											>Admin Dashboard</span
 										>
 									</span>
@@ -403,13 +403,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="users"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Account Management
 										</span>
@@ -428,13 +428,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="shield"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Setting Management
 										</span>
@@ -455,13 +455,13 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								aria-expanded="false"
 							>
 								<div class="d-flex align-items-center">
-									<span class="nav-link-icon me-2 fs-4">
+									<span class="nav-link-icon me-2 fs-2">
 										<span data-feather="book"></span>
 									</span>
 									<span class="nav-link-text-wrapper">
 										<span
 											class="nav-link-text fw-semibold"
-											style="font-size: 16px"
+											style="font-size: 18px; font-weight: bold"
 										>
 											Book Management
 										</span>

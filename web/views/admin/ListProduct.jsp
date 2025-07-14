@@ -137,23 +137,28 @@
                                             </td>
                                             <td class="align-middle">
                                                 <div class="mb-2">
-                                                    <a href="${pageContext.request.contextPath}/admin/products/edit?product_id=${p.id}" class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3" type="button">
-                                                        <span class="" data-feather="edit"></span>
+                                                    <a href="${pageContext.request.contextPath}/admin/products/edit?product_id=${p.id}" class="btn btn-outline-primary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
+                                                        <span class="fs-4 me-2" data-feather="edit"></span> Edit
                                                     </a>
                                                 </div>
-                                                <div>
+                                                <div class="mb-2">
                                                     <c:choose>
                                                         <c:when test="${b.status == true}">
-                                                            <a href="products/product/toggle-hide?id=${p.id}&status=false" class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3" type="button">
-                                                                <span class="" data-feather="eye"></span>
+                                                            <a href="products/product/toggle-hide?id=${p.id}&status=false" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
+                                                                <span class="fs-4 me-2" data-feather="eye"></span> Hide
                                                             </a>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="products/product/toggle-hide?id=${p.id}&status=true" class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3" type="button">
-                                                                <span class="" data-feather="eye-off"></span>
+                                                            <a href="products/product/toggle-hide?id=${p.id}&status=true" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
+                                                                <span class="fs-4 me-2" data-feather="eye-off"></span> Show
                                                             </a>
                                                         </c:otherwise>
                                                     </c:choose>
+                                                </div>
+                                                <div>
+                                                    <button class="btn btn-outline-danger d-flex align-items-center justify-content-center py-1 px-2" type="button" data-bs-toggle="modal" data-bs-target="#model_delete_${p.id}">
+                                                        <span class="fs-4 me-2" data-feather="trash-2"></span> Delete
+                                                    </button>
                                                 </div>
                                             </td>
                                         </tr>

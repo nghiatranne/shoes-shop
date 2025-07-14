@@ -189,45 +189,55 @@ contentType="text/html" pageEncoding="UTF-8"%>
 												<div class="mb-2">
 													<a
 														href="${pageContext.request.contextPath}/admin/sliders/edit?id=${s.id}"
-														class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3"
+														class="btn btn-outline-primary d-flex align-items-center justify-content-center mb-1 py-1 px-2"
 														type="button"
 													>
-														<span class="" data-feather="edit"></span>
+														<span class="fs-4 me-2" data-feather="edit"></span>
+														Edit
 													</a>
 												</div>
-												<div>
+												<div class="mb-2">
 													<c:choose>
 														<c:when test="${s.status == true}">
 															<a
 																href="${pageContext.request.contextPath}/admin/sliders/update-status?sliderId=${s.id}&status=false"
-																class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3"
+																class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2"
 																type="button"
 															>
-																<span class="" data-feather="eye"></span>
+																<span
+																	class="fs-4 me-2"
+																	data-feather="eye"
+																></span>
+																Hide
 															</a>
 														</c:when>
 														<c:otherwise>
 															<a
 																href="${pageContext.request.contextPath}/admin/sliders/update-status?sliderId=${s.id}&status=true"
-																class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3"
+																class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2"
 																type="button"
 															>
-																<span class="" data-feather="eye-off"></span>
+																<span
+																	class="fs-4 me-2"
+																	data-feather="eye-off"
+																></span>
+																Show
 															</a>
 														</c:otherwise>
 													</c:choose>
 												</div>
-												<div class="mt-2">
+												<div>
 													<button
-														class="btn btn-phoenix-secondary btn-icon fs--2 text-danger px-0 ms-3"
+														class="btn btn-outline-danger d-flex align-items-center justify-content-center py-1 px-2"
 														type="button"
 														data-bs-toggle="modal"
 														data-bs-target="#model_delete_${s.id}"
 													>
 														<span
-															class="text-danger"
+															class="fs-4 me-2"
 															data-feather="trash-2"
 														></span>
+														Delete
 													</button>
 												</div>
 

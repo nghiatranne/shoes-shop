@@ -22,7 +22,7 @@
                         </c:if>
 
                     </div>
-                    <div class="col-6 mb-3">
+                    <div class="col-8 mb-3">
                         <div class="card">
                             <div class="card-header d-flex align-items-center justify-content-between p-3">
                                 <h3>Order Statistics ${totalOrder}</h3>
@@ -47,8 +47,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-6 mb-3 row">
-                        <div class="col-6">
+                    <div class="col-4 mb-3 row d-flex justify-content-center">
+                        <div class="col-8">
                             <div class="col-12 mb-2">
                                 <a class="text-decoration-none">
                                     <div class="d-flex align-items-center justify-content-between border border-2 p-3 rounded-3 hover-shadow position-relative">
