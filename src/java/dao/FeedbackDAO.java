@@ -316,4 +316,42 @@ public class FeedbackDAO extends DBContext {
         return 0;
     }
 
+    // Lấy rating trung bình cho toàn bộ sản phẩm (theo ProductID)
+    public double getAverageRatingByProduct(int productId) {
+        String sql = "SELECT AVG(RatedStar) as averageRating FROM Feedback f " +
+                     "JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID " +
+                     "JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID " +
+                     "WHERE pv.ProductID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getDouble("averageRating");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0.0;
+    }
+
+    // Lấy tổng số review cho toàn bộ sản phẩm (theo ProductID)
+    public int getTotalReviewsByProduct(int productId) {
+        String sql = "SELECT COUNT(*) as totalReviews FROM Feedback f " +
+                     "JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID " +
+                     "JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID " +
+                     "WHERE pv.ProductID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setInt(1, productId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("totalReviews");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
 }

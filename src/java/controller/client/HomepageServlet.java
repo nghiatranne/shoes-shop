@@ -8,6 +8,7 @@ package controller.client;
 import dao.PostDAO;
 import dao.ProductDAO;
 import dao.SliderDAO;
+import dao.FeedbackDAO;
 import java.io.IOException;
 import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
@@ -16,6 +17,8 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 import model.Post;
 import model.Product;
 import model.Slider;
@@ -68,12 +71,22 @@ public class HomepageServlet extends HttpServlet {
         System.out.println("This is home page");
         SliderDAO sliderDao = new SliderDAO();
         ProductDAO productDAO = new ProductDAO();
-        
+        FeedbackDAO feedbackDAO = new FeedbackDAO();
         List<Slider> sliders = sliderDao.getAllSliders();
         List<Product> newProducts = productDAO.listNewProducts();
-        
+        // Tạo map lưu rating trung bình và số review cho từng sản phẩm
+        Map<Integer, Double> productAvgRating = new HashMap<>();
+        Map<Integer, Integer> productReviewCount = new HashMap<>();
+        for (Product p : newProducts) {
+            double avg = feedbackDAO.getAverageRatingByProduct(p.getId());
+            int count = feedbackDAO.getTotalReviewsByProduct(p.getId());
+            productAvgRating.put(p.getId(), avg);
+            productReviewCount.put(p.getId(), count);
+        }
         request.setAttribute("sliders", sliders);
         request.setAttribute("newProducts", newProducts);
+        request.setAttribute("productAvgRating", productAvgRating);
+        request.setAttribute("productReviewCount", productReviewCount);
         request.getRequestDispatcher("/views/client/Homepage.jsp").forward(request, response);
     }
 

@@ -441,143 +441,96 @@ contentType="text/html" pageEncoding="UTF-8"%>
 				<section class="py-0">
 					<div class="container-small">
 						<ul class="nav nav-underline mb-4" id="productTab" role="tablist">
-							<li class="nav-item mx-3">
-								<a
-									class="nav-link active"
-									id="description-tab"
-									data-bs-toggle="tab"
-									href="#tab-description"
-									role="tab"
-									aria-controls="tab-description"
-									aria-selected="true"
-									>Description</a
-								>
-							</li>
-
-							<li class="nav-item mx-3">
-								<a
-									class="nav-link"
-									id="reviews-tab"
-									data-bs-toggle="tab"
-									href="#tab-reviews"
-									role="tab"
-									aria-controls="tab-reviews"
-									aria-selected="false"
-									>Ratings &amp; reviews</a
-								>
-							</li>
+							<!-- XÓA HOẶC ẨN PHẦN TAB -->
 						</ul>
 						<div class="row gx-3 gy-7">
-							<div class="col-12 col-lg-7 col-xl-8">
-								<div
-									class="tab-content"
-									id="productTabContent"
-								>
-									<div
-										class="tab-pane pe-lg-6 pe-xl-12 fade show active text-1100"
-										id="tab-description"
-										role="tabpanel"
-										aria-labelledby="description-tab"
-									>
-										<p class="mb-5">${detail_product.description}</p>
-										<a
-											href="../../../assets/img/products/23.png"
-											data-gallery="gallery-description"
-											><img
-												class="img-fluid mb-5 rounded-3"
-												src="../../../assets/img/products/23.png"
-												alt=""
-										/></a>
-									</div>
-
-									<div
-										class="tab-pane fade"
-										id="tab-reviews"
-										role="tabpanel"
-										aria-labelledby="reviews-tab"
-									>
-										<%-- Phần hiển thị rating trung bình --%>
-										<div class="bg-white rounded-3 p-4 border border-200">
-											<div class="row g-3 justify-content-between mb-4">
-												<div class="col-auto">
-													<div class="d-flex align-items-center flex-wrap">
-														<h2 class="fw-bolder me-3">
-															<fmt:formatNumber value="${avgRating}" maxFractionDigits="1"/>
-															<span class="fs-0 text-500 fw-bold">/5</span>
-														</h2>
-														<div class="me-3">
-															<c:forEach var="i" begin="1" end="5">
-																<span class="fa fa-star <c:if test='${i > avgRating}'>text-secondary</c:if> text-warning fs-2"></span>
-															</c:forEach>
-														</div>
-														<p class="text-900 mb-0 fw-semi-bold fs-1">
-															<c:out value="${allFeedbacks.size()}"/> ratings &amp; reviews
-														</p>
-													</div>
+							<!-- Description bên trái -->
+							<div class="col-12 col-lg-4 col-xl-4 mb-4 mb-lg-0">
+								<div class="h-100 bg-white rounded-3 p-4 border border-200">
+									<h4 class="fw-bold mb-3">Mô tả sản phẩm</h4>
+									<p>${detail_product.description}</p>
+									<a href="../../../assets/img/products/23.png" data-gallery="gallery-description">
+										<img class="img-fluid mb-5 rounded-3" src="../../../assets/img/products/23.png" alt=""/>
+									</a>
+								</div>
+							</div>
+							<!-- Feedback/review bên phải -->
+							<div class="col-12 col-lg-8 col-xl-8">
+								<div class="h-100 bg-white rounded-3 p-4 border border-200">
+									<div class="row g-3 justify-content-between mb-4">
+										<div class="col-auto">
+											<div class="d-flex align-items-center flex-wrap">
+												<h2 class="fw-bolder me-3">
+													<fmt:formatNumber value="${avgRating}" maxFractionDigits="1"/>
+													<span class="fs-0 text-500 fw-bold">/5</span>
+												</h2>
+												<div class="me-3">
+													<c:forEach var="i" begin="1" end="5">
+														<span class="fa fa-star <c:if test='${i > avgRating}'>text-secondary</c:if> text-warning fs-2"></span>
+													</c:forEach>
 												</div>
-											</div>
-											<div class="feedback-section">
-												<h3>Customer Feedback</h3>
-												<c:set var="pageSize" value="5"/>
-												<c:set var="page" value="${param.page != null ? param.page : 1}"/>
-												<c:set var="start" value="${(page-1)*pageSize}"/>
-												<c:set var="end" value="${start+pageSize > allFeedbacks.size() ? allFeedbacks.size() : start+pageSize}"/>
-												<c:forEach var="fb" items="${allFeedbacks}" varStatus="loop">
-													<c:if test="${loop.index >= start && loop.index < end}">
-														<div class="feedback mb-4 hover-actions-trigger btn-reveal-trigger">
-															<div class="content1">
-    <div class="header-info">
-        <img src="https://ui-avatars.com/api/?name=${fb.accountName}&background=0D8ABC&color=fff" alt="Avatar" class="avatar" style="margin: 0px !important">
-        <div class="info">
-            <div class="name">
-                ${fb.accountName}
-                <span class="badge bg-info">${fb.productVariantName}</span>
-            </div>
-            <div class="date">
-                <fmt:formatDate value="${fb.createDate}" pattern="dd/MM/yyyy"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="rating-stars">
-        <c:forEach var="i" begin="1" end="5">
-            <c:choose>
-                <c:when test="${i <= fb.ratedStar}">
-                    <span class="fa fa-star text-warning"></span>
-                </c:when>
-                <c:otherwise>
-                    <span class="fa fa-star text-secondary"></span>
-                </c:otherwise>
-            </c:choose>
-        </c:forEach>
-    </div>
-
-    <div class="text">${fb.content}</div>
-
-    <c:if test="${not empty fb.image}">
-        <img src="../resources/feedback_image/${fb.image}" alt="Feedback image"/>
-    </c:if>
-</div>
-
-														</div>
-													</c:if>
-												</c:forEach>
-												<nav aria-label="Feedback pagination">
-													<ul class="pagination">
-														<c:set var="totalPages" value="${(allFeedbacks.size() + pageSize - 1) / pageSize}"/>
-														<c:forEach var="i" begin="1" end="${totalPages}">
-															<li class="page-item <c:if test='${i == page}'>active</c:if>">
-																<a class="page-link" href="?id=${detail_product.id}&page=${i}#tab-reviews">${i}</a>
-															</li>
-														</c:forEach>
-													</ul>
-												</nav>
+												<p class="text-900 mb-0 fw-semi-bold fs-1">
+													<c:out value="${allFeedbacks.size()}"/> ratings &amp; reviews
+												</p>
 											</div>
 										</div>
 									</div>
+									<div class="feedback-section">
+										<h3>Đánh giá từ khách hàng</h3>
+										<c:set var="pageSize" value="5"/>
+										<c:set var="page" value="${param.page != null ? param.page : 1}"/>
+										<c:set var="start" value="${(page-1)*pageSize}"/>
+										<c:set var="end" value="${start+pageSize > allFeedbacks.size() ? allFeedbacks.size() : start+pageSize}"/>
+										<c:forEach var="fb" items="${allFeedbacks}" varStatus="loop">
+											<c:if test="${loop.index >= start && loop.index < end}">
+												<div class="feedback mb-4 hover-actions-trigger btn-reveal-trigger">
+													<div class="content1">
+														<div class="header-info">
+															<img src="https://ui-avatars.com/api/?name=${fb.accountName}&background=0D8ABC&color=fff" alt="Avatar" class="avatar" style="margin: 0px !important">
+															<div class="info">
+																<div class="name">
+																	${fb.accountName}
+																	<span class="badge bg-info">${fb.productVariantName}</span>
+																</div>
+																<div class="date">
+																	<fmt:formatDate value="${fb.createDate}" pattern="dd/MM/yyyy"/>
+																</div>
+															</div>
+														</div>
+														<div class="rating-stars">
+															<c:forEach var="i" begin="1" end="5">
+																<c:choose>
+																	<c:when test="${i <= fb.ratedStar}">
+																		<span class="fa fa-star text-warning"></span>
+																	</c:when>
+																	<c:otherwise>
+																		<span class="fa fa-star text-secondary"></span>
+																	</c:otherwise>
+																</c:choose>
+															</c:forEach>
+														</div>
+														<div class="text">${fb.content}</div>
+														<c:if test="${not empty fb.image}">
+															<img src="<c:url value='../resources/feedback_image/${fb.image}'/>" alt="Feedback image"/>
+                                                                                                                        
+														</c:if>
+													</div>
+												</div>
+											</c:if>
+										</c:forEach>
+										<nav aria-label="Feedback pagination">
+											<ul class="pagination">
+												<c:set var="totalPages" value="${(allFeedbacks.size() + pageSize - 1) / pageSize}"/>
+												<c:forEach var="i" begin="1" end="${totalPages}">
+													<li class="page-item <c:if test='${i == page}'>active</c:if>">
+														<a class="page-link" href="?id=${detail_product.id}&page=${i}#tab-reviews">${i}</a>
+													</li>
+												</c:forEach>
+											</ul>
+										</nav>
+									</div>
 								</div>
 							</div>
-							<div class="col-12 col-lg-5 col-xl-4"></div>
 						</div>
 					</div>
 					<!-- end of .container-->
