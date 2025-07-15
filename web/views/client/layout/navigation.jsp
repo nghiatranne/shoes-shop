@@ -72,7 +72,7 @@
                                 style="font-size: 16px"
                                 class="nav-link ps-0 active me-2"
                                 href="${pageContext.request.contextPath}/blog-list"
-                                >Hot New</a
+                                >Hot News</a
                             >
                         </li>
                         <li class="nav-item" data-nav-item="data-nav-item">
