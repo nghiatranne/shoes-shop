@@ -377,13 +377,12 @@ public class OrderDAO extends DBContext {
             e.printStackTrace();
         }
     }
-    
-    public static String cutStringTo20Chars(String inputString) {
-        if (inputString.length() > 20) {
-            return inputString.substring(0, 20);
-        } else {
-            return inputString;
+   
+     private String cutStringTo20Chars(String inputString) {
+        if (inputString == null || inputString.isEmpty()) {
+            return "";
         }
+        return inputString.length() > 20 ? inputString.substring(0, 20) : inputString;
     }
     
     public Set<OrderDetail> getOrderDetailProductVariantSizeByOrderID(String order_id) {
