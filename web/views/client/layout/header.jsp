@@ -42,7 +42,7 @@
 							<div class="d-flex align-items-center">
 								<img src="<c:url
 									value="/resources/assets/img/logos/logo.jpg"
-								/>" alt="phoenix" width="27" />
+								/>" alt="phoenix" width="48" />
 								<p class="logo-text ms-2">Shoes Shop</p>
 							</div>
 						</a>
