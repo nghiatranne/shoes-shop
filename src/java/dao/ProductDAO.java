@@ -710,4 +710,38 @@ public class ProductDAO extends DBContext{
         }
         return products;
     }
+
+    public List<Product> listBestSellingProducts(int limit) {
+        BrandDAO brandDAO = new BrandDAO();
+        CategoryDAO categoryDAO = new CategoryDAO();
+        ProductVariantDAO productVariantDAO = new ProductVariantDAO();
+        List<Product> products = new ArrayList<>();
+        String sql = "SELECT TOP(" + limit + ") p.*, SUM(od.Quantity) AS TotalSold "
+                + "FROM Product p "
+                + "JOIN ProductVariant pv ON p.ID = pv.ProductID "
+                + "JOIN ProductVariantSize pvs ON pv.ID = pvs.ProductVariantID "
+                + "JOIN OrderDetail od ON pvs.ID = od.ProductVariantSizeID "
+                + "GROUP BY p.ID, p.Title, p.Image, p.Description, p.CreateDate, p.UpdateDate, p.Status, p.BrandID "
+                + "ORDER BY TotalSold DESC";
+        try (PreparedStatement ps = connection.prepareStatement(sql);
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                Product product = new Product();
+                product.setId(rs.getInt("ID"));
+                product.setTitle(rs.getString("Title"));
+                product.setImage(rs.getString("Image"));
+                product.setDescription(rs.getString("Description"));
+                product.setCreateDate(rs.getDate("CreateDate"));
+                product.setUpdateDate(rs.getDate("UpdateDate"));
+                product.setStatus(rs.getInt("Status") == 1);
+                product.setBrand(brandDAO.getBrandById(rs.getInt("BrandID")));
+                product.setCategories(categoryDAO.listAll(product.getId()));
+                product.setProductvariants(productVariantDAO.getProductVariantsByProductId(product.getId()));
+                products.add(product);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return products;
+    }
 }

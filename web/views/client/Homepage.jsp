@@ -281,7 +281,7 @@ pageEncoding="UTF-8"%> <% Map<Integer, Double>
 													style="align-items: flex-start"
 												>
 													<c:forEach
-														items="${newProducts}"
+														items="${bestSellers}"
 														var="np"
 														varStatus="item"
 													>

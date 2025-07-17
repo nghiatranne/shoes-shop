@@ -74,6 +74,7 @@ public class HomepageServlet extends HttpServlet {
         FeedbackDAO feedbackDAO = new FeedbackDAO();
         List<Slider> sliders = sliderDao.getAllSliders();
         List<Product> newProducts = productDAO.listNewProducts();
+        List<Product> bestSellers = productDAO.listBestSellingProducts(8);
         // Tạo map lưu rating trung bình và số review cho từng sản phẩm
         Map<Integer, Double> productAvgRating = new HashMap<>();
         Map<Integer, Integer> productReviewCount = new HashMap<>();
@@ -83,8 +84,17 @@ public class HomepageServlet extends HttpServlet {
             productAvgRating.put(p.getId(), avg);
             productReviewCount.put(p.getId(), count);
         }
+        for (Product p : bestSellers) {
+            if (!productAvgRating.containsKey(p.getId())) {
+                double avg = feedbackDAO.getAverageRatingByProduct(p.getId());
+                int count = feedbackDAO.getTotalReviewsByProduct(p.getId());
+                productAvgRating.put(p.getId(), avg);
+                productReviewCount.put(p.getId(), count);
+            }
+        }
         request.setAttribute("sliders", sliders);
         request.setAttribute("newProducts", newProducts);
+        request.setAttribute("bestSellers", bestSellers);
         request.setAttribute("productAvgRating", productAvgRating);
         request.setAttribute("productReviewCount", productReviewCount);
         request.getRequestDispatcher("/views/client/Homepage.jsp").forward(request, response);
