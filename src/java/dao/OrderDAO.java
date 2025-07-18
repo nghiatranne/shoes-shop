@@ -28,6 +28,7 @@ import model.OrderRAW2;
 import model.OrderRAW3;
 import model.OrderRevenue;
 import model.PaymentMethod;
+import model.ProductVariantSize;
 
 /**
  *
@@ -783,9 +784,16 @@ public class OrderDAO extends DBContext {
                 OrderDetailUser orderDetailUser = new OrderDetailUser();
 
                 OrderDetail orderDetail = new OrderDetail();
-                orderDetail.setProductVariantSize(productVariantSizeDAO.getProductVariantSizeById(rs.getInt("ProductVariantSizeId")));
+                ProductVariantSize pvs = productVariantSizeDAO.getProductVariantSizeById(rs.getInt("ProductVariantSizeId"));
+                orderDetail.setProductVariantSize(pvs);
                 orderDetail.setPrice(rs.getFloat("Price"));
                 orderDetail.setQuantity(rs.getInt("Quantity"));
+                // Set productId an toàn
+                int productId = -1;
+                if (pvs != null && pvs.getProductVariant() != null && pvs.getProductVariant().getProduct() != null) {
+                    productId = pvs.getProductVariant().getProduct().getId();
+                }
+                orderDetail.setProductId(productId);
 
                 orderDetailUser.setOrderDetail(orderDetail);
                 orderDetailUser.setFeedback(rs.getBoolean("isFeedback"));

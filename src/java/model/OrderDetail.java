@@ -24,4 +24,5 @@ public class OrderDetail {
     private ProductVariantSize productVariantSize;
     private int quantity;
     private Float price;
+    private int productId;
 }

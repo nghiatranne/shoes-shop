@@ -186,7 +186,7 @@
                                                 <fmt:formatNumber value="${od.orderDetail.quantity * od.orderDetail.price}" type="currency" pattern="###,### ₫"/>
                                             </td>
                                             <td class="border-0 align-middle">
-                                                <a href="${pageContext.request.contextPath}/products/product-detail?id=${od.orderDetail.productVariantSize.id}" class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Re buy">
+                                                <a href="${pageContext.request.contextPath}/products/product-detail?id=${od.orderDetail.productId}" class="btn btn-phoenix-primary btn-icon fs-1 px-0 mb-1 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="right" title="Re buy">
                                                     <span class="" data-feather="shopping-bag"></span>
                                                 </a>
                                                 <c:choose>
