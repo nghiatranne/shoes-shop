@@ -83,6 +83,7 @@
 								<div
 									class="dropdown-menu dropdown-menu-end navbar-dropdown-caret py-0 dropdown-profile shadow border border-300 mt-2"
 									aria-labelledby="navbarDropdownUser"
+                                                                        style="z-index: 100000"
 								>
 									<div class="card position-relative border-0">
 										<c:choose>
