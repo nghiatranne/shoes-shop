@@ -768,7 +768,7 @@ public class OrderDAO extends DBContext {
         Set<OrderDetailUser> orderDetailUsers = new HashSet<>();
         String sql = "select od.*, "
                 + "		CASE "
-                + "           WHEN f.ProductVariantSizeID IS NULL THEN 0 "
+                + "           WHEN f.AccountID != o.AccountID THEN 0"
                 + "           ELSE 1 "
                 + "		END AS isFeedback "
                 + "from OrderDetail od "
