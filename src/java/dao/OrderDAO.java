@@ -453,12 +453,12 @@ public class OrderDAO extends DBContext {
                 + "where od.OrderID = o.ID) as productName "
                 + "FROM [Order] o LEFT JOIN OrderDetail od ON o.ID = od.OrderID "
                 + "left join ManageOrder mo on mo.OrderID = o.ID "
-                + "where mo.AccountID = ? and o.FullName + o.ID like '%" + orderName + "%' "
+                + "where o.FullName + o.ID like '%" + orderName + "%' "
                 + "GROUP BY o.ID, o.UpdateDate, o.CreateDate, o.Status, o.Note, o.FullName, o.Email, o.ReceiveAddress, o.Tel, o.AccountID, o.PaymentMethod, o.isPaid";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, acc_id);
-            ps.setString(2, orderName);
+//            ps.setInt(1, acc_id);
+            ps.setString(1, orderName);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -497,13 +497,13 @@ public class OrderDAO extends DBContext {
                 + "where od.OrderID = o.ID) as productName "
                 + "FROM [Order] o LEFT JOIN OrderDetail od ON o.ID = od.OrderID "
                 + "left join ManageOrder mo on mo.OrderID = o.ID "
-                + "where mo.AccountID = ? and o.CreateDate >= ? and o.CreateDate <= ? "
+                + "where o.CreateDate >= ? and o.CreateDate <= ? "
                 + "GROUP BY o.ID, o.UpdateDate, o.CreateDate, o.Status, o.Note, o.FullName, o.Email, o.ReceiveAddress, o.Tel, o.AccountID, o.PaymentMethod, o.isPaid";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, acc_id);
-            ps.setString(2, CreateDate);
-            ps.setString(3, CreateDate1);
+//            ps.setInt(1, acc_id);
+            ps.setString(1, CreateDate);
+            ps.setString(2, CreateDate1);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {
@@ -586,12 +586,12 @@ public class OrderDAO extends DBContext {
                 + "where od.OrderID = o.ID) as productName "
                 + "FROM [Order] o LEFT JOIN OrderDetail od ON o.ID = od.OrderID "
                 + "left join ManageOrder mo on mo.OrderID = o.ID "
-                + "where mo.AccountID = ? and o.Status = ? "
+                + "where o.Status = ? "
                 + "GROUP BY o.ID, o.UpdateDate, o.CreateDate, o.Status, o.Note, o.FullName, o.Email, o.ReceiveAddress, o.Tel, o.AccountID, o.PaymentMethod, o.isPaid";
 
         try (PreparedStatement ps = connection.prepareStatement(sql)) {
-            ps.setInt(1, acc_id);
-            ps.setInt(2, status);
+//            ps.setInt(1, acc_id);
+            ps.setInt(1, status);
             ResultSet rs = ps.executeQuery();
 
             while (rs.next()) {

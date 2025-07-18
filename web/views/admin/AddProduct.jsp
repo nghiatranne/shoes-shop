@@ -156,7 +156,7 @@
                 </div>
                 <div class="col-md-3">
                     <label class="form-label">Quantity Holding</label>
-                    <input class="form-control" name="holdings[]" type="number" placeholder="Holding" value="0" required disabled="true"/>
+                    <input class="form-control" name="holdings[]" type="number" placeholder="Holding" value="0" required/>
                 </div>
                 <div class="col-md-2" style="display: flex;flex-direction: column-reverse; align-items: flex-start;">
                     <button type="button" class="btn btn-phoenix-danger btn-sm remove-size">
