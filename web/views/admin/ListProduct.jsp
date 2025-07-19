@@ -143,13 +143,13 @@
                                                 </div>
                                                 <div class="mb-2">
                                                     <c:choose>
-                                                        <c:when test="${b.status == true}">
-                                                            <a href="products/product/toggle-hide?id=${p.id}&status=false" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
+                                                        <c:when test="${p.status == true}">
+                                                            <a href="${pageContext.request.contextPath}/admin/products/product/toggle-hide?id=${p.id}&status=false" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
                                                                 <span class="fs-4 me-2" data-feather="eye"></span> Hide
                                                             </a>
                                                         </c:when>
                                                         <c:otherwise>
-                                                            <a href="products/product/toggle-hide?id=${p.id}&status=true" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
+                                                            <a href="${pageContext.request.contextPath}/admin/products/product/toggle-hide?id=${p.id}&status=true" class="btn btn-outline-secondary d-flex align-items-center justify-content-center mb-1 py-1 px-2" type="button">
                                                                 <span class="fs-4 me-2" data-feather="eye-off"></span> Show
                                                             </a>
                                                         </c:otherwise>

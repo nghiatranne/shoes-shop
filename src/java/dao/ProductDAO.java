@@ -34,6 +34,19 @@ import java.io.IOException;
  * @author admin
  */
 public class ProductDAO extends DBContext{
+    
+    public void updateStatusProduct(int pId, boolean status) {
+        String sql = "UPDATE Product SET Status = ? WHERE ID = ?";
+        try {
+            PreparedStatement ps = connection.prepareStatement(sql);
+            ps.setBoolean(1, status);
+            ps.setInt(2, pId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    
     public List<Product> listAll() {
         BrandDAO brandDAO = new BrandDAO();
         CategoryDAO categoryDAO = new CategoryDAO();

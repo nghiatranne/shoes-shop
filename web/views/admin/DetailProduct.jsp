@@ -32,24 +32,6 @@
                                     <a class="btn btn-phoenix-secondary me-2" href="${pageContext.request.contextPath}/admin/products/edit?product_id=${productId}">
                                         Update Product
                                     </a>
-                                    <c:choose>
-                                        <c:when test="${sessionScope.isWarehouse == true}">
-                                        </c:when>
-                                        <c:otherwise>
-                                            <c:choose>
-                                                <c:when test="${detailBook.status == true}">
-                                                    <a href="${pageContext.request.contextPath}/admin/books/book/toggle-hide-detail?isbn=${detailBook.isbn}&status=false" class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3" type="button">
-                                                        <span class="" data-feather="eye"></span>
-                                                    </a>
-                                                </c:when>
-                                                <c:otherwise>
-                                                    <a href="${pageContext.request.contextPath}/admin/books/book/toggle-hide-detail?isbn=${detailBook.isbn}&status=true" class="btn btn-phoenix-secondary btn-icon fs--2 px-0 ms-3" type="button">
-                                                        <span class="" data-feather="eye-off"></span>
-                                                    </a>
-                                                </c:otherwise>
-                                            </c:choose>
-                                        </c:otherwise>
-                                    </c:choose>
                                 </div>
                             </div>
                         </div>

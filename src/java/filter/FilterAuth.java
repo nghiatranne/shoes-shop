@@ -195,6 +195,7 @@ public class FilterAuth implements Filter {
         boolean isProductAddReq = url.equals(contextPath + "/admin/products/add");
         boolean isProductSaveReq = url.equals(contextPath + "/admin/products/add/save");
         boolean isProductEditReq = url.equals(contextPath + "/admin/products/edit");
+        boolean isToggleHideReq = url.equals(contextPath + "/admin/products/product/toggle-hide");
 
 // Common feature accessible by all logged in users
         if (isLoginRequest || isRegisterRequest || isResetPasswordRequest || isChangePasswordRequest || isSignOutRequest || isForgotPassRequest || isAdminLoginRequest) {
@@ -241,7 +242,7 @@ public class FilterAuth implements Filter {
                 || isOrderRequest || isPaymentRequest || isVNPayRequest || isChooseAddressRequest || isCheckoutRequest
                 || isInvoiceRequest || isCartCheckoutRequest || isCartComplementRequest || isMktDashboardRequest || isMktAddPublisherRequest || isMktCustomerDetaiReq || isMktCustomerAddRes
                 || isMktSliderDelReq || isMktSizeRequest || isMktBrandRequest || isMktPaymentRequest || isProductReq || isProductDetailReq
-                || isProductAddReq || isProductSaveReq || isProductEditReq) {
+                || isProductAddReq || isProductSaveReq || isProductEditReq || isToggleHideReq) {
             if (roles.contains("MARKETER") || roles.contains("SALE") || roles.contains("SALE MANAGER")) {
                 chain.doFilter(request, response);
                 return;

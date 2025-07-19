@@ -7,6 +7,10 @@
         <servlet-name>VerifyEmailServlet</servlet-name>
         <servlet-class>controller.client.VerifyEmailServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ToggleHideProductServlet</servlet-name>
+        <servlet-class>controller.admin.ProductFeatures.ToggleHideProductServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>VerifyEmailServlet</servlet-name>
         <url-pattern>/login/verify</url-pattern>
@@ -42,6 +46,10 @@
     <servlet-mapping>
         <servlet-name>DetailOrderServlet</servlet-name>
         <url-pattern>/admin/orders/order</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ToggleHideProductServlet</servlet-name>
+        <url-pattern>/admin/products/product/toggle-hide</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
