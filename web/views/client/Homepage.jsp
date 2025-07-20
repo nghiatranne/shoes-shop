@@ -20,64 +20,103 @@ pageEncoding="UTF-8"%> <% Map<Integer, Double>
 						/>
 						<title>Home - Shoes Shop</title>
 
-						<style>
-							.text-1100 {
-								color: #1a1a1a;
-								font-weight: bold;
-							}
+								<style>
+			.text-1100 {
+				color: #1a1a1a;
+				font-weight: bold;
+			}
 
-							.line-clamp-3 {
-								display: -webkit-box;
-								-webkit-line-clamp: 3;
-								-webkit-box-orient: vertical;
-								overflow: hidden;
-							}
-							.product-card-container {
-								transition: transform 0.3s ease, box-shadow 0.3s ease;
-							}
-							.product-card:hover {
-								transform: translateY(-5px);
-								box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-							}
-							.product-card {
-								background-color: #ffffff;
-								border-radius: 1rem;
-								padding: 1rem;
-								height: 100%;
-								border: 1px solid #eee;
-								display: flex;
-								flex-direction: column;
-								justify-content: space-between;
-								min-height: 420px; /* Đảm bảo chiều cao tối thiểu đồng đều */
-							}
-							.product-categories {
-								min-height: 2.7em;
-								max-height: 2.7em;
-								overflow: hidden;
-								display: -webkit-box;
-								-webkit-line-clamp: 2;
-								-webkit-box-orient: vertical;
-								line-clamp: 2;
-								/* Đảm bảo không bị giãn thẻ nếu nhiều category */
-							}
-							.product-name {
-								font-size: 1.5rem;
-								font-weight: 600;
-								color: #355e87;
-								min-height: 2em;
-							}
-							.badge-tag {
-								background-color: #f0f4f9;
-								color: #355e87;
-								padding: 0.25rem 0.5rem;
-								font-size: 0.5rem;
-								border-radius: 0.5rem;
-								margin-right: 0.25rem;
-							}
-							.img-thumbnail:hover {
-								transform: scale(1.03);
-							}
-						</style>
+			.line-clamp-3 {
+				display: -webkit-box;
+				-webkit-line-clamp: 3;
+				-webkit-box-orient: vertical;
+				overflow: hidden;
+			}
+			.product-card-container {
+				transition: transform 0.3s ease, box-shadow 0.3s ease;
+			}
+			.product-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+			}
+			.product-card {
+				background-color: #ffffff;
+				border-radius: 1rem;
+				padding: 1rem;
+				height: 100%;
+				border: 1px solid #eee;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+			}
+			.product-name {
+				font-size: 1.5rem;
+				font-weight: 600;
+				color: #355e87;
+				min-height: 2em;
+			}
+			.badge-tag {
+				background-color: #f0f4f9;
+				color: #355e87;
+				padding: 0.25rem 0.5rem;
+				font-size: 0.5rem;
+				border-radius: 0.5rem;
+				margin-right: 0.25rem;
+			}
+			.img-thumbnail:hover {
+				transform: scale(1.03);
+			}
+			.product-category-badges {
+				max-height: 2.4em; /* khoảng 2 dòng badge, điều chỉnh nếu cần */
+				overflow: hidden;
+				display: flex;
+				flex-wrap: wrap;
+				align-items: flex-start;
+			}
+			.theme-slider,
+			.swiper-theme-container,
+			.swiper-container {
+				width: 100vw !important;
+				max-width: 100vw !important;
+				margin-left: calc(50% - 50vw) !important;
+				margin-right: 0 !important;
+				display: block;
+			}
+			.swiper-wrapper {
+				width: 100% !important;
+			}
+			.theme-slider .swiper-slide,
+			.swiper-theme-container .swiper-slide {
+				display: flex !important;
+				justify-content: center;
+				align-items: center;
+			}
+			.theme-slider .swiper-slide img,
+			.swiper-theme-container .swiper-slide img {
+				width: 100vw;
+				max-width: 100vw;
+				height: 640px;
+				max-height: 50vw;
+				object-fit: contain;
+				background: #e9e6e6;
+				display: block;
+				margin: 0 auto;
+			}
+			@media (max-width: 991.98px) {
+				.theme-slider .swiper-slide img,
+				.swiper-theme-container .swiper-slide img {
+					height: 260px;
+					max-height: 70vw;
+				}
+			}
+			@media (max-width: 600px) {
+				.theme-slider .swiper-slide img,
+				.swiper-theme-container .swiper-slide img {
+					height: 160px;
+					max-height: 90vw;
+				}
+			}
+		</style>
 
 						<jsp:include page="import-css.jsp" />
 					</head>
