@@ -136,7 +136,7 @@ public class FeedbackDAO extends DBContext {
 
     public List<Feedback> getAllFeedBacks(String sort, String order) {
         List<Feedback> feedbacks = new ArrayList<>();
-        String sql = "SELECT f.*, pvs.ID as ProductVariantSizeID, pv.Name as ProductVariantName, a.FullName FROM Feedback f JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID JOIN Account a ON f.AccountID = a.ID ORDER BY " + sort + " " + order;
+        String sql = "SELECT f.*, pvs.ID as ProductVariantSizeID, pv.Name as ProductVariantName, pv.Id as ProductVariantId, a.FullName FROM Feedback f JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID JOIN Account a ON f.AccountID = a.ID ORDER BY " + sort + " " + order;
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ResultSet rs = ps.executeQuery();
@@ -145,6 +145,7 @@ public class FeedbackDAO extends DBContext {
                 ProductVariantSize pvs = new ProductVariantSize();
                 pvs.setId(rs.getInt("ProductVariantSizeID"));
                 ProductVariant pv = new ProductVariant();
+                pv.setId(rs.getInt("ProductVariantId"));
                 pv.setName(rs.getString("ProductVariantName"));
                 pvs.setProductVariant(pv);
 
@@ -172,8 +173,8 @@ public class FeedbackDAO extends DBContext {
 
     public List<Feedback> getFeedbacks(String search, String status, String product, String ratedStar, String sort, String order) {
         List<Feedback> feedbacks = new ArrayList<>();
-        String sql = "SELECT f.*, pvs.ID as ProductVariantSizeID, pv.Name as ProductVariantName, a.FullName FROM Feedback f JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID JOIN Account a ON f.AccountID = a.ID WHERE "
-                   + "a.FullName LIKE ? AND pvs.ID LIKE ? AND f.RatedStar LIKE ? ";
+        String sql = "SELECT f.*, pvs.ID as ProductVariantSizeID, pv.Name as ProductVariantName, pv.Id as ProductVariantId, a.FullName FROM Feedback f JOIN ProductVariantSize pvs ON f.ProductVariantSizeID = pvs.ID JOIN ProductVariant pv ON pvs.ProductVariantID = pv.ID JOIN Account a ON f.AccountID = a.ID WHERE "
+                   + "a.FullName LIKE ? AND pv.ID LIKE ? AND f.RatedStar LIKE ? ";
         
         if (!status.isEmpty()) {
             sql += "AND f.Status = ? ";
@@ -195,6 +196,7 @@ public class FeedbackDAO extends DBContext {
                 ProductVariantSize pvs = new ProductVariantSize();
                 pvs.setId(rs.getInt("ProductVariantSizeID"));
                 ProductVariant pv = new ProductVariant();
+                pv.setId(rs.getInt("ProductVariantId"));
                 pv.setName(rs.getString("ProductVariantName"));
                 pvs.setProductVariant(pv);
 

@@ -366,6 +366,57 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 								</div>
 							</a>
 						</div>
+						<!--Feedback-->
+						<div class="nav-item-wrapper">
+							<a
+								id="feedbacks-manage"
+								class="nav-link label-1 p-3"
+								href="${pageContext.request.contextPath}/admin/feedbacks"
+								role="button"
+								data-bs-toggle=""
+								aria-expanded="false"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon me-2 fs-2">
+										<span data-feather="message-square"></span>
+									</span>
+									<span class="nav-link-text-wrapper">
+										<span
+											class="nav-link-text fw-semibold"
+											style="font-size: 18px; font-weight: bold"
+										>
+											Feedback Management
+										</span>
+									</span>
+								</div>
+							</a>
+						</div>
+                                                                <!--Customer-->
+						<div class="nav-item-wrapper">
+							<a
+								id="customer-manage"
+								class="nav-link label-1 p-3"
+								href="${pageContext.request.contextPath}/admin/customers"
+								role="button"
+								data-bs-toggle=""
+								aria-expanded="false"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon me-2 fs-2">
+										<span data-feather="user"></span>
+									</span>
+									<span class="nav-link-text-wrapper">
+										<span
+											class="nav-link-text fw-semibold"
+											style="font-size: 18px; font-weight: bold"
+										>
+											Customer Management
+											<!--Customer-->
+										</span>
+									</span>
+								</div>
+							</a>
+						</div>
 					</c:if>
 					<c:if test="${sessionScope.isAdmin}">
 						<!--Dashboard-->

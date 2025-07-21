@@ -76,7 +76,7 @@ pageEncoding="UTF-8"%> <% Map<Integer, Double>
 			.theme-slider,
 			.swiper-theme-container,
 			.swiper-container {
-				width: 100vw !important;
+				/*width: 100vw !important;*/
 				max-width: 100vw !important;
 				margin-left: calc(50% - 50vw) !important;
 				margin-right: 0 !important;
@@ -93,9 +93,9 @@ pageEncoding="UTF-8"%> <% Map<Integer, Double>
 			}
 			.theme-slider .swiper-slide img,
 			.swiper-theme-container .swiper-slide img {
-				width: 100vw;
+				/*width: 100vw;*/
 				max-width: 100vw;
-				height: 640px;
+				height: 700px;
 				max-height: 50vw;
 				object-fit: contain;
 				background: #e9e6e6;

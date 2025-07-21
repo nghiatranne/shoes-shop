@@ -20,7 +20,7 @@ public class ProductVariantDAO extends DBContext {
     
     public List<ProductVariant> getAllProductVariants() {
         List<ProductVariant> list = new ArrayList<>();
-        String sql = "SELECT * FROM product_variant WHERE status = 1";
+        String sql = "SELECT * FROM ProductVariant WHERE status = 1";
         try {
             PreparedStatement st = connection.prepareStatement(sql);
             ResultSet rs = st.executeQuery();
@@ -28,14 +28,14 @@ public class ProductVariantDAO extends DBContext {
                 ProductVariant pv = new ProductVariant();
                 pv.setId(rs.getInt("id"));
                 pv.setName(rs.getString("name"));
-                pv.setImportPrice(rs.getDouble("import_price"));
+                pv.setImportPrice(rs.getDouble("ImportPrice"));
                 pv.setPrice(rs.getDouble("price"));
                 pv.setStatus(rs.getBoolean("status"));
                 pv.setImage(rs.getString("image"));
                 
                 // Get product
                 ProductDAO productDAO = new ProductDAO();
-                Product product = productDAO.getProductById(rs.getInt("product_id"));
+                Product product = productDAO.getProductById(rs.getInt("ProductId"));
                 pv.setProduct(product);
                 
                 list.add(pv);
