@@ -426,13 +426,38 @@ public class PostDAO extends DBContext {
     }
     
     public void deletePost(int postID) {
-        String sql = "delete Post where id = ?";
+    String deletePostCategorySQL = "DELETE FROM PostCategory WHERE PostID = ?";
+    String deletePostSQL = "DELETE FROM Post WHERE ID = ?";
+    
+    try {
+        connection.setAutoCommit(false); // Bắt đầu transaction
+
+        // Xóa các bản ghi liên quan trong PostCategory trước
+        try (PreparedStatement ps1 = connection.prepareStatement(deletePostCategorySQL)) {
+            ps1.setInt(1, postID);
+            ps1.executeUpdate();
+        }
+
+        // Sau đó mới xóa post
+        try (PreparedStatement ps2 = connection.prepareStatement(deletePostSQL)) {
+            ps2.setInt(1, postID);
+            ps2.executeUpdate();
+        }
+
+        connection.commit(); // Commit nếu mọi thứ thành công
+    } catch (SQLException e) {
         try {
-            PreparedStatement ps = connection.prepareStatement(sql);
-            ps.setInt(1, postID);
-            ps.executeUpdate();
+            connection.rollback(); // Rollback nếu có lỗi
+        } catch (SQLException rollbackEx) {
+            rollbackEx.printStackTrace();
+        }
+        e.printStackTrace();
+    } finally {
+        try {
+            connection.setAutoCommit(true); // Trả lại trạng thái ban đầu
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+}
 }

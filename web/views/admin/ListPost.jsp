@@ -185,7 +185,7 @@
 
 
             const setDeletePost = (postID) => {
-                $('#btn_deletePost').attr('href', 'posts/del?id=' + postID);
+                $('#btn_deletePost').attr('href', '${pageContext.request.contextPath}/admin/posts/del?id=' + postID);
             };
         </script>
     </body>

@@ -82,10 +82,10 @@
                                 <tbody class="list" >
                                     <c:forEach items="${feedbacks}" var="f">
                                         <tr class="feedback position-static">
-                                            <td class="fullName align-middle ps-4">
-                                                <a href="">
+                                            <td class="fullName align-middle white-space-nowrap fw-bold text-1000 fs--1">
+                                                
                                                     ${f.account.fullname}
-                                                </a>
+                                                
                                             </td>
                                             <td class="productName align-middle white-space-nowrap text-end fw-bold text-1000 fs--1 ps-4">
                                                 ${f.pvs.productVariant.name}
