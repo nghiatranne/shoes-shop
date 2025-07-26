@@ -109,7 +109,7 @@ public class ForgotPasswordServlet extends HttpServlet {
         if (isHasEmail) {
             accountDAO.storeResetToken(email, token);
             try {
-                EmailUtility.sendEmail(host, port, user, pass, email, "Reset password request", "http://localhost:8080/BookShopping/reset-pass?token=" + token);
+                EmailUtility.sendEmail(host, port, user, pass, email, "Reset password request", "http://localhost:8080/ShoesShop/reset-pass?token=" + token);
             } catch (MessagingException ex) {
                 ex.printStackTrace();
             }

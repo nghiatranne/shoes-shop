@@ -277,12 +277,12 @@
                                                 </c:choose>
                                             </td>
                                             <td class="align-middle">
-                                                <c:if test="${statusCur == 'SUBMITTED' && (sessionScope.isSaleManager || sessionScope.isSale)}">
+                                                <c:if test="${statusCur == 'SUBMITTED' && (sessionScope.isSale)}">
                                                     <a href="${pageContext.request.contextPath}/admin/orders/order/change-status?order_id=${o.order.order_id}&order_status=CONFIRMED" class="btn btn-phoenix-success btn-icon fs--2 px-0 ms-3" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="CONFIRM">
                                                         <span class="" data-feather="check"></span>
                                                     </a>
                                                 </c:if>
-                                                <c:if test="${statusCur == 'SUBMITTED'  && o.order.paid == false && (sessionScope.isSaleManager || sessionScope.isSale)}">
+                                                <c:if test="${statusCur == 'SUBMITTED'  && o.order.paid == false && (sessionScope.isSale)}">
                                                     <a href="${pageContext.request.contextPath}/admin/orders/order/change-status?order_id=${o.order.order_id}&order_status=REJECTED" class="btn btn-phoenix-danger btn-icon fs--2 px-0 ms-3 mt-2" type="button" data-bs-toggle="tooltip" data-bs-placement="top" title="REJECT">
                                                         <span class="" data-feather="x"></span>
                                                     </a>

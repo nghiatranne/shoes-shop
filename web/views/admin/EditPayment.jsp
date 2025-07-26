@@ -41,7 +41,7 @@
                                     <textarea name="note" id="noteIn" class="form-control" rows="20" required>${paymentMethod.note}</textarea>
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a class="btn btn-phoenix-warning me-2" href="${pageContext.request.contextPath}/admin/payments">Cancle</a>
+                                    <a class="btn btn-phoenix-warning me-2" href="${pageContext.request.contextPath}/admin/payments">Cancel</a>
                                     <input class="btn btn-phoenix-primary" type="submit" value="Update">
                                 </div>
                             </form>

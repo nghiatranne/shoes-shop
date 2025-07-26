@@ -321,7 +321,7 @@
                         barWidth: "12%",
                     },
                     {
-                        name: 'Cancle',
+                        name: 'Cancel',
                         type: 'bar',
                         itemStyle: {
                             color: '#d54049'

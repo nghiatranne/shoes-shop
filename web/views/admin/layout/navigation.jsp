@@ -138,9 +138,61 @@ uri="http://java.sun.com/jsp/jstl/core" %>
 							</a>
 						</div>
 					</c:if>
-
+                                        <c:if
+                                            test="${sessionScope.isSale == true || sessionScope.isWarehouse == true}"
+                                            >
+                                            						<div class="nav-item-wrapper">
+							<a
+								id="dashboard-manage"
+								class="nav-link label-1 p-3"
+								href="${pageContext.request.contextPath}/admin/sale-dashboard"
+								role="button"
+								data-bs-toggle=""
+								aria-expanded="false"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon me-2 fs-2">
+										<span data-feather="pie-chart"></span>
+									</span>
+									<span class="nav-link-text-wrapper">
+										<span
+											class="nav-link-text fw-semibold"
+											style="font-size: 18px; font-weight: bold"
+											>Sale Dashboard</span
+										>
+									</span>
+								</div>
+							</a>
+						</div>
+                                                                						<!--Order-->
+						<div class="nav-item-wrapper">
+							<a
+								id="order-manage"
+								class="nav-link label-1 p-3"
+								href="${pageContext.request.contextPath}/admin/orders"
+								role="button"
+								data-bs-toggle=""
+								aria-expanded="false"
+							>
+								<div class="d-flex align-items-center">
+									<span class="nav-link-icon me-2 fs-2">
+										<span data-feather="shopping-cart"></span>
+									</span>
+									<span class="nav-link-text-wrapper">
+										<span
+											class="nav-link-text fw-semibold"
+											style="font-size: 18px; font-weight: bold"
+										>
+											Orders Management
+											<!--Orders-->
+										</span>
+									</span>
+								</div>
+							</a>
+						</div>
+                                            </c:if>
 					<c:if
-						test="${sessionScope.isSale == true || sessionScope.isSaleManager == true || sessionScope.isWarehouse == true}"
+						test="${sessionScope.isSaleManager == true || sessionScope.isWarehouse == true}"
 					>
 						<!--Dashboard-->
 						<div class="nav-item-wrapper">

@@ -13,6 +13,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import util.PasswordHasher;
 
 /**
  *
@@ -83,7 +84,7 @@ public class ResetPasswordServlet extends HttpServlet {
         String token = request.getParameter("token");
         
         AccountDAO accountDAO = new AccountDAO();
-        accountDAO.resetPass(email, newPass, token);
+        accountDAO.resetPass(email, PasswordHasher.hashPassword(newPass), token);
         
         response.sendRedirect(request.getContextPath() + "/login");
     }

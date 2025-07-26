@@ -187,7 +187,7 @@ public class FilterAuth implements Filter {
         boolean isAssignAccountRequest = url.contains(contextPath + "/order/assign-account");
 
         boolean isAddminUsersListRequest = url.contains(contextPath + "/admin/accounts");
-        boolean isAddminRoleRequest = url.equals(contextPath + "/admin/roles");
+        boolean isAddminRoleRequest = url.contains(contextPath + "/admin/roles");
         
         boolean isSaleDashboardReq = url.equals(contextPath + "/admin/sale-dashboard"); 
         boolean isProductReq = url.equals(contextPath + "/admin/products");
