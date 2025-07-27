@@ -17,6 +17,11 @@
             max-width: 800px;
             width: 100%;
         }
+    .post-content img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
     </style>
 </head>
 <body>
@@ -62,7 +67,7 @@
                                     <div class="col-12">
                                         <img class="img-thumbnail w-100" src="<c:url value='/resources/post_image/${post.thumbnail}'/>" alt="${post.title}" />
                                     </div>
-                                    <div class="col-12">
+                                    <div class="col-12 post-content">
                                         <p>${post.content}</p>
                                     </div>
                                 </div>

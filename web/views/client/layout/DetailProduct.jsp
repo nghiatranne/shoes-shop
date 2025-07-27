@@ -346,7 +346,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 													</c:forEach>
 												</p>
 												<p><strong>Brand:</strong> ${detail_product.brand.name}</p>
-												<a href="http://localhost:8080/ShoesShop/blog/post-details?id=12" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: #007bff; text-decoration: none; font-weight: 500; margin-bottom: 10px;">
+												<a href="http://localhost:8080/ShoesShop/blog/post-details?id=13" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: #007bff; text-decoration: none; font-weight: 500; margin-bottom: 10px;">
     <span class="fa fa-ruler" style="font-size: 1.2em;"></span>
     Hướng dẫn chọn Size
 </a>
@@ -418,9 +418,9 @@ contentType="text/html" pageEncoding="UTF-8"%>
 												</div>
 											</div>
 											<div class="d-flex mt-4">
-												<button type="button" class="btn btn-lg btn-outline-warning rounded-pill w-100 me-3 px-2 px-sm-4 fs--1 fs-sm-0">
+<!--												<button type="button" class="btn btn-lg btn-outline-warning rounded-pill w-100 me-3 px-2 px-sm-4 fs--1 fs-sm-0">
 													<span class="me-2 far fa-heart"></span>Add to wishlist
-												</button>
+												</button>-->
 												<button type="submit" class="btn btn-lg btn-warning rounded-pill w-100 fs--1 fs-sm-0">
 													<span class="fas fa-shopping-cart me-2"></span>Add to cart
 												</button>
