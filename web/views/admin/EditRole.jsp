@@ -41,7 +41,7 @@
                                     <input class="form-control" id="roleNameInput" type="text" name="role_name" value="${updateRole.role_name}" />
                                 </div>
                                 <div class="d-flex justify-content-end">
-                                    <a href="${pageContext.request.contextPath}/admin/roles" class="btn btn-phoenix-secondary me-2" type="reset">Cancle</a>
+                                    <a href="${pageContext.request.contextPath}/admin/roles" class="btn btn-phoenix-secondary me-2" type="reset">Cancel</a>
                                     <input class="btn btn-phoenix-primary" type="submit" value="Update">
                                 </div>
                             </form>

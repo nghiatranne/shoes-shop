@@ -346,7 +346,7 @@ contentType="text/html" pageEncoding="UTF-8"%>
 													</c:forEach>
 												</p>
 												<p><strong>Brand:</strong> ${detail_product.brand.name}</p>
-												<a href="http://localhost:8080/ShoesShop/blog/post-details?id=13" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: #007bff; text-decoration: none; font-weight: 500; margin-bottom: 10px;">
+												<a href="http://localhost:8080/ShoesShop/blog/post-details?id=15" target="_blank" style="display: inline-flex; align-items: center; gap: 6px; color: #007bff; text-decoration: none; font-weight: 500; margin-bottom: 10px;">
     <span class="fa fa-ruler" style="font-size: 1.2em;"></span>
     Hướng dẫn chọn Size
 </a>

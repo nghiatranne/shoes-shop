@@ -413,7 +413,7 @@ public class OrderDAO extends DBContext {
                 + "(select top 1 pv.Name from OrderDetail od left join ProductVariantSize pvs on od.ProductVariantSizeID = pvs.Id left join ProductVariant pv on pvs.ProductVariantId = pv.Id where od.OrderID = o.ID) as productName "
                 + "FROM [Order] o LEFT JOIN OrderDetail od ON o.ID = od.OrderID "
                 + "where o.AccountID = ? "
-                + "GROUP BY o.ID, o.UpdateDate, o.CreateDate, o.Status, o.Note, o.FullName, o.Email, o.ReceiveAddress, o.Tel, o.AccountID, o.PaymentMethod, o.isPaid";
+                + "GROUP BY o.ID, o.UpdateDate, o.CreateDate, o.Status, o.Note, o.FullName, o.Email, o.ReceiveAddress, o.Tel, o.AccountID, o.PaymentMethod, o.isPaid order by o.CreateDate DESC";
         try {
             PreparedStatement ps = connection.prepareStatement(sql);
             ps.setInt(1, accId);

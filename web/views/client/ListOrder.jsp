@@ -94,8 +94,13 @@
                             <span class="ms-1 fs-0" data-feather="info"></span>
                         </span>
                     </c:if>
-
-                    <hr>
+                    
+                   
+                        <span class="badge badge-phoenix fs-0 badge-phoenix-info mb-3">
+                            <span class="badge-label">Your Previous Order</span>
+                            <span class="ms-1 fs-0" data-feather="info"></span>
+                        </span>
+                      
 
                     <c:if test="${sessionScope.recentOrder == null}">
                         <span class="badge badge-phoenix fs-0 badge-phoenix-success mb-3">
